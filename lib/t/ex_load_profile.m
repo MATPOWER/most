@@ -7,7 +7,7 @@ function loadprofile = ex_load_profile
 %
 %   This file is part of MOST.
 %   Covered by the 3-clause BSD License (see LICENSE file for details).
-%   See http://www.pserc.cornell.edu/matpower/ for more info.
+%   See https://github.com/MATPOWER/most for more info.
 
 %% define constants
 [CT_LABEL, CT_PROB, CT_TABLE, CT_TBUS, CT_TGEN, CT_TBRCH, CT_TAREABUS, ...

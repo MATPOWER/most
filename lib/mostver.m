@@ -14,7 +14,7 @@ function rv = mostver(varargin)
 %
 %   This file is part of MOST.
 %   Covered by the 3-clause BSD License (see LICENSE file for details).
-%   See http://www.pserc.cornell.edu/matpower/ for more info.
+%   See https://github.com/MATPOWER/most for more info.
 
 v = struct( 'Name',     'MOST', ... 
             'Version',  '1.0', ...
