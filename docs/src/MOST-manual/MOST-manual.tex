@@ -221,8 +221,7 @@
 \title{\mostname{}\\\most{} \mostver{}\\
 User's Manual}
 \author{Ray~D.~Zimmerman \and Carlos~E.~Murillo-S\'anchez}
-%\author{Ray~D.~Zimmerman \and Carlos~E.~Murillo-S\'anchez \and Daniel Mu\~noz-\'Alvarez}
-\date{December 16, 2016} % comment this line to display the current date
+%\date{December 16, 2016} % comment this line to display the current date
 %\date{December 14, 2011\thanks{Second revision. First revision was December 13, 2011}} % comment this line to display the current date
 
 %%% BEGIN DOCUMENT
@@ -354,7 +353,7 @@ But even for continuous LP and QP problems, these solvers will offer much better
 % \end{Code}
 % \end{enumerate}
 
-If you have followed the directions for installing \matpower{} found in Section~\ref{MUM-sec:installation} of the \mum{}, then \most{} should already be installed in the \mostpath{} directory and the appropriate paths\footnote{To use \most{} your \matlab{} path must include \mostpath{} and, to run the tests, \mostpath{/t}.} added to your \matlab{} path.
+If you have followed the directions for installing \matpower{} found in Section~\ref{MUM-sec:installation} of the \mum{}, then \most{} should already be installed in the \mostpath{} directory and the appropriate paths\footnote{To use \most{} your \matlab{} path must include \mostpath{/lib} and, to run the tests, \mostpath{/lib/t}.} added to your \matlab{} path.
 
 To run the test suite and verify that \most{} is properly installed and functioning, at the \matlab{} prompt, type \code{test\_most} . The result should resemble the following, possibly including extra tests, depending on the availablility of optional packages.
 %--LATER--
@@ -492,7 +491,7 @@ The full set of \most{} options are detailed in Section~\ref{sec:mostoptions}.
 
 \subsection{Documentation}
 
-There are two primary sources of documentation for \most{}. The first is this manual, which gives an overview of the capabilities and structure and describes the problem formulation. The \most{} User's Manual can be found in your \matpower{} distribution at \mppath{/docs/MOST-manual.pdf}.
+There are two primary sources of documentation for \most{}. The first is this manual, which gives an overview of the capabilities and structure and describes the problem formulation. The \most{} User's Manual can be found in your \matpower{} distribution at \mppath{/most/docs/MOST-manual.pdf}.
 
 The second is the built-in \code{help} command. As with \matlab{}'s built-in functions and toolbox routines, you can type \code{help} followed by the name of a command or M-file to get help on that particular function. Many of the \most{} related M-files have such documentation and this should be considered the main reference for the calling options for each individual function. See Appendix~\ref{app:functions} for a list of \most{} functions.
 
@@ -2562,7 +2561,7 @@ The examples in this section are based on the simple three bus model summarized 
   \label{fig:threebus}
 \end{figure}
 
-The code for the following examples can be found in \mostpath{/t} in the files whose names begin with \code{most\_ex}, such as \code{most\_ex1\_ed.m}.
+The code for the following examples can be found in \mostpath{/lib/t} in the files whose names begin with \code{most\_ex}, such as \code{most\_ex1\_ed.m}.
 %\mbox{\code{most\_ex}\textsf{\textsl{{\relsize{-1.0}\textless{}\mbox{N}\textgreater{}}}}\code{\_}\textsf{\textsl{{\relsize{-1.0}\textless{}\mbox{prob}\textgreater{}}}}\code{.m}}.
 %\code{most\_ex}$N$\code{\_*.m}.
 For all of the following examples, assume that \code{mpopt} is a \matpower{} options struct and that \code{define\_constants} has already been executed.
@@ -3231,54 +3230,81 @@ The authors would like to thank the following people, in no particular order, fo
 \section{\most{} Files and Functions}
 \label{app:functions}
 
-This appendix lists all of the files and functions that \most{} provides. In most cases, the function is found in a \matlab{} M-file of the same name in the top-level of the \most{} distribution\footnote{That is, in the \mostpath{} directory.}, where the \code{.m} extension is omitted from this listing. For more information on each, at the \matlab{} prompt, simply type \code{help} followed by the name of the function. For documentation and data files, the filename extensions are included.
+This appendix lists all of the files and functions that \most{} provides. In most cases, the function is found in a \matlab{} M-file of the same name in the \code{lib} directory of the \most{} distribution\footnote{That is, in the \mostpath{/lib} directory.}, where the \code{.m} extension is omitted from this listing. For more information on each, at the \matlab{} prompt, simply type \code{help} followed by the name of the function. For documentation and data files, the filename extensions are included.
 
 
-\subsection{\most{} Functions and Documentation}
+\subsection{\most{} Documentation Files}
 
 \begin{table}[!ht]
 %\renewcommand{\arraystretch}{1.2}
 \centering
 \begin{threeparttable}
-\caption{\most{} Functions and Documentation}
-\label{tab:mostfiles}
+\caption{\most{} Documentation Files}
+\label{tab:mostdocfiles}
 \footnotesize
 \begin{tabular}{lp{0.6\textwidth}}
 \toprule
 name & description \\
 \midrule
-\code{docs/}	& 	\\
-\code{~~CHANGES}	& \most{} change history	\\
-\code{~~MOST-manual.pdf}\tnote{*}	& \emph{\most{} User's Manual}	\\
-\code{}	& 	\\
-\code{addgen2mpc}	& appends generators to existing case, see Section~\ref{sec:addgen2mpc}	\\
-\code{addstorage}	& appends storage units to existing case, see Section~\ref{sec:addstorage}	\\
-\code{addwind}	& appends wind generators to existing case, see Section~\ref{sec:addwind}	\\
-\code{apply\_profile}	& applies a single profile to the specified data, see Section~\ref{sec:apply_profile}	\\
-\code{filter\_ramp\_transitions}	& creates binary valued transition mask $\zeta^{tj_2j_1}$ for ramping reserves based on a probability threshold, see Section~\ref{sec:filter_ramp_transitions}	\\
-\code{getprofiles}	& loads profiles from a struct or file, see Section~\ref{sec:getprofiles}	\\
-\code{idx\_profile}	& defines constants for use with profiles, see Section~\ref{sec:idx_profile}	\\
-\code{loadgenericdata}	& loads data from a variable, M-file or MAT-file and checks that it matches a specified type, see Section~\ref{sec:loadgenericdata}	\\
-\code{loadmd}	& loads a \md{}, see Section~\ref{sec:loadmd}	\\
-\code{loadstoragedata}	& loads parameters for storage units, see Section~\ref{sec:loadstoragedata}	\\
-\code{loadxgendata}	& loads extra generator data, see Section~\ref{sec:loadxgendata}	\\
-\code{md\_init}	& data structure initialization	\\
-\code{most}	& top-level solver, see Chapter~\ref{sec:mostfcn}	\\
-\code{mostver}	& prints/returns version info for \most{}, see Section~\ref{sec:mostver}	\\
-\code{mpoption\_info\_most}	& option information for \most{}	\\
-\code{plot\_gen}	& create plots of generator results	\\
-\code{plot\_storage}	& create plots of storage unit results	\\
-\code{plot\_uc\_data}	& plot generator commitment summary from raw data	\\
-\code{plot\_uc}	& plot generator commitment summary from \code{md}	\\
+\code{docs/}	& \most{} documentation	\\
+\code{~~MOST-manual.pdf}	& \emph{\most{} User's Manual}	\\
+\code{~~src/}	& \LaTeX{} source for \emph{\most{} User's Manual}	\\
+\code{lib/}	& \most{} software (see Table~\ref{tab:mostsw})	\\
+\code{~~t/}	& \most{} tests and examples (see Tables~\ref{tab:mosttestdata} and \ref{tab:mosttests})	\\
+\code{AUTHORS}	& list of \most{} authors	\\
+\code{CHANGES.md}	& \most{} change history	\\
+\code{CONTRIBUTING.md}	& \most{} Contributors Guide	\\
+\code{LICENSE}	& license file	\\
+\code{README.md}	& basic introduction to \most{}	\\
 \bottomrule
 \end{tabular}
-\begin{tablenotes}
- \scriptsize
- \item [*] {While the \most{} User's Manual is listed here with other documentation, it is actually located in \mppath{/docs}, not \mostpath{/docs}.}
-\end{tablenotes}
 \end{threeparttable}
 \end{table}
 
+\clearpage
+\subsection{\most{} Functions}
+
+\begin{table}[!ht]
+%\renewcommand{\arraystretch}{1.2}
+\centering
+\begin{threeparttable}
+\caption{\most{} Functions}
+\label{tab:mostsw}
+\footnotesize
+\begin{tabular}{lp{0.6\textwidth}}
+\toprule
+name & description \\
+\midrule
+\code{lib/}	& 	\\
+\code{~~addgen2mpc}	& appends generators to existing case, see Section~\ref{sec:addgen2mpc}	\\
+\code{~~addstorage}	& appends storage units to existing case, see Section~\ref{sec:addstorage}	\\
+\code{~~addwind}	& appends wind generators to existing case, see Section~\ref{sec:addwind}	\\
+\code{~~apply\_profile}	& applies a single profile to the specified data, see Section~\ref{sec:apply_profile}	\\
+\code{~~filter\_ramp\_transitions}	& creates binary valued transition mask $\zeta^{tj_2j_1}$ for ramping reserves based on a probability threshold, see Section~\ref{sec:filter_ramp_transitions}	\\
+\code{~~getprofiles}	& loads profiles from a struct or file, see Section~\ref{sec:getprofiles}	\\
+\code{~~idx\_profile}	& defines constants for use with profiles, see Section~\ref{sec:idx_profile}	\\
+\code{~~loadgenericdata}	& loads data from a variable, M-file or MAT-file and checks that it matches a specified type, see Section~\ref{sec:loadgenericdata}	\\
+\code{~~loadmd}	& loads a \md{}, see Section~\ref{sec:loadmd}	\\
+\code{~~loadstoragedata}	& loads parameters for storage units, see Section~\ref{sec:loadstoragedata}	\\
+\code{~~loadxgendata}	& loads extra generator data, see Section~\ref{sec:loadxgendata}	\\
+\code{~~md\_init}	& data structure initialization	\\
+\code{~~most}	& top-level solver, see Chapter~\ref{sec:mostfcn}	\\
+\code{~~mostver}	& prints/returns version info for \most{}, see Section~\ref{sec:mostver}	\\
+\code{~~mpoption\_info\_most}	& option information for \most{}	\\
+\code{~~plot\_gen}	& create plots of generator results	\\
+\code{~~plot\_storage}	& create plots of storage unit results	\\
+\code{~~plot\_uc\_data}	& plot generator commitment summary from raw data	\\
+\code{~~plot\_uc}	& plot generator commitment summary from \code{md}	\\
+\bottomrule
+\end{tabular}
+% \begin{tablenotes}
+%  \scriptsize
+%  \item [*] {While the \most{} User's Manual is listed here with other documentation, it is actually located in \mppath{/docs}, not \mostpath{/docs}.}
+% \end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\clearpage
 \subsection{Automated Test Suite}
 
 \begin{table}[!ht]
@@ -3292,7 +3318,7 @@ name & description \\
 \toprule
 name & description \\
 \midrule
-\code{t/}	& 	\\
+\code{lib/t/}	& 	\\
 \code{~~c118swf}	& 118-bus test case, used by \code{t\_most\_w\_ds}	\\
 \code{~~ex\_case3a}	& sample 3-bus \matpower{} case (version $a$)	\\
 \code{~~ex\_case3b}	& sample 3-bus \matpower{} case (version $b$)	\\
@@ -3331,13 +3357,13 @@ name & description \\
 \centering
 \begin{threeparttable}
 \caption{\most{} Tests}
-\label{tab:mosttestdata}
+\label{tab:mosttests}
 \footnotesize
 \begin{tabular}{lp{0.6\textwidth}}
 \toprule
 name & description \\
 \midrule
-\code{t/}	& 	\\
+\code{lib/t/}	& 	\\
 \code{~~test\_most}	& runs full \most{} test suite	\\
 \code{~~t\_most\_3b\_1\_1\_0}	& 3-bus, single period, no contingencies	\\
 \code{~~t\_most\_3b\_1\_1\_2}	& 3-bus, single period, 2 contingencies	\\
