@@ -75,7 +75,7 @@ Documentation
 There are two primary sources of documentation for MOST. The first is
 the [MOST User's Manual][8], which gives an overview of the capabilities
 and structure of MOST and describes the problem formulation. It
-can be found in your MATPOWER distribution at `<MATPOWER>/docs/MOST-manual.pdf`
+can be found in your MATPOWER distribution at `<MATPOWER>/most/docs/MOST-manual.pdf`
 and the latest version is always available at:
 <https://github.com/MATPOWER/most/blob/master/docs/MOST-manual.pdf>.
 
