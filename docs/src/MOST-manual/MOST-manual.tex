@@ -326,7 +326,6 @@ The first step in beginning to use the \most{} is to get familiar with \matpower
 \label{sec:sysreq}
 To use \most{} you will need a working installation of \matpower{}~\mpver{} or later. See the corresponding section in the \mum{} for more information on the system requirements.
 \matpower{}~6 and later includes a full version of \most{} in the \mostpath{} directory.
-%You also need the \most{} code, distributed as a ZIP file such as \zipname{}.
 
 It is also highly recommended that you install a high-performance solver such as \gurobi{}, \cplex{}, \mosek{}, \matlab{}'s \ot{} or \glpk{}, described in Appendix~\ref{MUM-app:optional_packages} in the \mum{}.
 For problems involving unit-commitment, a mixed integer solver is required.\footnote{At the time of this writing, \matlab{}'s \ot{} and \glpk{} only address MILP problems. \gurobi{}, \cplex{} and \mosek{} all handle MIQP problems as well.}
@@ -334,30 +333,10 @@ But even for continuous LP and QP problems, these solvers will offer much better
 
 \subsection{Installation}
 
-% \begin{enumerate}[\bfseries Step 1:] % requires package paralist
-% \item Unzip the file containing the \most{} distribution. It should be named \zipname{}, where \code{NNN} depends on the version of \most{}.
-% \item Move the resulting \distname{} directory to the location of your choice. These files should not need to be modified, so it is recommended that they be kept separate from your own code. We will use \mostpath{} to denote the path to this directory.
-% \item Locate the \distname{} directory within the \code{dist} sub-directory of your \matpower{} distribution. These files should not need to be modified, so it is recommended that they be kept separate from your own code. We will use \mostpath{} to denote the path to this directory.
-% \item Add the following directories to your \matlab{} path:
-% \begin{itemize}
-% \item \mostpath{} -- core \most{} functions
-% \item \mostpath{/t} -- \most{} \hl{tests}
-% \end{itemize}
-% %\item At the \matlab{} prompt, type \code{test\_most} to run the test suite and verify that \most{} is properly installed and functioning. \hl{The result should resemble the following.}
-% %--LATER--
-% %\\\hl{re-do before release (run on fastest machine available)}
-% \begin{Code}
-% >> test_most
-% All tests successful (0 of 0)
-% Elapsed time 0.00 seconds.
-% \end{Code}
-% \end{enumerate}
-
 If you have followed the directions for installing \matpower{} found in Section~\ref{MUM-sec:installation} of the \mum{}, then \most{} should already be installed in the \mostpath{} directory and the appropriate paths\footnote{To use \most{} your \matlab{} path must include \mostpath{/lib} and, to run the tests, \mostpath{/lib/t}.} added to your \matlab{} path.
 
 To run the test suite and verify that \most{} is properly installed and functioning, at the \matlab{} prompt, type \code{test\_most} . The result should resemble the following, possibly including extra tests, depending on the availablility of optional packages.
-%--LATER--
-%\\\hl{re-do before release (run on fastest machine available)}
+% UPDATE BEFORE RELEASE
 \begin{Code}
 >> test_most
 t_most_3b_1_1_0........ok
@@ -518,8 +497,7 @@ Figure~\ref{fig:most_single_period} illustrates the range of continuous single p
 
 \begin{figure}[hbtp]
   \centering
-%  \includegraphics[scale=0.65]{./figures/most-single-period-problems-16}
-  \includegraphics[width=0.8\textwidth]{./figures/most-single-period-problems-16}
+\includegraphics[width=0.8\textwidth]{./figures/most-single-period-problems-16}
   \caption{MOST Continuous Single-Period Problems}
   \label{fig:most_single_period}
 \end{figure}
@@ -842,16 +820,7 @@ f_{\rm lf}(\delta_+, \delta_-) = \sum_{t\in T}  \gamma^t  \sum_{i\in I^t} \left[
 \begin{equation}
 f_s(s_0, p_{\rm sc}, p_{\rm sd}) = \trans{C_{s0}} s_0 - (\trans{C_{\rm ts0}} s_0 + \trans{C_{\rm tsc}} p_{\rm sc} + \trans{C_{\rm tsd}} p_{\rm sd}) \label{eq:storagecost}
 \end{equation}
-% \begin{equation}
-% f_s(s_0, p_{\rm sc}, p_{\rm sd}) = \trans{C_{s0}} s_0 - \trans{C_{\rm ts}} x \label{eq:storagecost}
-% \end{equation}
 \item[--] no load, startup and shutdown costs
-% \begin{equation}
-% f_{\rm uc}(u,v,w) = \sum_{t\in T} \gamma^t \sum_{i\in I^t} (C_v^{ti} v^{ti} +  C_w^{ti} w^{ti}) + \sum_{t\in T} \sum_{j\in J^t} \sum_{k\in K^{tj}} \psi_\alpha^{tjk} \sum_{i\in I^{tjk}} C_P^{ti}(0) u^{ti}
-% \end{equation}
-% \begin{equation}
-% f_{\rm uc}(u,v,w) = \sum_{t\in T} \sum_{j\in J^t} \sum_{k\in K^{tj}} \psi_\alpha^{tjk} \sum_{i\in I^t} \Bigl[ C_P^{ti}(0) u^{ti} + C_v^{ti} v^{ti} +  C_w^{ti} w^{ti} \Bigr]
-% \end{equation}
 \begin{equation}
 f_{\rm uc}(u,v,w) = \sum_{t\in T} \gamma^t \sum_{i\in I^t} \Bigl( C_P^{ti}(0) u^{ti} + C_v^{ti} v^{ti} +  C_w^{ti} w^{ti} \Bigr)
 \end{equation}
@@ -917,12 +886,6 @@ The remaining sets of constraints include intertemporal restrictions and typical
 \subsubsection*{Load-following Ramping Limits and Reserves}
 \begin{itemize}
 \item[--]  variable limits
-% \begin{align}
-% 0 \leq \delta_+^{ti} &\leq  \delta^{ti}_{\rm max+} \label{eq:deltapbounds} \\
-% 0 \leq \delta_-^{ti} &\leq  \delta^{ti}_{\rm max-}  \label{eq:deltambounds}\\
-% p^{tij_20} - p^{(t-1)ij_10} &\leq \delta_+^{(t-1)i}, \;\; j_1 \in J^{t-1}, j_2 \in J^t \label{eq:inter1} \\
-% p^{(t-1)ij_10} - p^{tij_20} &\leq \delta_-^{(t-1)i}, \;\; j_1 \in J^{t-1}, j_2 \in J^t \label{eq:rampconstr}
-% \end{align}
 \begin{align}
 0 \leq \delta_+^{ti} &\leq  \delta^{ti}_{\rm max+} \label{eq:deltapbounds} \\
 0 \leq \delta_-^{ti} &\leq  \delta^{ti}_{\rm max-}  \label{eq:deltambounds}
@@ -994,24 +957,13 @@ When using this option $s_0^i$ is an optimization variable that can take on any 
  0 \le v^{ti} &\le 1 \\
  0 \le w^{ti} &\le 1
 \end{align}
-% \begin{align}
-%  u^{ti} - u^{(t-1)i} &= v^{ti} - w^{ti} & \forall t \in T, \forall i \in I^t
-% \end{align}
-% where $u^{ti} \in \{0,1\}$, $v^{ti} \in \{0,1\}$ and $w^{ti} \in \{0,1\}$.
 \item[--] minimum up and down times
 \begin{align}
  \sum_{y=t-\tau_i^+ + 1}^t v^{yi} & \le u^{ti} \\
  \sum_{y=t-\tau_i^- + 1}^t w^{yi} & \le 1 - u^{ti}
 \end{align}
-% \begin{align}
-%  \sum_{y=t-\tau_i^+ + 1}^t v^{yi} & \le u^{ti} & \forall t \in T, \forall i \in I^t \\
-%  \sum_{y=t-\tau_i^- + 1}^t w^{yi} & \le 1 - u^{ti} & \forall t \in T, \forall i \in I^t.
-% \end{align}
 Note: These summations can be made to ``wrap around'' to implement a cyclic commitment schedule where commitment transitions from the last period of the horizon back to the first are also constrained to be feasible.
 \item[--] integrality constraints
-% \begin{equation}
-% u^{ti} \in \{0,1\}, v^{ti} \in \{0,1\}, w^{ti} \in \{0,1\}
-% \end{equation}
 \begin{equation}
 u^{ti} \in \{0,1\}
 \end{equation}
@@ -1138,7 +1090,6 @@ s_{\rm loss}^{tijk} &= \Delta \eta^{ti}_{\rm loss} \left[ \alpha \frac{s_I^{tijk
 where \eqref{eq:lossk} follows directly from \eqref{eq:salpha} and \eqref{eq:lossk1}, keeping in mind that $s_I^{tijk} = s_I^{tij0}$.
 
 In this case, the stored energy in unit~$i$ at the end of period~$t$ in state $jk$ can be computed deterministically from the stored energy at the beginning and the injections in states $j0$ and $jk$ as follows.
-% \begin{equation}
 \begin{align}
 s_F^{tijk} &= s_I^{tijk} + \alpha s_\Delta^{tij0} + (1 - \alpha) s_\Delta^{tijk} - s_{\rm loss}^{tijk} \\
 &= \alpha \left[ s_I^{tij0} + s_\Delta^{tij0} - \Delta \eta^{ti}_{\rm loss} \frac{s_I^{tij0}+ s_F^{tij0}}{2} \right] \nonumber \\
@@ -1258,23 +1209,6 @@ N^t_h &=& B_1^t M^t_h + B_2^t H_0^t, \label{eq:Nth}
 \end{eqnarray}
 where $L_I^1 = D^1$ and $M^1_g = M^1_h = \mathbf{0}$.
 
-% \hrulefill
-% 
-% I'm tempted to eliminate $L_F^t$, $M^t_g$ and $M^t_h$ to reduce the number of symbols we use and the number of matrices we store (in the code).
-% \begin{eqnarray}
-% S_I^t &=& L^t s_0 + D^t (N^{(t-1)}_g + N^{(t-1)}_h) x \label{eq:simnall} \\
-% S_F^t &=& B_1^t L^t s_0 + (N^t_g + N^t_h) x \label{eq:sfmnall}
-% \end{eqnarray}
-% where
-% \begin{eqnarray}
-% L^t &=& D^t B_1^{(t-1)} L^{(t-1)} \label{eq:Lt}	\\
-% N^t_g &=& B_1^t D^t N^{(t-1)}_g + B_2^t G_0^t \label{eq:Ntg}	\\
-% N^t_h &=& B_1^t D^t N^{(t-1)}_h + B_2^t H_0^t, \label{eq:Nth}
-% \end{eqnarray}
-% \hl{What do you think?} Hmmm, maybe not, given that what follows uses $M$.
-% 
-% \hrulefill
-
 If the rows of each of these vectors and matrices are sorted and partitioned by scenario (as opposed to by storage unit), we can denote the resulting $j$-th components, whose $i$-th row corresponds to storage unit~$i$, with a bar, for example $\bar{S}_F^{tj}$, $\bar{S}_I^{tj}$, $\bar{G}_k^{tj}$, $\bar{H}_k^{tj}$, $\bar{L}_I^{tj}$, $\bar{L}_F^{tj}$, $\bar{M}_g^{tj}$, $\bar{M}_h^{tj}$, $\bar{N}_g^{tj}$ and $\bar{N}_h^{tj}$. It should be noted that for the $B$ matrices, the corresponding $\bar{B}_n^{tj}$ is just the diagonal matrix $[\beta_n^t]$, with the individual $\beta_n^{ti}$ on the diagonal.
 Using this notation, the expected residual stored energy for all units in a base scenario~$j$ at the end of the last period~$n_t$ of the horizon, the vector $\bar{S}_F^{n_tj}$ can be written as a function of these matrices
 \begin{align}
@@ -1365,8 +1299,6 @@ C_{\rm ts0} &= \trans{A_1} C_s \\
 C_{\rm tsc} &= \trans{\bar{A}_2} C_s + \trans{\bar{A}_4} C_{\rm sc0} + \trans{\bar{A}_6} C_{{\rm sc}k} \\
 C_{\rm tsd} &= \trans{\bar{A}_3} C_s + \trans{\bar{A}_5} C_{\rm sd0} + \trans{\bar{A}_7} C_{{\rm sd}k}. \label{eq:Ctsd}
 \end{align}
-
-
 
 
 %%------------------------------------------
@@ -2562,8 +2494,6 @@ The examples in this section are based on the simple three bus model summarized 
 \end{figure}
 
 The code for the following examples can be found in \mostpath{/lib/t} in the files whose names begin with \code{most\_ex}, such as \code{most\_ex1\_ed.m}.
-%\mbox{\code{most\_ex}\textsf{\textsl{{\relsize{-1.0}\textless{}\mbox{N}\textgreater{}}}}\code{\_}\textsf{\textsl{{\relsize{-1.0}\textless{}\mbox{prob}\textgreater{}}}}\code{.m}}.
-%\code{most\_ex}$N$\code{\_*.m}.
 For all of the following examples, assume that \code{mpopt} is a \matpower{} options struct and that \code{define\_constants} has already been executed.
 
 \begin{Code}
@@ -3092,105 +3022,6 @@ As seen in Figure~\ref{fig:suc_ex_5}, the storage allows all units to remain on 
 An example of using the linear time-varying dynamical system constraints can be found in \code{t\_most\_w\_ds.m}.
 
 
-
-% %%------------------------------------------
-% \clearpage
-% \section{Nonlinear Solver -- {\tt mostac}}
-% \label{sec:nonlinearsolver}
-% 
-% \clearpage
-% 
-% \subsection{Problem Decomposition}
-% 
-% Such a formidable problem is hard to solve for realistic system sizes
-% using an island representation, as has been done in our earlier work.
-% For example, the IEEE 30 bus system with a 24-hour horizon,
-% seven scenarios per time period and 10 contingencies, results in 1,848
-% coupled power flows, and an island representation would involve a
-% 55,440 bus system with 1,848 islands and many unusual constraints and additional
-% variables. Although improvements in the solvers employed by \matpower{} allow it
-% to solve problems of this size, larger systems with more contingencies and
-% efficiency considerations suggest that the problem should be decomposed.
-% 
-% \begin{figure}[!t]
-%   \centering
-%   \includegraphics[width=\textwidth]{structure-multi-period-17}
-%   \caption{Problem Decomposition}
-%   \label{fig:structuredecomp}
-% \end{figure}
-% 
-% In the current design, the decomposition is done by duplicating the variables representing all of the active power injections. One set is used in individual AC OPF problems, each representing a specific scenario or contingency in a specific period. The other set is used in a central coordination quadratic program containing all of the intertemporal and inter-flow constraints and their corresponding variables and costs. The overall structure is illustrated in Figure~\ref{fig:structuredecomp}. With this decomposition scheme, the granularity on the level of a single OPF allows for massive parallelization and the central quadratic program, although large, can be solved up to realistic-sized problems with the current generation of QP and LP solvers. Coordination occurs only at the level of the two copies of the set of all active injections.
-% 
-% Essentially, all traditional OPF constraints \eqref{eq:firstopf}--\eqref{eq:lastopf} are imposed on
-% the sets of variables  $(\theta^{tijk}, V^{tijk}, \pi^{tijk}, \rho^{tijk})$,
-% where $ \pi^{tijk}$ and $  \rho^{tijk}$ are the active and reactive
-% injections, whereas constraints \eqref{eq:firstinterflow}--\eqref{eq:lastinterflow},
-% together with network-like proxy constraints to limit the search
-% space on $p^{tjk}$,
-% and the original cost are imposed on variables
-% $(p,q,p_c,  p_+,p_-,r_+,r_-,s_+,s_-,\delta_+,\delta_-)$.
-% Then, quadratic coordination costs arising from an augmented
-% Lagrangian coordination scheme are imposed on the active
-% injections to force equality of $p^{tijk}$ and $\pi^{tijk}$.  Thus, the costs
-% for each of the OPFs is  purely made from the coordination costs
-% \begin{equation}
-% \sum_i \{ \frac{b}{2} (\pi^{tijk})^2 
-%                  + [\lambda^{tijk} - b \pi^{tijk}_{\rm old} +c (\pi^{tijk}_{\rm old} - p^{tijk}_{\rm old})  ] \pi^{tijk}
-%                  \}
-%                  \label{eq:picoordcost}
-% \end{equation}
-% where $\lambda^{tijk}$ are the coordination multipliers, $c$ is the quadratic augmentation term
-% coefficient, so $c (\pi^{tijk}_{\rm old} - p^{tijk}_{\rm old})  \pi^{tijk}$ is the linearization
-% of this term about the previous iteration's values of $(\pi^{tijk},p^{tijk})$,
-% $b$ is the coefficient of the quadratic regularization term 
-% $\frac{b}{2}(\pi^{tijk}-\pi^{tijk}_{\rm old})^2$; it has a damping effect
-% in the trajectory of the coordination multipliers, a useful feature if problem
-% costs are rather flat.
-% Similarly for the QP, the cost \eqref{eq:mostobjective} is modified to include
-% the terms
-% \begin{equation}
-% \sum_t \sum_j \sum_k \sum_i
-% \{ \frac{b}{2} (p^{tijk})^2 
-%                  + [-\lambda^{tijk} - b p^{tijk}_{\rm old} +c (\pi^{tijk}_{\rm old} - p^{tijk}_{\rm old})  ] p^{tijk}
-%                  \}
-%                  \label{eq:pcoordcost}
-% \end{equation}
-% 
-% \noindent
-% An algorithm for solving the problem with this decomposition is as follows:
-% 
-% \noindent
-% \begin{namelist}{XXX}
-% \item[1.] Initialize $(\lambda^{tijk})$, perhaps by solving the large QP
-%               without the coordination costs and with linearized network constraints; the 
-%               $(\lambda^{tijk})$ take the values of the nodal prices at the active injection buses.
-%               This also assigns initial values to  $(p^{tijk})$.  Similarly, obtain initial values for
-%               $(\pi^{tijk})$, perhaps by solving each individual  OPF with just the original fuel cost.
-% \item[2.] Compute the mismatches $\pi^{tijk}-p^{tijk}$.
-% \item[3.] Update the coordination multipliers according to the mismatches, perhaps by
-%    \begin{equation}
-%       \lambda^{tijk} \leftarrow \lambda^{tijk} + \beta (\pi^{tijk}-p^{tijk})
-%     \end{equation}
-%                where $\beta$ is a step-control parameter.
-% \item[4.]  $\pi^{tijk}_{\rm old} \leftarrow \pi^{tijk}$\\  $p^{tijk}_{\rm old} \leftarrow p^{tijk}$.
-% \item[5.]  Solve one OPF for each of the flows considered in the problem, with
-%                 cost \eqref{eq:picoordcost} and restrictions \eqref{eq:firstopf}--\eqref{eq:lastopf}; obtain
-%                 new $(\pi^{tijk})$.
-%  \item[6.] Solve one large QP with cost \eqref{eq:mostobjective} ammended with
-%                addition \eqref{eq:pcoordcost},  constraints  \eqref{eq:firstinterflow}--\eqref{eq:lastinterflow},
-%                and proxy network constraints such as 
-%    \begin{equation}
-%       - 0.1 P^{tijk}_D \leq P^{tijk}_D - \sum_i p^{tijk}  \leq 0.1 P^{tijk}_D
-%    \end{equation}
-%               where $P^{tijk}_D$ is the system demand in flow $(tijk)$ .  From this,
-%               obtain new $(p^{tijk})$.
-% \item[7.] Compute mismatches $\pi^{tijk} - p^{tijk}$ ; if any are larger in magnitude than some
-%              tolerance, go to step 3 and repeat.
-% \item[8.] From solution, compute all quantities not expressly obtained, such as
-%              expected dispatches and expected storage values.
-% \end{namelist}
-
-
 %%------------------------------------------
 \clearpage
 \section{Acknowledgments}
@@ -3209,20 +3040,6 @@ The authors would like to thank the following people, in no particular order, fo
 % \clearpage
 % \section{\most{} Options}
 % \label{app:options}
-
-% 
-% %%------------------------------------------
-% \clearpage
-% \section{Tutorial Examples}
-% \label{app:tutorial}
-% 
-% \subsection{Deterministic Economic Dispatch}
-% \label{app:ed}
-% 
-% \subsection{Deterministic DC OPF}
-% \label{app:dcopf}
-% 
-% \subsection{Etc.}
 
 
 %%------------------------------------------
@@ -3412,17 +3229,6 @@ The \href{http://www.pserc.cornell.edu/matpower/docs/MOST-manual-1.0.pdf}{\most{
 \begin{itemize}
 \item No significant changes since first public beta release.\footnote{Version 1.0b1 was released on Jun 1, 2016 and 1.0b2 on Nov 1, 2016}
 \end{itemize}
-
-% \subsubsection*{New Features}
-% \begin{itemize}
-% % \item \hl{Fill in details from announcement or ``What's New'' section of index.html or README.}
-% \item \hl{Fill in details \dots}
-% \end{itemize}
-% 
-% \subsubsection*{Bugs Fixed}
-% \begin{itemize}
-% \item \hl{Fill in details \dots}
-% \end{itemize}
 
 \end{appendices}
 
