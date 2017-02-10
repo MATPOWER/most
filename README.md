@@ -37,8 +37,8 @@ System Requirements
 Installation
 ------------
 
-Installation and use of MOST requires familiarity with the basic operation
-of Matlab or Octave, including setting up your Matlab path.
+The preferred method of installation is simply to install MATPOWER,
+which is a prerequisite for MOST and also includes its own copy of MOST.
 
 If you have followed the directions for installing MATPOWER found in 
 the [MATPOWER User's Manual][7], then MOST should already be installed and
@@ -68,6 +68,17 @@ t_most_suc.............ok (148 of 185 skipped)
 All tests successful (762 passed, 932 skipped of 1694)
 Elapsed time 93.13 seconds.
 ```
+
+If, for some reason, you prefer to install your own copy of MOST directly
+from the [MOST GitHub repository][1], simply clone the repository to the
+location of your choice, where we use `<MOST>` to denote the path the
+resulting `most` directory. Then add the following directories to your
+Matlab or Octave path:
+ *  `<MOST>/lib`
+ *  `<MOST>/lib/t`
+It is important that they appear before MATPOWER in your path if you want
+to use this version of MOST, rather than the one included with MATPOWER.
+
 
 Documentation
 -------------
