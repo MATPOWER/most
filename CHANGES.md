@@ -5,6 +5,9 @@ Change history for MOST
 Since last release
 ------------------
 
+#### 5/25/17
+  - Fix dimension of RampWear cost indexing if OpenEnded is true.
+
 #### 1/26/17
   - Add MOST User's Manual to `docs` and sources to `docs/src`.
 
