@@ -6,7 +6,9 @@ Since last release
 ------------------
 
 #### 5/25/17
-  - Fix dimension of RampWear cost indexing if OpenEnded is true.
+  - Fix dimension of `RampWear` cost indexing if `mdi.OpenEnded` is true.
+  - Add missing constant term to objective function value reported
+    by `most_summary`.
 
 #### 1/26/17
   - Add MOST User's Manual to `docs` and sources to `docs/src`.
