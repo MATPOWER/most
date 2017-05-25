@@ -148,7 +148,7 @@
 \newcommand{\most}[0]{{MOST}}
 \newcommand{\mostname}[0]{{{\bf M}{\sc atpower} \textbf{O}ptimal \textbf{S}cheduling \textbf{T}ool}}
 \newcommand{\mosturl}[0]{https://github.com/MATPOWER/most}
-\newcommand{\mostver}[0]{1.0}
+\newcommand{\mostver}[0]{1.0.1-dev}
 \newcommand{\md}[0]{{\most{} Data struct}}
 \newcommand{\powerweb}[0]{{\sc PowerWeb}}
 \newcommand{\pserc}[0]{{\sc PSerc}}
@@ -3226,6 +3226,17 @@ name & description \\
 \label{app:release_history}
 
 The full release history can be found in \mostpath{/docs/CHANGES}.
+
+\subsection{Version 1.0.1-dev -- not yet released}
+\label{app:v101}
+
+The \href{http://www.pserc.cornell.edu/matpower/docs/MOST-manual-1.0.1.pdf}{\most{} 1.0.1 User's Manual} is available online.\footnote{\url{http://www.pserc.cornell.edu/matpower/docs/MOST-manual-1.0.1.pdf}}
+
+\subsubsection*{Bugs Fixed}
+\begin{itemize}
+\item Fix dimension of \code{RampWear} cost indexing if \code{mdi.OpenEnded} is true.
+\item Add missing constant term to objective function value reported by \code{most\_summary}.
+\end{itemize}
 
 \subsection{Version 1.0 -- released Dec 16, 2016}
 \label{app:v10}
