@@ -948,13 +948,13 @@ if mpopt.most.build_model
           A = [Bdc negCg];
           b = -(mpc.bus(:,PD)+mpc.bus(:,GS))/baseMVA-Psh;
           vs = struct('name', {'Va', 'Pg'}, 'idx', {{t,j,k}, {t,j,k}});
-          om.add_constraints('Pmis', {t,j,k}, A, b, b, vs);
+          om.add_lin_constraints('Pmis', {t,j,k}, A, b, b, vs);
           % Then the thermal limits
           tmp = mpc.branch(ion,RATE_A)/baseMVA;
           iuncon = find(~tmp);
           tmp(iuncon) = Inf(size(iuncon));
           vs = struct('name', {'Va'}, 'idx', {{t,j,k}});
-          om.add_constraints('Pf', {t,j,k}, Bl, -tmp-PLsh, tmp-PLsh, vs);
+          om.add_lin_constraints('Pf', {t,j,k}, Bl, -tmp-PLsh, tmp-PLsh, vs);
         end
       end
     end
@@ -970,7 +970,7 @@ if mpopt.most.build_model
           A = sparse(ones(1, ng));
           b = 1.0*sum(mpc.bus(:, PD)+mpc.bus(:,GS))/baseMVA;
           vs = struct('name', {'Pg'}, 'idx', {{t,j,k}});
-          om.add_constraints('Pmis', {t,j,k}, A, b, b, vs);
+          om.add_lin_constraints('Pmis', {t,j,k}, A, b, b, vs);
         end
       end
     end
@@ -1000,11 +1000,11 @@ if mpopt.most.build_model
             u = mpc.gen(r.igr, PMAX) / baseMVA;
             vs = struct('name', {'Pg', 'R'}, 'idx', {{t,j,k}, {t,j,k}});
           end
-          om.add_constraints('Pg_plus_R', {t,j,k}, A, [], u, vs);
+          om.add_lin_constraints('Pg_plus_R', {t,j,k}, A, [], u, vs);
           A = r.zones(:, r.igr);
           l = r.req / mpc.baseMVA;
           vs = struct('name', {'R'}, 'idx', {{t,j,k}});
-          om.add_constraints('Rreq', {t,j,k}, A, l, [], vs);
+          om.add_lin_constraints('Rreq', {t,j,k}, A, l, [], vs);
         end
       end
     end
@@ -1022,7 +1022,7 @@ if mpopt.most.build_model
         A = [sparse((1:ns)', mdi.Storage.UnitIdx, -1, ns, ng) Ins Ins];
         b = zeros(ns, 1);
         vs = struct('name', {'Pg', 'Psc', 'Psd'}, 'idx', {{t,j,k}, {t,j,k}, {t,j,k}});
-        om.add_constraints('Ps', {t,j,k}, A, b, b, vs);
+        om.add_lin_constraints('Ps', {t,j,k}, A, b, b, vs);
       end
     end
   end
@@ -1045,7 +1045,7 @@ if mpopt.most.build_model
         mpc = mdi.flow(t,j,k).mpc;
         [A, u] = makeAy(baseMVA, ng, mpc.gencost, 1, [], ng+1);
         vs = struct('name', {'Pg', 'y'}, 'idx', {{t,j,k}, {t,j,k}});
-        om.add_constraints('ycon', {t,j,k}, A, [], u, vs);
+        om.add_lin_constraints('ycon', {t,j,k}, A, [], u, vs);
       end
     end
   end
@@ -1069,7 +1069,7 @@ if mpopt.most.build_model
         A = sparse((1:ngtmp)', ii, 1, ngtmp, ng);
         u = mdi.flow(t,j,k).mpc.gen(ii,RAMP_10)/baseMVA;
         vs = struct('name', {'Pg', 'Pg'}, 'idx', {{t,j,1}, {t,j,k}});
-        om.add_constraints('rampcont', {t,j,k}, [-A A], -u, u, vs);
+        om.add_lin_constraints('rampcont', {t,j,k}, [-A A], -u, u, vs);
       end
     end
   end
@@ -1089,7 +1089,7 @@ if mpopt.most.build_model
         A = sparse((1:ngtmp)', ii, 1, ngtmp, ng);
         l = zeros(ngtmp, 1);
         vs = struct('name', {'dPp', 'Rpp'}, 'idx', {{t,j,k}, {t}});
-        om.add_constraints('dPpRp', {t,j,k}, [-A A], l, [], vs);
+        om.add_lin_constraints('dPpRp', {t,j,k}, [-A A], l, [], vs);
       end
     end
   end
@@ -1106,7 +1106,7 @@ if mpopt.most.build_model
         A = sparse((1:ngtmp)', ii, 1, ngtmp, ng);
         l = zeros(ngtmp, 1);
         vs = struct('name', {'dPm', 'Rpm'}, 'idx', {{t,j,k}, {t}});
-        om.add_constraints('dPmRm', {t,j,k}, [-A A], l, [], vs);
+        om.add_lin_constraints('dPmRm', {t,j,k}, [-A A], l, [], vs);
       end
     end
   end
@@ -1123,7 +1123,7 @@ if mpopt.most.build_model
         b = zeros(ngtmp, 1);
         vs = struct('name', {'Pg', 'Pc', 'dPp', 'dPm'}, ...
                     'idx', {{t,j,k}, {t}, {t,j,k}, {t,j,k}});
-        om.add_constraints('dPdef', {t,j,k}, [A -A -A A], b, b, vs);
+        om.add_lin_constraints('dPdef', {t,j,k}, [A -A -A A], b, b, vs);
       end
     end
   end
@@ -1154,7 +1154,7 @@ if mpopt.most.build_model
           l = zeros(ng, 1);
           vs = struct('name', {'Pg', 'Pg', 'Rrp'}, ...
                       'idx', {{t,j1,1}, {t+1,j2,1}, {t}});
-          om.add_constraints('Rrp', {t,j1,j2}, A, l, [], vs);
+          om.add_lin_constraints('Rrp', {t,j1,j2}, A, l, [], vs);
         end
       end
     end
@@ -1171,7 +1171,7 @@ if mpopt.most.build_model
       l = mdi.TerminalPg/baseMVA;
       vs = struct('name', {'Pg', 'Rrp'}, ...
                   'idx', {{nt,j1,1}, {nt}});
-      om.add_constraints('Rrp', {nt,j1,1}, A, l, [], vs);
+      om.add_lin_constraints('Rrp', {nt,j1,1}, A, l, [], vs);
     end
   end
   % Now on to downward ramping reserves.
@@ -1188,7 +1188,7 @@ if mpopt.most.build_model
           l = zeros(ng, 1);
           vs = struct('name', {'Pg', 'Pg', 'Rrm'}, ...
                       'idx', {{t,j1,1}, {t+1,j2,1}, {t}});
-          om.add_constraints('Rrm', {t,j1,j2}, A, l, [], vs);
+          om.add_lin_constraints('Rrm', {t,j1,j2}, A, l, [], vs);
         end
       end
     end
@@ -1205,7 +1205,7 @@ if mpopt.most.build_model
       l = -mdi.TerminalPg/baseMVA;
       vs = struct('name', {'Pg', 'Rrm'}, ...
                   'idx', {{nt,j1,1}, {nt}});
-      om.add_constraints('Rrm', {nt,j1,1}, A, l, [], vs);
+      om.add_lin_constraints('Rrm', {nt,j1,1}, A, l, [], vs);
     end
   end
   %
@@ -1224,7 +1224,7 @@ if mpopt.most.build_model
         A = [ diagBeta2EtaIn1 diagBeta2overEtaOut1 Ins -spdiags(beta1(:,1), 0, ns, ns)];
         u = zeros(ns, 1);
         vs = struct('name', {'Psc', 'Psd', 'Sm', 'S0'}, 'idx', {{1,j,1}, {1,j,1}, {1}, {}});
-        om.add_constraints('Sm', {1,j}, A, [], u, vs);
+        om.add_lin_constraints('Sm', {1,j}, A, [], u, vs);
       end
     else
       % sm(1) + beta2*Delta_T*[eta_c*psc(1,j,0) + (1/eta_d)*psd(1,j,0)] <= beta1*Initial/baseMVA
@@ -1232,7 +1232,7 @@ if mpopt.most.build_model
         A = [ diagBeta2EtaIn1 diagBeta2overEtaOut1 Ins ];
         u = beta1(:,1).*mdi.Storage.InitialStorageLowerBound/baseMVA;
         vs = struct('name', {'Psc', 'Psd', 'Sm'}, 'idx', {{1,j,1}, {1,j,1}, {1}});
-        om.add_constraints('Sm', {1,j}, A, [], u, vs);
+        om.add_lin_constraints('Sm', {1,j}, A, [], u, vs);
       end
     end
     % Then the rest of the periods
@@ -1257,7 +1257,7 @@ if mpopt.most.build_model
         else
           u = full(diag1minusRhoBeta1 * Lij * mdi.Storage.InitialStorage/baseMVA);
         end
-        om.add_constraints('Sm', {t,j}, A, [], u);
+        om.add_lin_constraints('Sm', {t,j}, A, [], u);
       end
     end
     % Do the same we did for sm(t) for sp(t). First the initial step ...
@@ -1268,7 +1268,7 @@ if mpopt.most.build_model
         A = [ -diagBeta2EtaIn1 -diagBeta2overEtaOut1 -Ins spdiags(beta1(:,1), 0, ns, ns) ];
         u = zeros(ns, 1);
         vs = struct('name', {'Psc', 'Psd', 'Sp', 'S0'}, 'idx', {{1,j,1}, {1,j,1}, {1}, {}});
-        om.add_constraints('Sp', {1,j}, A, [], u, vs);
+        om.add_lin_constraints('Sp', {1,j}, A, [], u, vs);
       end
     else
       % -sp(1) - beta2*Delta_T*[eta_c*psc(1,j,0) + (1/eta_d)*psd(1,j,0)] <= -beta1*Initial/baseMVA
@@ -1276,7 +1276,7 @@ if mpopt.most.build_model
         A = [ -diagBeta2EtaIn1 -diagBeta2overEtaOut1 -Ins ];
         u = -beta1(:,1).*mdi.Storage.InitialStorageUpperBound/baseMVA;
         vs = struct('name', {'Psc', 'Psd', 'Sp'}, 'idx', {{1,j,1}, {1,j,1}, {1}});
-        om.add_constraints('Sp', {1,j}, A, [], u, vs);
+        om.add_lin_constraints('Sp', {1,j}, A, [], u, vs);
       end
     end
     % Then the rest of the periods
@@ -1301,7 +1301,7 @@ if mpopt.most.build_model
         else
           u = full(-diag1minusRhoBeta1 * Lij * mdi.Storage.InitialStorage/baseMVA);
         end
-        om.add_constraints('Sp', {t,j}, A, [], u);
+        om.add_lin_constraints('Sp', {t,j}, A, [], u);
       end
     end
     % Now go on and limit the amount of energy that can be used if a
@@ -1323,7 +1323,7 @@ if mpopt.most.build_model
           vs = struct('name', {'Psc', 'Psd', 'Psc', 'Psd'}, ...
                       'idx', {{1,j,1}, {1,j,1}, {1,j,k}, {1,j,k}});
         end
-        om.add_constraints('contSm', {1,j,k}, A, [], u, vs);
+        om.add_lin_constraints('contSm', {1,j,k}, A, [], u, vs);
       end
     end
     % then the rest of the periods
@@ -1349,7 +1349,7 @@ if mpopt.most.build_model
           else
             u = u + diag1minusRhoBeta5 * Lij * mdi.Storage.InitialStorageLowerBound/baseMVA;
           end
-          om.add_constraints('contSm', {t,j,k}, A, [], u);
+          om.add_lin_constraints('contSm', {t,j,k}, A, [], u);
         end
       end
     end
@@ -1371,7 +1371,7 @@ if mpopt.most.build_model
           vs = struct('name', {'Psc', 'Psd', 'Psc', 'Psd'}, ...
                       'idx', {{1,j,1}, {1,j,1}, {1,j,k}, {1,j,k}});
         end
-        om.add_constraints('contSp', {1,j,k}, A, [], u, vs);
+        om.add_lin_constraints('contSp', {1,j,k}, A, [], u, vs);
       end
     end
     % then the rest of the periods
@@ -1397,7 +1397,7 @@ if mpopt.most.build_model
           else
             u = u - diag1minusRhoBeta5 * Lij * mdi.Storage.InitialStorageUpperBound/baseMVA;
           end
-          om.add_constraints('contSp', {t,j,k}, A, [], u);
+          om.add_lin_constraints('contSp', {t,j,k}, A, [], u);
         end
       end
     end
@@ -1426,7 +1426,7 @@ if mpopt.most.build_model
       b = (1/endprob) * b;
       l = mdi.Storage.ExpectedTerminalStorageMin / baseMVA - b;
       u = mdi.Storage.ExpectedTerminalStorageMax / baseMVA - b;
-      om.add_constraints('ESnt', A, l, u);
+      om.add_lin_constraints('ESnt', A, l, u);
     elseif mdi.Storage.ForceCyclicStorage
       % 2) Constrain the initial storage (a variable) to be the same as the final expected storage
       A = sparse(ns, nvars);
@@ -1444,7 +1444,7 @@ if mpopt.most.build_model
       end
       A(:, vv.i1.S0:vv.iN.S0) = (1/endprob) * A(:, vv.i1.S0:vv.iN.S0) - speye(ns);
       b = zeros(ns, 1);
-      om.add_constraints('ESnt', A, b, b);
+      om.add_lin_constraints('ESnt', A, b, b);
     end
   end
 
@@ -1485,7 +1485,7 @@ if mpopt.most.build_model
       end
       A(:, vv.i1.Z(t):vv.iN.Z(t)) = mdi.dstep(t).A;
       A(:, vv.i1.Z(t+1):vv.iN.Z(t+1)) = -speye(nzds);
-      om.add_constraints('DSz', {t}, A, b, b);
+      om.add_lin_constraints('DSz', {t}, A, b, b);
     end
   end
   
@@ -1503,7 +1503,7 @@ if mpopt.most.build_model
       end
       l = mdi.dstep(t).ymin;
       u = mdi.dstep(t).ymax;
-      om.add_constraints('DSy', {t}, A, l, u);
+      om.add_lin_constraints('DSy', {t}, A, l, u);
     end
   end
   
@@ -1532,7 +1532,7 @@ if mpopt.most.build_model
         A = [Ing -Ing -Ing Ing];
         b = zeros(ng, 1);
       end
-      om.add_constraints('uvw', {t}, A, b, b, vs);
+      om.add_lin_constraints('uvw', {t}, A, b, b, vs);
     end
     % Then continue with minimimum up time constraints. Again, two
     % different forms depending on whether the horizon is cyclical or not
@@ -1558,7 +1558,7 @@ if mpopt.most.build_model
             vs(end).idx  = {ti(tt)};
             A = [A sparse(1, i, 1, 1, ng)];
         end
-        om.add_constraints('minup', {t, i}, A, [], 0, vs);
+        om.add_lin_constraints('minup', {t, i}, A, [], 0, vs);
       end
     end
     % Continue with minimimum downtime constraints. Two
@@ -1585,7 +1585,7 @@ if mpopt.most.build_model
             vs(end).idx  = {ti(tt)};
             A = [A sparse(1, i, 1, 1, ng)];
         end
-        om.add_constraints('mindown', {t, i}, A, [], 1, vs);
+        om.add_lin_constraints('mindown', {t, i}, A, [], 1, vs);
       end
     end
     % Limit generation ranges based on commitment status; first Pmax;
@@ -1603,7 +1603,7 @@ if mpopt.most.build_model
           A = [ sparse(1:nii, ii, 1, nii, ng) ...
                 sparse(1:nii, ii, -mpc.gen(ii, PMAX)/baseMVA, nii, ng) ];
           u = zeros(nii, 1);
-          om.add_constraints('uPmax', {t,j,k}, A, [], u, vs);
+          om.add_lin_constraints('uPmax', {t,j,k}, A, [], u, vs);
         end
       end
     end
@@ -1619,7 +1619,7 @@ if mpopt.most.build_model
           A = [ sparse(1:nii, ii, -1, nii, ng) ...
                 sparse(1:nii, ii, mpc.gen(ii, PMIN)/baseMVA, nii, ng) ];
           u = zeros(nii, 1);
-          om.add_constraints('uPmin', {t,j,k}, A, [], u, vs);
+          om.add_lin_constraints('uPmin', {t,j,k}, A, [], u, vs);
         end
       end
     end
@@ -1639,7 +1639,7 @@ if mpopt.most.build_model
             A = [ sparse(1:nii, ii, 1, nii, ng) ...
                   sparse(1:nii, ii, -mpc.gen(ii, QMAX)/baseMVA, nii, ng) ];
             u = zeros(nii, 1);
-            om.add_constraints('uQmax', {t,j,k}, A, [], u, vs);
+            om.add_lin_constraints('uQmax', {t,j,k}, A, [], u, vs);
           end
         end
       end
@@ -1655,7 +1655,7 @@ if mpopt.most.build_model
             A = [ sparse(1:nii, ii, -1, nii, ng) ...
                   sparse(1:nii, ii, mpc.gen(ii, QMIN)/baseMVA, nii, ng) ];
             u = zeros(nii, 1);
-            om.add_constraints('uQmin', {t,j,k}, A, [], u, vs);
+            om.add_lin_constraints('uQmin', {t,j,k}, A, [], u, vs);
           end
         end
       end
