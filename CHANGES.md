@@ -5,6 +5,10 @@ Change history for MOST
 Since last release
 ------------------
 
+#### 9/1/17
+  - Use MATPOWER's new quadratic costs in @opt_model in place of the
+    legacy cost model.
+
 #### 8/7/17
   - Switch to OOP notation everywhere for `opt_model` object,
     e.g. `om.method()`.
