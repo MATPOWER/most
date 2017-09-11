@@ -1962,8 +1962,7 @@ if isfield(mdi, 'CoordCost') && ...
 %   cp = struct('Cw', mdi.CoordCost.Cuser(:), ...
 %         'H', [ mdi.CoordCost.Huser     sparse(nvuser,nvars-nvuser) ;
 %             sparse(nvars-nvuser,nvuser) sparse(nvars-nvuser,nvars-nvuser) ]);
-%   om.add_costs('CoordCost', cp);
-%   om.build_cost_params('force');
+%   om.add_legacy_costs('CoordCost', cp);
 end
 
 mdi.om = om;
@@ -1975,7 +1974,7 @@ end
 if verbose
   fprintf('- Assembling full set of variable bounds.\n');
 end
-[mdi.QP.x0, mdi.QP.xmin, mdi.QP.xmax, mdi.QP.vtype] = om.getv();
+[mdi.QP.x0, mdi.QP.xmin, mdi.QP.xmax, mdi.QP.vtype] = om.params_var();
 
 tmptime(2,:) = clock;
 
