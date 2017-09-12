@@ -1689,7 +1689,7 @@ if mpopt.most.build_model
     c = -w * baseMVA * mdi.RampWearCostCoeff(:,1) .* mdi.InitialPg;
     vs = struct('name', {'Pg'}, 'idx', {{1,j,1}});
     k0 = w * 0.5 * mdi.RampWearCostCoeff(:,1)' * mdi.InitialPg.^2;
-    om.add_quadratic_costs('RampWear', {1,j,1}, Q, c, k0, vs);
+    om.add_quad_cost('RampWear', {1,j,1}, Q, c, k0, vs);
   end
   % Then the remaining periods
   for t = 2:nt
@@ -1701,7 +1701,7 @@ if mpopt.most.build_model
         j = ng+(1:ng)';
         Q = sparse([i;j;i;j], [i;i;j;j], [h;-h;-h;h], 2*ng, 2*ng);
         vs = struct('name', {'Pg', 'Pg'}, 'idx', {{t-1,j1,1}, {t,j2,1}});
-        om.add_quadratic_costs('RampWear', {t,j1,j2}, Q, zeros(2*ng,1), 0, vs);
+        om.add_quad_cost('RampWear', {t,j1,j2}, Q, zeros(2*ng,1), 0, vs);
       end
     end
   end
@@ -1716,7 +1716,7 @@ if mpopt.most.build_model
       c = -w * baseMVA * mdi.RampWearCostCoeff(:,nt+1) .* mdi.TerminalPg;
       vs = struct('name', {'Pg'}, 'idx', {{nt,j,1}});
       k0 = w * 0.5 * mdi.RampWearCostCoeff(:,nt+1)' * mdi.TerminalPg.^2;
-      om.add_quadratic_costs('RampWear', {nt+1,j,1}, Q, c, k0, vs);
+      om.add_quad_cost('RampWear', {nt+1,j,1}, Q, c, k0, vs);
     end
   end
 
@@ -1773,7 +1773,7 @@ if mpopt.most.build_model
             end
           end
           vs = struct('name', {'Pg'}, 'idx', {{t,j,k}});
-          om.add_quadratic_costs('Cp', {t,j,k}, Q, c, k0, vs);
+          om.add_quad_cost('Cp', {t,j,k}, Q, c, k0, vs);
         end
 
         % weighted y-variables for piecewise linear energy costs for committed units
@@ -1781,22 +1781,22 @@ if mpopt.most.build_model
         if mdi.idx.ny(t,j,k)
           c = w * ones(mdi.idx.ny(t,j,k),1);
           vs = struct('name', {'y'}, 'idx', {{t,j,k}});
-          om.add_quadratic_costs('Cy', {t,j,k}, [], c, 0, vs);
+          om.add_quad_cost('Cy', {t,j,k}, [], c, 0, vs);
         end
 
         % inc and dec offers for each flow
         c = w * baseMVA * mdi.offer(t).PositiveActiveDeltaPrice(:);
         vs = struct('name', {'dPp'}, 'idx', {{t,j,k}});
-        om.add_quadratic_costs('Cpp', {t,j,k}, [], c, 0, vs);
+        om.add_quad_cost('Cpp', {t,j,k}, [], c, 0, vs);
         c = w * baseMVA * mdi.offer(t).NegativeActiveDeltaPrice(:);
         vs = struct('name', {'dPm'}, 'idx', {{t,j,k}});
-        om.add_quadratic_costs('Cpm', {t,j,k}, [], c, 0, vs);
+        om.add_quad_cost('Cpm', {t,j,k}, [], c, 0, vs);
 
         % weighted fixed reserves cost
         if mdi.IncludeFixedReserves
           c = w * mdi.FixedReserves(t,j,k).cost(r.igr) * baseMVA;
           vs = struct('name', {'R'}, 'idx', {{t,j,k}});
-          om.add_quadratic_costs('Rcost', {t,j,k}, [], c, 0, vs);
+          om.add_quad_cost('Rcost', {t,j,k}, [], c, 0, vs);
         end
       end
     end
@@ -1804,10 +1804,10 @@ if mpopt.most.build_model
     % contingency reserve costs
     c = baseMVA * mdi.StepProb(t) * mdi.offer(t).PositiveActiveReservePrice(:);
     vs = struct('name', {'Rpp'}, 'idx', {{t}});
-    om.add_quadratic_costs('Crpp', {t}, [], c, 0, vs);
+    om.add_quad_cost('Crpp', {t}, [], c, 0, vs);
     c = baseMVA * mdi.StepProb(t) * mdi.offer(t).NegativeActiveReservePrice(:);
     vs = struct('name', {'Rpm'}, 'idx', {{t}});
-    om.add_quadratic_costs('Crpm', {t}, [], c, 0, vs);
+    om.add_quad_cost('Crpm', {t}, [], c, 0, vs);
   end
   % Assign load following ramp reserve costs.  Do first nt-1 periods first
   om.init_indexed_name('qdc', 'Crrp', {mdi.idx.ntramp});
@@ -1815,20 +1815,20 @@ if mpopt.most.build_model
   for t = 1:nt-1,
     c = baseMVA * mdi.StepProb(t+1) * mdi.offer(t).PositiveLoadFollowReservePrice(:);
     vs = struct('name', {'Rrp'}, 'idx', {{t}});
-    om.add_quadratic_costs('Crrp', {t}, [], c, 0, vs);
+    om.add_quad_cost('Crrp', {t}, [], c, 0, vs);
     c = baseMVA * mdi.StepProb(t+1) * mdi.offer(t).NegativeLoadFollowReservePrice(:);
     vs = struct('name', {'Rrm'}, 'idx', {{t}});
-    om.add_quadratic_costs('Crrm', {t}, [], c, 0, vs);
+    om.add_quad_cost('Crrm', {t}, [], c, 0, vs);
   end
   % Then do last period if needed Terminal state case
   if ~mdi.OpenEnded
     %% are these costs missing a mdi.StepProb(t)?  -- rdz
     c = baseMVA * mdi.offer(nt).PositiveLoadFollowReservePrice(:);
     vs = struct('name', {'Rrp'}, 'idx', {{nt}});
-    om.add_quadratic_costs('Crrp', {nt}, [], c, 0, vs);
+    om.add_quad_cost('Crrp', {nt}, [], c, 0, vs);
     c = baseMVA * mdi.offer(nt).NegativeLoadFollowReservePrice(:);
     vs = struct('name', {'Rrm'}, 'idx', {{nt}});
-    om.add_quadratic_costs('Crrm', {nt}, [], c, 0, vs);
+    om.add_quad_cost('Crrm', {nt}, [], c, 0, vs);
   end
   % Assign startup/shutdown costs, if any, and fixed operating costs
   if UC
@@ -1844,13 +1844,13 @@ if mpopt.most.build_model
       end
       c = ww.*mdi.UC.c00(:,t);
       vs = struct('name', {'u'}, 'idx', {{t}});
-      om.add_quadratic_costs('c00', {t}, [], c, 0, vs);
+      om.add_quad_cost('c00', {t}, [], c, 0, vs);
       c = mdi.StepProb(t)*mdi.flow(t,1,1).mpc.gencost(:, STARTUP);
       vs = struct('name', {'v'}, 'idx', {{t}});
-      om.add_quadratic_costs('startup', {t}, [], c, 0, vs);
+      om.add_quad_cost('startup', {t}, [], c, 0, vs);
       c = mdi.StepProb(t)*mdi.flow(t,1,1).mpc.gencost(:, SHUTDOWN);
       vs = struct('name', {'w'}, 'idx', {{t}});
-      om.add_quadratic_costs('shutdown', {t}, [], c, 0, vs);
+      om.add_quad_cost('shutdown', {t}, [], c, 0, vs);
     end
   end
   % Finally, assign any value to leftover stored energy
@@ -1916,7 +1916,7 @@ if mpopt.most.build_model
           Cfstor(vv.i1.S0:vv.iN.S0) - ...
           baseMVA * mdi.Storage.TerminalStoragePrice' * A1;
     end
-    om.add_quadratic_costs('fstor', [], Cfstor', 0);
+    om.add_quad_cost('fstor', [], Cfstor', 0);
 
     % The following is a hack to make the storage state bounds tight;
     % assign them a very small cost
@@ -1924,7 +1924,7 @@ if mpopt.most.build_model
     c = 1e-2 * [-ones(ns,1); ones(ns,1)];
     for t = 1:nt
       vs = struct('name', {'Sm', 'Sp'}, 'idx', {{t}, {t}});
-      om.add_quadratic_costs('SpSmFudge', {t}, [], c, 0, vs);
+      om.add_quad_cost('SpSmFudge', {t}, [], c, 0, vs);
     end
   else
     Cfstor = sparse(1, nvars);
