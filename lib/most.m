@@ -1970,7 +1970,7 @@ mdi.om = om;
 if verbose
   fprintf('- Assembling full set of constraints.\n');
 end
-[mdi.QP.A, mdi.QP.l, mdi.QP.u] = om.params_lin_cons();
+[mdi.QP.A, mdi.QP.l, mdi.QP.u] = om.params_lin_constraint();
 if verbose
   fprintf('- Assembling full set of variable bounds.\n');
 end
