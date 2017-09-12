@@ -571,7 +571,7 @@ if mpopt.most.build_model
           Va_min(iref) = mdi.flow(t,j,k).mpc.bus(iref,VA)*pi/180;
           Va_max(iref) = Va_min(iref);
           
-          om.add_vars('Va', {t,j,k}, mdi.idx.nb(t,j,k), Va0, Va_min, Va_max);
+          om.add_var('Va', {t,j,k}, mdi.idx.nb(t,j,k), Va0, Va_min, Va_max);
         end
       end
       % All active injections in c3sopf cell
@@ -586,7 +586,7 @@ if mpopt.most.build_model
           pmin = genmask .* mpc.gen(:, PMIN) / baseMVA;
           pmax = genmask .* mpc.gen(:, PMAX) / baseMVA;
         end
-        om.add_vars('Pg', {t,j,k}, ng, p0, pmin, pmax);
+        om.add_var('Pg', {t,j,k}, ng, p0, pmin, pmax);
       end
       if mdi.IncludeFixedReserves
         for k = 1:mdi.idx.nc(t,j)+1
@@ -635,16 +635,16 @@ if mpopt.most.build_model
           kk = find(r.qty(r.igr) < Rmax);
           Rmax(kk) = r.qty(r.igr(kk));      %% ... stated max reserve qty
           Rmax = Rmax / baseMVA;
-          om.add_vars('R', {t,j,k}, ngr, [], zeros(ngr, 1), Rmax);
+          om.add_var('R', {t,j,k}, ngr, [], zeros(ngr, 1), Rmax);
         end
       end
       % All deltaP plus in c3sopf cell
       for k = 1:mdi.idx.nc(t,j)+1
-        om.add_vars('dPp', {t,j,k}, ng, [], zeros(ng,1), []);
+        om.add_var('dPp', {t,j,k}, ng, [], zeros(ng,1), []);
       end
       % All deltaP minus in c3sopf cell
       for k = 1:mdi.idx.nc(t,j)+1
-        om.add_vars('dPm', {t,j,k}, ng, [], zeros(ng,1), []);
+        om.add_var('dPm', {t,j,k}, ng, [], zeros(ng,1), []);
       end
       % All y variables in c3sopf cell - even if not committed.  There must
       % be a fixed cost associated with u(t,i,j) such that if u(t,i,j) = 0,
@@ -652,7 +652,7 @@ if mpopt.most.build_model
       % u(t,i,j) = 1, then the fixed cost plus that interpolated from the
       % (x,y) pairs is as desired.
       for k = 1:mdi.idx.nc(t,j)+1
-        om.add_vars('y', {t,j,k}, mdi.idx.ny(t,j,k), [], [], []);
+        om.add_var('y', {t,j,k}, mdi.idx.ny(t,j,k), [], [], []);
       end %
     end % for j
   end % for t
@@ -661,7 +661,7 @@ if mpopt.most.build_model
   om.init_indexed_name('var', 'Rpp', {nt});
   om.init_indexed_name('var', 'Rpm', {nt});
   for t = 1:nt
-    om.add_vars('Pc', {t}, ng);
+    om.add_var('Pc', {t}, ng);
     %% non-negativity on Rpp and Rpm is redundant, leave unbounded below
     %% (except where gen is off-line for all j and k)
     Rpmin = -Inf(ng,1);
@@ -672,8 +672,8 @@ if mpopt.most.build_model
       end
     end
     Rpmin(off == 1) = 0;
-    om.add_vars('Rpp', {t}, ng, [], Rpmin, mdi.offer(t).PositiveActiveReserveQuantity/baseMVA);
-    om.add_vars('Rpm', {t}, ng, [], Rpmin, mdi.offer(t).NegativeActiveReserveQuantity/baseMVA);
+    om.add_var('Rpp', {t}, ng, [], Rpmin, mdi.offer(t).PositiveActiveReserveQuantity/baseMVA);
+    om.add_var('Rpm', {t}, ng, [], Rpmin, mdi.offer(t).NegativeActiveReserveQuantity/baseMVA);
   end
   % Now load following ramping reserves.  In open ended problem, we need to
   % specify nt-1 ramping reserves, those needed to transition 1-2, 2-3, ..
@@ -690,14 +690,14 @@ if mpopt.most.build_model
   om.init_indexed_name('var', 'Rrm', {mdi.idx.ntramp});
   for t = 1:mdi.idx.ntramp
     ramp30 = mdi.flow(t,1,1).mpc.gen(:,RAMP_30)*2*mdi.Delta_T;
-    om.add_vars('Rrp', {t}, ng, [], zeros(ng,1), ...
+    om.add_var('Rrp', {t}, ng, [], zeros(ng,1), ...
         min(mdi.offer(t).PositiveLoadFollowReserveQuantity, ramp30)/baseMVA);
-%     om.add_vars('Rrm', {t}, ng, [], zeros(ng,1), ...
+%     om.add_var('Rrm', {t}, ng, [], zeros(ng,1), ...
 %         min(mdi.offer(t).NegativeLoadFollowReserveQuantity, ramp30)/baseMVA);
   end
   for t = 1:mdi.idx.ntramp
     ramp30 = mdi.flow(t,1,1).mpc.gen(:,RAMP_30)*2*mdi.Delta_T;
-    om.add_vars('Rrm', {t}, ng, [], zeros(ng,1), ...
+    om.add_var('Rrm', {t}, ng, [], zeros(ng,1), ...
         min(mdi.offer(t).NegativeLoadFollowReserveQuantity, ramp30)/baseMVA);
   end
   % Continue with storage charge/discharge injections, one of each
@@ -709,8 +709,8 @@ if mpopt.most.build_model
     for j = 1:mdi.idx.nj(t)
       for k = 1:mdi.idx.nc(t,j)+1
         if ns
-          om.add_vars('Psc', {t,j,k}, ns, [], [], zeros(ns,1));
-%           om.add_vars('Psd', {t,j,k}, ns, [], zeros(ns,1), []);
+          om.add_var('Psc', {t,j,k}, ns, [], [], zeros(ns,1));
+%           om.add_var('Psd', {t,j,k}, ns, [], zeros(ns,1), []);
         end
       end
     end
@@ -719,7 +719,7 @@ if mpopt.most.build_model
     for t = 1:nt
       for j = 1:mdi.idx.nj(t)
         for k = 1:mdi.idx.nc(t,j)+1
-          om.add_vars('Psd', {t,j,k}, ns, [], zeros(ns,1), []);
+          om.add_var('Psd', {t,j,k}, ns, [], zeros(ns,1), []);
         end
       end
     end
@@ -730,17 +730,17 @@ if mpopt.most.build_model
   om.init_indexed_name('var', 'Sm', {nt});
   if ns
     for t = 1:nt
-      om.add_vars('Sp', {t}, ns, [], [], MaxStorageLevel(:,t)/baseMVA);
-%       om.add_vars('Sm', {t}, ns, [], MinStorageLevel(:,t)/baseMVA, []);
+      om.add_var('Sp', {t}, ns, [], [], MaxStorageLevel(:,t)/baseMVA);
+%       om.add_var('Sm', {t}, ns, [], MinStorageLevel(:,t)/baseMVA, []);
     end
     for t = 1:nt
-      om.add_vars('Sm', {t}, ns, [], MinStorageLevel(:,t)/baseMVA, []);
+      om.add_var('Sm', {t}, ns, [], MinStorageLevel(:,t)/baseMVA, []);
     end
   end
   % Possible initial storage quantities when using cyclic storage dispatch
   % so that initial storage = expected terminal storage is a constraint
   if ns && mdi.Storage.ForceCyclicStorage
-    om.add_vars('S0', ns, [], ...
+    om.add_var('S0', ns, [], ...
         mdi.Storage.InitialStorageLowerBound / baseMVA, ...
         mdi.Storage.InitialStorageUpperBound / baseMVA);
   end
@@ -757,7 +757,7 @@ if mpopt.most.build_model
         zmax = mdi.dstep(t).zmax;
       end
       z0 = (zmax - zmin) / 2;
-      om.add_vars('Z', {t}, nzds, z0, zmin, zmax);
+      om.add_var('Z', {t}, nzds, z0, zmin, zmax);
     end
   end
   % Now the integer variables; u variables mean on/off status
@@ -788,15 +788,15 @@ if mpopt.most.build_model
       vt = vt0;                 % initialize all variable types to binary
       vt(umin == umax) = 'C';   % make continuous for those that are fixed
       
-      om.add_vars('u', {t}, ng, zeros(ng, 1), umin, umax, vt);
+      om.add_var('u', {t}, ng, zeros(ng, 1), umin, umax, vt);
     end
     % v variables mean startup events
     for t = 1:nt
-      om.add_vars('v', {t}, ng, zeros(ng, 1), zeros(ng, 1), ones(ng, 1));
+      om.add_var('v', {t}, ng, zeros(ng, 1), zeros(ng, 1), ones(ng, 1));
     end
     % w variables mean shutdown events
     for t = 1:nt
-      om.add_vars('w', {t}, ng, zeros(ng, 1), zeros(ng, 1), ones(ng, 1));
+      om.add_var('w', {t}, ng, zeros(ng, 1), zeros(ng, 1), ones(ng, 1));
     end
   end
   % An external program may be using coordination with AC flows, and in
@@ -817,7 +817,7 @@ if mpopt.most.build_model
             qmin = genmask .* mpc.gen(:, QMIN) / baseMVA;
             qmax = genmask .* mpc.gen(:, QMAX) / baseMVA;
           end
-          om.add_vars('Qg', {t,j,k}, ng, q0, qmin, qmax);
+          om.add_var('Qg', {t,j,k}, ng, q0, qmin, qmax);
         end
       end
     end
