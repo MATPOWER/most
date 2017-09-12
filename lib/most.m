@@ -1962,7 +1962,7 @@ if isfield(mdi, 'CoordCost') && ...
 %   cp = struct('Cw', mdi.CoordCost.Cuser(:), ...
 %         'H', [ mdi.CoordCost.Huser     sparse(nvuser,nvars-nvuser) ;
 %             sparse(nvars-nvuser,nvuser) sparse(nvars-nvuser,nvars-nvuser) ]);
-%   om.add_legacy_costs('CoordCost', cp);
+%   om.add_legacy_cost('CoordCost', cp);
 end
 
 mdi.om = om;
