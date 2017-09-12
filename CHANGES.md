@@ -5,6 +5,9 @@ Change history for MOST
 Since last release
 ------------------
 
+#### 9/12/17
+  - Update for @opt_model API cleanup.
+
 #### 9/1/17
   - Use MATPOWER's new quadratic costs in @opt_model in place of the
     legacy cost model.
