@@ -26,8 +26,8 @@ power flow and optimal power flow problems.
 System Requirements
 -------------------
 
-*   [Matlab][3] version 7 (R14) or later, or
-*   [GNU Octave][4] version 3.4 or later
+*   [Matlab][3] version 7.3 (R2006b) or later, or
+*   [GNU Octave][4] version 4.0 or later
 *   [MATPOWER][5] version 6 or later,
 *   [MP-Test][6], for running the MOST test suite (included with [MATPOWER][5])
 *   A good LP/MILP, QP/MIQP solver, such as Gurobi, CPLEX, MOSEK, Matlab's
