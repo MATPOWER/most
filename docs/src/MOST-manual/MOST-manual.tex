@@ -2237,7 +2237,7 @@ name & value & description \\
 \end{Code}
 
 The \code{loadgenericdata} function loads data from a variable, M-file or MAT-file and checks that it matches a specified type.
-The first argument, \code{varfile}, is a variable containing the data structure or a string containing the name of a function M-file or a MAT-file on the Matlab path.
+The first argument, \code{varfile}, is a variable containing the data structure or a string containing the name of a function M-file or a MAT-file on the \matlab{} path.
 If no file extension is provided, it will attempt to load a MAT-file with the specified name and, if not found, will call a function by that name to get the data.
 The function M-file should return a single argument containing the data.
 A MAT-file should either contain a single variable with the desired data or provide the variable name in \code{varname}.
