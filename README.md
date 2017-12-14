@@ -160,5 +160,5 @@ MOST is distributed under the [3-clause BSD license][10].
 [8]: https://github.com/MATPOWER/most/blob/master/docs/MOST-manual.pdf
 [9]: CONTRIBUTING.md
 [10]: LICENSE
-[11]: http://dx.doi.org/10.1109/TPWRS.2010.2051168
-[12]: http://dx.doi.org/10.1109/TSG.2013.2281001
+[11]: https://doi.org/10.1109/TPWRS.2010.2051168
+[12]: https://doi.org/10.1109/TSG.2013.2281001
