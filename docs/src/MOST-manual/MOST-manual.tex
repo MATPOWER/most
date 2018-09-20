@@ -712,7 +712,7 @@ This section summarizes the nomenclature for the full multi-period mixed-integer
 \item[$Q_{\rm min}^{tijk}, Q_{\rm max}^{tijk}$] Limits on reactive injection for unit~$i$ in post-contingency state~$k$ of scenario~$j$ at time~$t$.
 \item[$R_{\rm max+}^{ti}, R_{\rm max-}^{ti}$] Upward/downward contingency (or zonal) reserve capacity limits for unit~$i$ at time~$t$.
 \item[$R_l^{tjk}$] MW reserve requirement for zone~$l$ in post-contingency state~$k$ of scenario~$j$ at time~$t$.
-\item[$\delta^{i}_{\rm max+}, \delta^i_{\rm max-}$] Upward/downward load-following ramping reserve limits for unit~$i$.
+\item[$\delta^{ti}_{\rm max+}, \delta^{ti}_{\rm max-}$] Upward/downward load-following ramping reserve limits for unit~$i$ at time $t$ for transition to time $t+1$.
 \item[$\Delta_+^i, \Delta_-^i$] Upward/downward physical ramping limits for unit~$i$ for transitions from base ($k=0$) to contingency cases.
 \item[$\rho^{ti}$] Parameter for storage unit~$i$ at period $t$ that determines the weighting in storage constraints, where the storage dispatch bounds are computed relative to a weighted average of previous period endogenous bounds $s_+^{(t-1)i}$, $s_-^{(t-1)i}$ ($\rho^{ti} = 1$) and period- and scenario-specific initial expected stored energy ($\rho^{ti} = 0$).
 \item[$S^{ti}_{\rm max},S^{ti}_{\rm min}$] Stored energy (in MWh) max/min limits for storage unit~$i$ at time~$t$.
