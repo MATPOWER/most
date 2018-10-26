@@ -1979,6 +1979,7 @@ name & type\tnote{*} & description \\
 name & type\tnote{*} & description \\
 \midrule
 \code{f}	& O	& value of objective function $f(x)$ in \eqref{eq:mostobjective} at solution (same as \code{md.QP.f})	\\
+\code{success}	& O	& optimization success flag, 1 = succeeded, 0 = failed	\\
 \code{Pc(i,t)}	& O	& $n_g \times n_t$, active power contract quantity, $p_c^{ti}$	\\
 \code{Rpp(i,t)}	& O	& $n_g \times n_t$, upward active contingency reserve quantity $r_+^{ti}$	\\
 \code{Rpm(i,t)}	& O	& $n_g \times n_t$, downward active contingency reserve quantity $r_-^{ti}$	\\
@@ -3272,6 +3273,12 @@ The \href{http://www.pserc.cornell.edu/matpower/docs/MOST-manual-1.0.1.pdf}{\mos
 \begin{itemize}
 \item Updated to use OOP notation for \code{opt\_model} object, and avoid calls to deprecated methods, using \code{init\_indexed\_name()} and \code{add\_lin\_constraint()} instead.
 \item Updated to use \matpower{}'s new quadratic costs in \code{opt\_model} in place of the legacy cost model.
+\item Add \code{success} flag to \code{md.results} output \md{} to indicate success or failure of optimization.
+\end{itemize}
+
+\subsubsection*{Incompatible Changes}
+\begin{itemize}
+\item Failure of the optimization no longer halts execution and jumps to the debugger.
 \end{itemize}
 
 \end{appendices}
