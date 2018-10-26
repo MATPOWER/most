@@ -3236,24 +3236,6 @@ name & description \\
 
 The full release history can be found in \mostpath{/docs/CHANGES}.
 
-\subsection{Version 1.0.1-dev -- not yet released}
-\label{app:v101}
-
-The \href{http://www.pserc.cornell.edu/matpower/docs/MOST-manual-1.0.1.pdf}{\most{} 1.0.1 User's Manual} is available online.\footnote{\url{http://www.pserc.cornell.edu/matpower/docs/MOST-manual-1.0.1.pdf}}
-
-\subsubsection*{Bugs Fixed}
-\begin{itemize}
-\item Fix bugs in \code{plot\_uc\_data()} resulting in incorrect legends.
-\item Fix dimension of \code{RampWear} cost indexing if \code{mdi.OpenEnded} is true.
-\item Add missing constant term to objective function value reported by \code{most\_summary}.
-\end{itemize}
-
-\subsubsection*{Other Changes}
-\begin{itemize}
-\item Updated to use OOP notation for \code{opt\_model} object, and avoid calls to deprecated methods, using \code{init\_indexed\_name()} and \code{add\_lin\_constraint()} instead.
-\item Updated to use \matpower{}'s new quadratic costs in \code{opt\_model} in place of the legacy cost model.
-\end{itemize}
-
 \subsection{Version 1.0 -- released Dec 16, 2016}
 \label{app:v10}
 
@@ -3272,6 +3254,24 @@ The \href{http://www.pserc.cornell.edu/matpower/docs/MOST-manual-1.0.pdf}{\most{
 \subsubsection*{Other Changes}
 \begin{itemize}
 \item No significant changes since first public beta release.\footnote{Version 1.0b1 was released on Jun 1, 2016 and 1.0b2 on Nov 1, 2016}
+\end{itemize}
+
+\subsection{Version 1.0.1-dev -- not yet released}
+\label{app:v101}
+
+The \href{http://www.pserc.cornell.edu/matpower/docs/MOST-manual-1.0.1.pdf}{\most{} 1.0.1 User's Manual} is available online.\footnote{\url{http://www.pserc.cornell.edu/matpower/docs/MOST-manual-1.0.1.pdf}}
+
+\subsubsection*{Bugs Fixed}
+\begin{itemize}
+\item Fix bugs in \code{plot\_uc\_data()} resulting in incorrect legends.
+\item Fix dimension of \code{RampWear} cost indexing if \code{mdi.OpenEnded} is true.
+\item Add missing constant term to objective function value reported by \code{most\_summary}.
+\end{itemize}
+
+\subsubsection*{Other Changes}
+\begin{itemize}
+\item Updated to use OOP notation for \code{opt\_model} object, and avoid calls to deprecated methods, using \code{init\_indexed\_name()} and \code{add\_lin\_constraint()} instead.
+\item Updated to use \matpower{}'s new quadratic costs in \code{opt\_model} in place of the legacy cost model.
 \end{itemize}
 
 \end{appendices}
