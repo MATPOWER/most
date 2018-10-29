@@ -51,9 +51,14 @@ function mdo = most(mdi, mpopt)
 %           most.price_stage_warn_tol (1e-7) - tolerance on the objective fcn
 %               value and primal variable relative match required to avoid
 %               mis-match warning message, see 'help miqps_matpower' for details
+%
+%   Outputs:
+%       MDO   MOST data structure, output
+%           (see MOST User's Manual for details)
+
 
 %   MOST
-%   Copyright (c) 2010-2016, Power Systems Engineering Research Center (PSERC)
+%   Copyright (c) 2010-2018, Power Systems Engineering Research Center (PSERC)
 %   by Carlos E. Murillo-Sanchez, PSERC Cornell & Universidad Nacional de Colombia
 %   and Ray Zimmerman, PSERC Cornell
 %
@@ -77,7 +82,7 @@ if verbose
     fprintf(  '                       -----  Built on MATPOWER  -----\n');
     fprintf(  '  by Carlos E. Murillo-Sanchez, Universidad Nacional de Colombia--Manizales\n');
     fprintf(  '                  and Ray D. Zimmerman, Cornell University\n');
-    fprintf(  '       (c) 2012-2016 Power Systems Engineering Research Center (PSERC)       \n');
+    fprintf(  '       (c) 2012-2018 Power Systems Engineering Research Center (PSERC)       \n');
     fprintf(  '=============================================================================\n');
 end
 

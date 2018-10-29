@@ -129,7 +129,7 @@
 
 %\hyphenation{matpower}
 
-\newcommand{\mpver}[0]{6.1-dev}
+\newcommand{\mpver}[0]{7.0b1}
 %\newcommand{\matlab}[0]{{Matlab}}
 %\newcommand{\matlab}[0]{{\sc Matlab}\textsuperscript{\tiny \textregistered}}
 \newcommand{\matlab}[0]{{\sc Matlab}}
@@ -144,11 +144,11 @@
 \newcommand{\mipsurl}[0]{https://github.com/MATPOWER/mips}
 \newcommand{\mipslink}[0]{\href{\mipsurl}{\mips{}}}
 \newcommand{\mipsname}[0]{{{\bf M}{\sc atpower} \textbf{I}nterior \textbf{P}oint \textbf{S}olver}}
-\newcommand{\mipsver}[0]{1.2.2}
+\newcommand{\mipsver}[0]{1.3}
 \newcommand{\most}[0]{{MOST}}
 \newcommand{\mostname}[0]{{{\bf M}{\sc atpower} \textbf{O}ptimal \textbf{S}cheduling \textbf{T}ool}}
 \newcommand{\mosturl}[0]{https://github.com/MATPOWER/most}
-\newcommand{\mostver}[0]{1.0.1-dev}
+\newcommand{\mostver}[0]{1.0.1}
 \newcommand{\md}[0]{{\most{} Data struct}}
 \newcommand{\powerweb}[0]{{\sc PowerWeb}}
 \newcommand{\pserc}[0]{{\sc PSerc}}
@@ -222,7 +222,7 @@
 \title{\mostname{}\\\most{} \mostver{}\\
 User's Manual}
 \author{Ray~D.~Zimmerman \and Carlos~E.~Murillo-S\'anchez}
-%\date{December 16, 2016} % comment this line to display the current date
+\date{October 29, 2018} % comment this line to display the current date
 %\date{December 14, 2011\thanks{Second revision. First revision was December 13, 2011}} % comment this line to display the current date
 
 %%% BEGIN DOCUMENT
@@ -232,7 +232,7 @@ User's Manual}
 \vfill
 \begin{center}
 {\scriptsize
-\copyright~2011, 2012, 2013, 2014, 2015, 2016~\PSERC{}\\
+\copyright~2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018~\PSERC{}\\
 All Rights Reserved}
 \end{center}
 
@@ -370,11 +370,11 @@ t_most_fixed_res.......ok
 t_most_w_ds............ok
 t_most_30b_1_1_0_uc....ok
 t_most_sp..............ok
-t_most_spuc............ok (576 of 720 skipped)
-t_most_uc..............ok (208 of 260 skipped)
-t_most_suc.............ok (148 of 185 skipped)
-All tests successful (762 passed, 932 skipped of 1694)
-Elapsed time 93.13 seconds.
+t_most_spuc............ok (432 of 720 skipped)
+t_most_uc..............ok (156 of 260 skipped)
+t_most_suc.............ok (111 of 185 skipped)
+All tests successful (995 passed, 699 skipped of 1694)
+Elapsed time 84.68 seconds.
 \end{Code}
 
 If, for some reason, you prefer to install your own copy of MOST directly
@@ -437,12 +437,12 @@ mdo = most(mdi, mpopt);
 
 \begin{Code}
 =============================================================================
-          MATPOWER Optimal Scheduling Tool  --  MOST Version 1.0
+          MATPOWER Optimal Scheduling Tool  --  MOST Version 1.0.1
           A multiperiod stochastic secure OPF with unit commitment
                        -----  Built on MATPOWER  -----
   by Carlos E. Murillo-Sanchez, Universidad Nacional de Colombia--Manizales
                   and Ray D. Zimmerman, Cornell University
-       (c) 2012-2016 Power Systems Engineering Research Center (PSERC)       
+       (c) 2012-2018 Power Systems Engineering Research Center (PSERC)       
 =============================================================================
 - Building indexing structures.
 - Building expected storage-tracking mechanism.
@@ -462,9 +462,9 @@ mdo = most(mdi, mpopt);
 
 ============================================================================
 
-Gurobi Version 7.0.1 -- automatic MILP solver
+Gurobi Version 8.1.0 -- automatic MILP solver
 --- Integer stage complete, starting price computation stage ---
-Gurobi Version 7.0.1 -- automatic LP solver
+Gurobi Version 8.1.0 -- automatic LP solver
 
 ============================================================================
 - MOST: MILP solved successfully.
@@ -3263,7 +3263,7 @@ The \href{http://www.pserc.cornell.edu/matpower/docs/MOST-manual-1.0.pdf}{\most{
 \item No significant changes since first public beta release.\footnote{Version 1.0b1 was released on Jun 1, 2016 and 1.0b2 on Nov 1, 2016}
 \end{itemize}
 
-\subsection{Version 1.0.1-dev -- not yet released}
+\subsection{Version 1.0.1 -- released Oct 29, 2018}
 \label{app:v101}
 
 The \href{http://www.pserc.cornell.edu/matpower/docs/MOST-manual-1.0.1.pdf}{\most{} 1.0.1 User's Manual} is available online.\footnote{\url{http://www.pserc.cornell.edu/matpower/docs/MOST-manual-1.0.1.pdf}}
