@@ -109,11 +109,18 @@ Publications
     DOI: [10.1109/TPWRS.2010.2051168][11].
 
 2.  C. E. Murillo-Sanchez, R. D. Zimmerman, C. L. Anderson, and
-     R. J. Thomas, ["Secure Planning and Operations of Systems with
-     Stochastic Sources, Energy Storage and Active Demand,"][12]
-     *Smart Grid, IEEE Transactions on*, vol. 4, no. 4, pp. 2220–2229,
-     Dec. 2013.  
-     DOI: [10.1109/TSG.2013.2281001][12].
+    R. J. Thomas, ["Secure Planning and Operations of Systems with
+    Stochastic Sources, Energy Storage and Active Demand,"][12]
+    *Smart Grid, IEEE Transactions on*, vol. 4, no. 4, pp. 2220–2229,
+    Dec. 2013.  
+    DOI: [10.1109/TSG.2013.2281001][12].
+
+3.  A. J. Lamadrid, D. Munoz-Alvarez, C. E. Murillo-Sanchez,
+    R. D. Zimmerman, H. D. Shin and R. J. Thomas, ["Using the MATPOWER
+    Optimal Scheduling Tool to Test Power System Operation Methodologies
+    Under Uncertainty,"][13] *Sustainable Energy, IEEE Transactions on*,
+    2018.
+    DOI: [10.1109/TSTE.2018.2865454][13].
 
 
 Citing MATPOWER and MOST
@@ -162,3 +169,4 @@ MOST is distributed under the [3-clause BSD license][10].
 [10]: LICENSE
 [11]: https://doi.org/10.1109/TPWRS.2010.2051168
 [12]: https://doi.org/10.1109/TSG.2013.2281001
+[13]: https://doi.org/10.1109/TSTE.2018.2865454
