@@ -21,6 +21,11 @@ previous versions, see Appendix B of the [MOST User's Manual][2].
   - Updated to use MATPOWER's new quadratic costs in `opt_model` in
     place of the legacy cost model.
 
+* Incompatible Changes:
+  - Failure of the optimization no longer halts execution and jumps to
+    the debugger.
+  - Requires MATPOWER 7.x or later.
+
 
 [1]: ../../CHANGES.md
 [2]: ../MOST-manual.pdf
