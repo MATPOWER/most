@@ -48,7 +48,7 @@ To run the test suite and verify that MOST is properly installed and
 functioning, at the MATLAB prompt, type `test_most`. The result
 should resemble the following, possibly including extra tests,
 depending on the availablility of optional packages:
-```matlab
+```
 >> test_most
 t_most_3b_1_1_0........ok
 t_most_3b_3_1_0........ok
@@ -62,11 +62,11 @@ t_most_fixed_res.......ok
 t_most_w_ds............ok
 t_most_30b_1_1_0_uc....ok
 t_most_sp..............ok
-t_most_spuc............ok (576 of 720 skipped)
-t_most_uc..............ok (208 of 260 skipped)
-t_most_suc.............ok (148 of 185 skipped)
-All tests successful (762 passed, 932 skipped of 1694)
-Elapsed time 93.13 seconds.
+t_most_spuc............ok (432 of 720 skipped)
+t_most_uc..............ok (156 of 260 skipped)
+t_most_suc.............ok (111 of 185 skipped)
+All tests successful (995 passed, 699 skipped of 1694)
+Elapsed time 84.68 seconds.
 ```
 
 If, for some reason, you prefer to install your own copy of MOST directly
