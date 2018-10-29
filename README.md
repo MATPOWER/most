@@ -59,12 +59,12 @@ t_most_30b_3_1_0.......ok
 t_most_30b_1_1_17......ok
 t_most_30b_3_1_17......ok
 t_most_fixed_res.......ok
-t_most_w_ds............ok
 t_most_30b_1_1_0_uc....ok
 t_most_sp..............ok
 t_most_spuc............ok (432 of 720 skipped)
 t_most_uc..............ok (156 of 260 skipped)
 t_most_suc.............ok (111 of 185 skipped)
+t_most_w_ds............ok
 All tests successful (995 passed, 699 skipped of 1694)
 Elapsed time 84.68 seconds.
 ```
