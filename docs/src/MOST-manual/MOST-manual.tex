@@ -334,7 +334,13 @@ The first step in beginning to use the \most{} is to get familiar with \matpower
 
 \subsection{System Requirements}
 \label{sec:sysreq}
-To use \most{} you will need a working installation of \matpower{}~\mpver{} or later. See the corresponding section in the \mum{} for more information on the system requirements.
+To use \most{}~\mostver{} you will need:
+\begin{itemize}
+\item \matpower{} version 7.x or later\footnote{\most{}~1.0 required \matpower{}~6.}
+\item \emph{(highly recommended)} a high-performance LP/MILP, QP/MIQP solver such as \gurobi{}, \cplex{}, \mosek{}, \matlab{}'s \ot{} or \glpk{} \emph{(included with Octave)}.
+\end{itemize}
+
+\most{} requires a working installation of \matpower{}. See the corresponding section in the \mum{} for more information on the system requirements for \matpower{}.
 \matpower{}~6 and later includes a full version of \most{} in the \mostpath{} directory.
 
 It is also highly recommended that you install a high-performance solver such as \gurobi{}, \cplex{}, \mosek{}, \matlab{}'s \ot{} or \glpk{}, described in Appendix~\ref{MUM-app:optional_packages} in the \mum{}.
