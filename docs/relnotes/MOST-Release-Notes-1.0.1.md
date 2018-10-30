@@ -1,5 +1,7 @@
-What's New in Version 1.0.1
----------------------------
+What's New in MOST 1.0.1
+------------------------
+
+#### Released Oct 30, 2018
 
 Below is a summary of the changes since version 1.0 of MOST. See the
 [`CHANGES.md`][1] file for all the gory details. For release notes for

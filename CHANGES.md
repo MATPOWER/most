@@ -2,8 +2,11 @@ Change history for MOST
 =======================
 
 
-Version 1.0.1 - *Oct 29, 2016*
+Version 1.0.1 - *Oct 30, 2016*
 ------------------------------
+
+#### 10/30/18
+  - Release 1.0.1.
 
 #### 10/26/18
   - **INCOMPATIBLE CHANGE**: Failure of the optimization no longer
