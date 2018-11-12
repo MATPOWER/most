@@ -2,7 +2,7 @@ Change history for MOST
 =======================
 
 
-Version 1.0.1 - *Oct 30, 2016*
+Version 1.0.1 - *Oct 30, 2018*
 ------------------------------
 
 #### 10/30/18
@@ -56,6 +56,27 @@ Version 1.0 - *Dec 16, 2016*
 #### 12/16/16
   - Released 1.0.
   - Moved development to GitHub: <https://github.com/MATPOWER/most>.
+  - no changes from v1.0b2
+
+#### 11/17/16
+  - Silence some warnings during tests on Octave 4.2.
+
+
+Version 1.0b2 - *Nov 1, 2016*
+-----------------------------
+
+#### 11/1/16
+  - Released 1.0b2.
+  
+#### 10/27/16
+  - Fixed some MOSEK related issues in tests and tutorial examples.
+
+
+Version 1.0 - *Jun 1, 2016*
+---------------------------
+
+#### 6/1/16
+  - Released 1.0b1.
 
 #### 3/1/16
   - Put checks in `loadmd()` and `most()` to require internal bus ordering
