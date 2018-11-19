@@ -1,4 +1,4 @@
-function t_most_w_ds(quiet)
+function t_most_w_ds(quiet, solver)
 %T_MOST_W_DS  Test for MOST with dynamical system constraints.
 
 %   MOST
@@ -12,6 +12,9 @@ function t_most_w_ds(quiet)
 
 if nargin < 1
     quiet = 0;
+    if nargin < 2
+        solver = '';
+    end
 end
 
 include_MIPS = 0;   %% set to 1, to attempt even if MIPS is the best solver
@@ -44,30 +47,31 @@ if have_fcn('cplex') || have_fcn('gurobi') || have_fcn('mosek') || ...
         have_fcn('quadprog_ls') || include_MIPS
     mdi = md_init;
 
-    mpopt = mpoption('verbose', 0);
 
     %% choose solver
-    if have_fcn('cplex')
-        mpopt = mpoption(mpopt, 'most.solver', 'CPLEX');
-    elseif have_fcn('gurobi')
-        mpopt = mpoption(mpopt, 'most.solver', 'GUROBI');
-    elseif have_fcn('quadprog_ls')
-        mpopt = mpoption(mpopt, 'most.solver', 'OT');
-    elseif have_fcn('mosek')
-        mpopt = mpoption(mpopt, 'most.solver', 'MOSEK');
-    else
-        mpopt = mpoption(mpopt, 'most.solver', 'MIPS');
-        if have_fcn('pardiso')
-            mpopt = mpoption(mpopt, 'mips.linsolver', 'PARDISO');
+    if isempty(solver)
+        if have_fcn('mosek')
+            solver = 'MOSEK';
+        elseif have_fcn('cplex')
+            solver = 'CPLEX';
+        elseif have_fcn('gurobi')
+            solver = 'GUROBI';
+        elseif have_fcn('quadprog_ls')
+            solver = 'OT';
+        else
+            solver = 'MIPS';
         end
+        mpopt = mpoption('verbose', 0);
+    else
+        mpopt = mpoption('verbose', 2);
     end
+    mpopt = mpoption(mpopt, 'most.solver', solver);
 
     %% set options
     if have_fcn('cplex')
         mpopt = mpoption(mpopt, 'cplex.opts.threads', 2);   % set this manually here
     end
     if have_fcn('gurobi')
-        mpopt = mpoption(mpopt, 'most.solver', 'GUROBI');
         mpopt = mpoption(mpopt, 'gurobi.method', 2);        %% barrier
         mpopt = mpoption(mpopt, 'gurobi.threads', 2);
         mpopt = mpoption(mpopt, 'gurobi.opts.BarConvTol', 1e-6);        %% 1e-8
@@ -75,22 +79,22 @@ if have_fcn('cplex') || have_fcn('gurobi') || have_fcn('mosek') || ...
         mpopt = mpoption(mpopt, 'gurobi.opts.OptimalityTol', 1e-5);     %% 1e-6
     end
     if have_fcn('quadprog_ls')
-        mpopt = mpoption(mpopt, 'most.solver', 'OT');
         mpopt = mpoption(mpopt, 'quadprog.TolFun', 1e-13);
     end
     if have_fcn('mosek')
-        mpopt = mpoption(mpopt, 'most.solver', 'MOSEK');
         mpopt = mpoption(mpopt, 'mosek.num_threads', 2);
     else
-        mpopt = mpoption(mpopt, 'most.solver', 'MIPS');
         mpopt = mpoption(mpopt, 'mips.max_it', 500);
         if have_fcn('pardiso')
             mpopt = mpoption(mpopt, 'mips.linsolver', 'PARDISO');
         end
     end
+    %% use e.g. t_most_w_ds(0, 'MOSEK') instead of uncommenting these lines
+    % mpopt = mpoption(mpopt, 'most.solver', 'MOSEK');
+    % mpopt = mpoption(mpopt, 'most.solver', 'CPLEX');
     % mpopt = mpoption(mpopt, 'most.solver', 'GUROBI');
-    % mpopt = mpoption(mpopt, 'most.solver', 'CLP');
-    % mpopt = mpoption(mpopt, 'most.solver', 'IPOPT');
+    % mpopt = mpoption(mpopt, 'most.solver', 'OT');
+    % mpopt = mpoption(mpopt, 'most.solver', 'BPMPD');
     % mpopt = mpoption(mpopt, 'most.solver', 'MIPS');
 
     mdi.mpc = loadcase(casefile);
@@ -251,7 +255,7 @@ if have_fcn('cplex') || have_fcn('gurobi') || have_fcn('mosek') || ...
     t = 'dynamical system state (Z)';
     t_is(mdo.results.Z, s.Z, 4, t);
 else
-    t_skip(1, 'requires CPLEX, Gurobi, MOSEK or quadprog');
+    t_skip(1, 'requires MOSEK, CPLEX, Gurobi or quadprog');
 end
 
 % YorN = input('Play movie? (y/n) : ', 's');
