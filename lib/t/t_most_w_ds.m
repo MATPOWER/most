@@ -1,4 +1,4 @@
-function t_most_w_ds(quiet, solver)
+function t_most_w_ds(quiet, solver, verbose)
 %T_MOST_W_DS  Test for MOST with dynamical system constraints.
 
 %   MOST
@@ -10,10 +10,13 @@ function t_most_w_ds(quiet, solver)
 %   Covered by the 3-clause BSD License (see LICENSE file for details).
 %   See https://github.com/MATPOWER/most for more info.
 
-if nargin < 2
-    solver = '';
-    if nargin < 1
-        quiet = 0;
+if nargin < 3
+    verbose = 0;
+    if nargin < 2
+        solver = '';
+        if nargin < 1
+            quiet = 0;
+        end
     end
 end
 
@@ -47,9 +50,8 @@ if have_fcn('cplex') || have_fcn('gurobi') || have_fcn('mosek') || ...
         have_fcn('quadprog_ls') || include_MIPS
     mdi = md_init;
 
-
     %% choose solver
-    if isempty(solver)
+    if isempty(solver) || strcmp(upper(solver), 'DEFAULT')
         if have_fcn('mosek')
             solver = 'MOSEK';
         elseif have_fcn('cplex')
@@ -61,11 +63,8 @@ if have_fcn('cplex') || have_fcn('gurobi') || have_fcn('mosek') || ...
         else
             solver = 'MIPS';
         end
-        mpopt = mpoption('verbose', 0);
-    else
-        mpopt = mpoption('verbose', 2);
     end
-    mpopt = mpoption(mpopt, 'most.solver', solver);
+    mpopt = mpoption('most.solver', solver, 'verbose', verbose);
 
     %% set options
     if have_fcn('cplex')
