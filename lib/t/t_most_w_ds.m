@@ -252,7 +252,7 @@ if have_fcn('cplex') || have_fcn('gurobi') || have_fcn('mosek') || ...
     s = load(solnfile);
 
     t = 'dynamical system state (Z)';
-    t_is(mdo.results.Z, s.Z, 4, t);
+    t_is(mdo.results.Z, s.Z, 3.7, t);
 else
     t_skip(1, 'requires MOSEK, CPLEX, Gurobi or quadprog');
 end
