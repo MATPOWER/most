@@ -5,7 +5,7 @@ Change history for MOST
 Since last release
 ------------------
 
-#### 11/19/18
+#### 11/20/18
   - Fix selection of default solver for `t_most_w_ds` and add option
     to specify solver directly in optional input arg.
 
