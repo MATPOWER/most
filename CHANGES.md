@@ -29,8 +29,8 @@ Version 1.0.1 - *Oct 30, 2018*
   - Replace `clock()`/`etime()` with `tic()`/`toc()` for timing.
 
 #### 9/27/17
-  - Fix bug #1 in `loadmd()` where profiles that modify xGenData or
-    StorageData resulted in a fatal error.
+  - Fix [bug #1][1] in `loadmd()` where profiles that modify xGenData
+    or StorageData resulted in a fatal error.
 
 #### 9/12/17
   - Update for `@opt_model` API cleanup.
@@ -173,3 +173,7 @@ Version 1.0 - *Jun 1, 2016*
 #### 5/21/15
   - Forked development from `mpsopfl_fixed_res()`, which is currently
     identical except for function names in error messages.
+
+--
+
+[1]: https://github.com/MATPOWER/most/issues/1
