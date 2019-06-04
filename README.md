@@ -106,21 +106,21 @@ Publications
     ["MATPOWER: Steady-State Operations, Planning and Analysis Tools
     for Power Systems Research and Education,"][9] *Power Systems, IEEE
     Transactions on*, vol. 26, no. 1, pp. 12–19, Feb. 2011.  
-    DOI: [10.1109/TPWRS.2010.2051168][9].
+    doi: [10.1109/TPWRS.2010.2051168][9].
 
 2.  C. E. Murillo-Sanchez, R. D. Zimmerman, C. L. Anderson, and
     R. J. Thomas, ["Secure Planning and Operations of Systems with
     Stochastic Sources, Energy Storage and Active Demand,"][10]
     *Smart Grid, IEEE Transactions on*, vol. 4, no. 4, pp. 2220–2229,
     Dec. 2013.  
-    DOI: [10.1109/TSG.2013.2281001][10].
+    doi: [10.1109/TSG.2013.2281001][10].
 
 3.  A. J. Lamadrid, D. Munoz-Alvarez, C. E. Murillo-Sanchez,
     R. D. Zimmerman, H. D. Shin and R. J. Thomas, ["Using the MATPOWER
     Optimal Scheduling Tool to Test Power System Operation Methodologies
     Under Uncertainty,"][11] *Sustainable Energy, IEEE Transactions on*,
     2018.
-    DOI: [10.1109/TSTE.2018.2865454][11].
+    doi: [10.1109/TSTE.2018.2865454][11].
 
 
 Citing MATPOWER and MOST
