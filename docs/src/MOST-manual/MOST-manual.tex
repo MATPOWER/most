@@ -248,13 +248,13 @@ All Rights Reserved}
 \clearpage
 \section{Introduction}
 
-Beginning with version 6, \matpower{}~\cite{zimmerman2011} includes a framework for solving generalized steady-state electric power scheduling problems. This framework is known as \most{}, for \mostname{}~\cite{murillo-sanchez2013a,lamadrid2018}.
+Beginning with version 6, \matpower{}~\cite{zimmerman2011,matpower,matpower_manual} includes a framework for solving generalized steady-state electric power scheduling problems. This framework is known as \most{}, for \mostname{}~\cite{murillo-sanchez2013a,lamadrid2018}.
 
 \most{} can be used to solve problems as simple as a deterministic, single period economic dispatch problem with no transmission constraints or as complex as a stochastic, security-constrained, combined unit-commitment and multiperiod optimal power flow problem with locational contingency and load-following reserves, ramping costs and constraints, deferrable demands, lossy storage resources and uncertain renewable generation.
 
 While the problem formulation is general and incorporates a full nonlinear AC network model, the current implementation is limited to DC power flow modeling of the network. Some work has been done on an AC implementation, but it is not yet ready for release.
 
-The primary developers of \most{} are Carlos~E.~Murillo-S\'anchez\footnote{Universidad Nacional de Colombia, Manizales, Colombia} and Ray~D.~Zimmerman\footnote{Cornell University, Ithaca, NY, USA} of \pserc{}\footnote{\url{http://pserc.org/}}, with significant contributions from Daniel Mu\~noz-\'Alvarez and Alberto~J.~Lamadrid. It is built on top of \matpowerlink{}\footnote{See \url{\matpowerurl} for more information on \matpowerlink{}.}, a package of \matlab{}\textsuperscript{\tiny \textregistered} M-files for solving power flow and optimal power flow problems~\cite{zimmerman2011, zimmerman2009}. This manual assumes that the user is familiar with using \matpowerlink{}, especially for solving optimal power flow problems, and makes numerious references to version \mpver{} of the \mum{}~\cite{matpower}.
+The primary developers of \most{} are Carlos~E.~Murillo-S\'anchez\footnote{Universidad Nacional de Colombia, Manizales, Colombia} and Ray~D.~Zimmerman\footnote{Cornell University, Ithaca, NY, USA} of \pserc{}\footnote{\url{http://pserc.org/}}, with significant contributions from Daniel Mu\~noz-\'Alvarez and Alberto~J.~Lamadrid. It is built on top of \matpowerlink{}\footnote{See \url{\matpowerurl} for more information on \matpowerlink{}.}, a package of \matlab{}\textsuperscript{\tiny \textregistered} M-files for solving power flow and optimal power flow problems~\cite{zimmerman2011, zimmerman2009}. This manual assumes that the user is familiar with using \matpowerlink{}, especially for solving optimal power flow problems, and makes numerious references to version \mpver{} of the \mum{}~\cite{matpower_manual}.
 
 %\clearpage
 \subsection{License and Terms of Use}
@@ -538,7 +538,7 @@ There is one other important source of related documentation and that is the \mu
 
 \most{} grew out of research at Cornell University on the development and testing of new tools for the power industry, funded by the U.S. Department of Energy through the CERTS Reliability and Markets program.\footnote{This work was supported by the Consortium for Electric Reliability Technology Solutions and the Office of Electricity Delivery and Energy Reliability, Transmission Reliability Program of the U.S. Department of Energy under the National Energy Technology Laboratory Cooperative Agreement No. DE-FC26-09NT43321. \url{https://certs.lbl.gov/research-areas/reliability-markets-rm}} Initially the work was focused on extending the AC optimal power flow problem to include co-optimization of locational reserves for security defined in terms of explicitly included contingencies \cite{superopf2008,murillo-sanchez2013}. This work was then extended to include multiple base scenarios to represent stochastic load and renewable generation availability, a multiperiod planning horizon, energy storage resources, ramping considerations and binary unit commitment decisions \cite{murillo-sanchez2013a}.
 
-The formulation implemented in \most{} and described in the next section further generalizes the problem by including the facility to define zonal reserve requirements like those from Section~\ref{MUM-sec:reserves} in the \mum{}~\cite{matpower}, and to constrain the solutions via a general linear time-varying dynamical system. The initial prototype was implemented by Carlos~E.~Murillo-S\'anchez with subsequent development by Ray~D.~Zimmerman along with contributions by Daniel Mu\~noz-\'Alvarez and Alberto~J.~Lamadrid.
+The formulation implemented in \most{} and described in the next section further generalizes the problem by including the facility to define zonal reserve requirements like those from Section~\ref{MUM-sec:reserves} in the \mum{}~\cite{matpower_manual}, and to constrain the solutions via a general linear time-varying dynamical system. The initial prototype was implemented by Carlos~E.~Murillo-S\'anchez with subsequent development by Ray~D.~Zimmerman along with contributions by Daniel Mu\~noz-\'Alvarez and Alberto~J.~Lamadrid.
 
 The description of the problem formulation will begin with a conceptual overview of the approach, beginning with the simplest single period problem that \most{} handles and extending and expanding the problem one step at a time to illustrate how each additional aspect of the full problem is handled.
 
@@ -3324,6 +3324,16 @@ R.~D. Zimmerman, C.~E. Murillo-S{\'a}nchez, and R.~J. Thomas,
   ``\matpower{}: Steady-State Operations, Planning and Analysis Tools for Power Systems Research and Education,'' \emph{Power Systems, IEEE Transactions on}, vol.~26, no.~1, pp.~12--19, Feb.~2011.
 \doi{10.1109/TPWRS.2010.2051168}
 
+\bibitem{matpower}
+R.~D. Zimmerman, C.~E. Murillo-S{\'a}nchez (2019). \matpower{}\\~
+[Software]. Available: \url{http://www.pserc.cornell.edu/matpower/}\\
+\doi{10.5281/zenodo.3236535}
+
+\bibitem{matpower_manual}
+R.~D. Zimmerman, C.~E. Murillo-S{\'a}nchez. \matpower{} User's Manual. 2019.\\~
+[Online]. Available: \url{https://matpower.org/docs/MATPOWER-manual.pdf}\\
+\doi{10.5281/zenodo.3236519}
+
 \bibitem{murillo-sanchez2013a}
 C.~E. Murillo-S{\'a}nchez, R.~D. Zimmerman, C.~L. Anderson, and R.~J. Thomas, ``Secure Planning and Operations of Systems with Stochastic Sources, Energy Storage and Active Demand,'' \emph{Smart Grid, IEEE Transactions on}, vol.~4, no.~4, pp.~2220--2229, Dec.~2013.
 \doi{10.1109/TSG.2013.2281001}
@@ -3337,10 +3347,6 @@ R.~D. Zimmerman, C.~E. Murillo-S{\'a}nchez, and R.~J. Thomas, ``\matpower{}'s
 Extensible Optimal Power Flow Architecture,'' \emph{Power and Energy Society
 General Meeting, 2009 IEEE}, pp. 1--7, July 26--30 2009.
 \doi{10.1109/PES.2009.5275967}
-
-\bibitem{matpower}
-R.~D. Zimmerman and C.~E. Murillo-S{\'a}nchez, \mum{},
-  [Online]. Available: \url{\matpowerurl}
 
 \bibitem{bsd}
 The BSD 3-Clause License. [Online]. Available: \url{https://opensource.org/licenses/BSD-3-Clause}.
