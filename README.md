@@ -179,7 +179,7 @@ MOST is distributed under the [3-clause BSD license][12].
 
 ----
 [1]: https://github.com/MATPOWER/most
-[2]: http://www.pserc.cornell.edu/matpower/
+[2]: https://matpower.org
 [3]: https://github.com/MATPOWER/matpower
 [4]: https://www.mathworks.com/
 [5]: https://www.gnu.org/software/octave/
