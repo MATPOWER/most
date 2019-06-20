@@ -11,7 +11,7 @@ previous versions, see Appendix B of the [MOST User's Manual][2].
   - Fix default solver selection issue in `t_most_w_ds` test.
 
 #### Other Changes:
-  - Add \code{CITATION} file.
+  - Add `CITATION` file.
   - Other miscellaneous documentation updates, e.g. MATPOWER website
     links updated to https://matpower.org, separate references for
     MATPOWER software and User's Manual, with DOIs.

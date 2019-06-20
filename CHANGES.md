@@ -7,7 +7,7 @@ Version 1.0.2 - *Jun 20, 2019*
 
 #### 6/20/19
   - Release 1.0.2.
-  - Add CITATION file.
+  - Add `CITATION` file.
   - Other miscellaneous documentation updates, e.g. MATPOWER website
     links updated to https://matpower.org, separate references for
     MATPOWER software and User's Manual, with DOIs.
