@@ -52,20 +52,14 @@ depending on the availablility of optional packages:
 >> test_most
 t_most_3b_1_1_0........ok
 t_most_3b_3_1_0........ok
-t_most_3b_1_1_2........ok
-t_most_3b_3_1_2........ok
 t_most_30b_1_1_0.......ok
 t_most_30b_3_1_0.......ok
-t_most_30b_1_1_17......ok
-t_most_30b_3_1_17......ok
 t_most_fixed_res.......ok
 t_most_30b_1_1_0_uc....ok
-t_most_sp..............ok
-t_most_spuc............ok (432 of 720 skipped)
-t_most_uc..............ok (156 of 260 skipped)
-t_most_suc.............ok (111 of 185 skipped)
+t_most_uc..............ok
+t_most_suc.............ok
 t_most_w_ds............ok
-All tests successful (995 passed, 699 skipped of 1694)
+All tests successful (615 of 615)
 Elapsed time 84.68 seconds.
 ```
 
@@ -145,12 +139,12 @@ citing both the 2011 MATPOWER paper and the 2013 MOST paper.
 The [MATPOWER Optimal Scheduling Tool (MOST) User's Manual][7] should
 also be cited explicitly in work that refers to or is derived from its
 content. The citation and DOI can be version-specific or general, as
-appropriate. For version 1.0.1, use:
+appropriate. For version 1.0.2, use:
 
 >   R. D. Zimmerman, C. E. Murillo-Sanchez. *MATPOWER Optimal Scheduling
-    Tool (MOST) User's Manual, Version 1.0.1*. 2018. [Online].
-    Available: https://matpower.org/docs/MOST-manual-1.0.1.pdf  
-    doi: [10.5281/zenodo.3236533](https://doi.org/10.5281/zenodo.3236533)
+    Tool (MOST) User's Manual, Version 1.0.2*. 2019. [Online].
+    Available: https://matpower.org/docs/MOST-manual-1.0.2.pdf  
+    doi: [10.5281/zenodo.3251047](https://doi.org/10.5281/zenodo.3251047)
 
 For a version non-specific citation, use the following citation and DOI,
 with *\<YEAR\>* replaced by the year of the most recent release:

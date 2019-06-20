@@ -129,7 +129,7 @@
 
 %\hyphenation{matpower}
 
-\newcommand{\mpver}[0]{7.0b1}
+\newcommand{\mpver}[0]{7.0}
 %\newcommand{\matlab}[0]{{Matlab}}
 %\newcommand{\matlab}[0]{{\sc Matlab}\textsuperscript{\tiny \textregistered}}
 \newcommand{\matlab}[0]{{\sc Matlab}}
@@ -144,11 +144,11 @@
 \newcommand{\mipsurl}[0]{https://github.com/MATPOWER/mips}
 \newcommand{\mipslink}[0]{\href{\mipsurl}{\mips{}}}
 \newcommand{\mipsname}[0]{{{\bf M}{\sc atpower} \textbf{I}nterior \textbf{P}oint \textbf{S}olver}}
-\newcommand{\mipsver}[0]{1.3}
+\newcommand{\mipsver}[0]{1.3.1}
 \newcommand{\most}[0]{{MOST}}
 \newcommand{\mostname}[0]{{{\bf M}{\sc atpower} \textbf{O}ptimal \textbf{S}cheduling \textbf{T}ool}}
 \newcommand{\mosturl}[0]{https://github.com/MATPOWER/most}
-\newcommand{\mostver}[0]{1.0.1}
+\newcommand{\mostver}[0]{1.0.2}
 \newcommand{\md}[0]{{\most{} Data struct}}
 \newcommand{\powerweb}[0]{{\sc PowerWeb}}
 \newcommand{\pserc}[0]{{\sc PSerc}}
@@ -226,7 +226,7 @@ User's Manual}
 %%% BEFORE PUBLISHING A NEW VERSION:
 %%%   Update the publication year for \bibitem{matpower} and
 %%%   \bibitem{matpower_manual} to the year of the latest release
-\date{October 30, 2018} % comment this line to display the current date
+\date{June 20, 2019} % comment this line to display the current date
 %\date{December 14, 2011\thanks{Second revision. First revision was December 13, 2011}} % comment this line to display the current date
 
 %%% BEGIN DOCUMENT
@@ -236,7 +236,7 @@ User's Manual}
 \vfill
 \begin{center}
 {\scriptsize
-\copyright~2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018~\PSERC{}\\
+\copyright~2011--2019~\PSERC{}\\
 All Rights Reserved}
 \end{center}
 
@@ -317,12 +317,12 @@ C.~E. Murillo-S{\'a}nchez, R.~D. Zimmerman, C.~L. Anderson, and R.~J. Thomas, ``
 The \mostname{} (\most) User's Manual~\cite{most_manual} should also be
 cited explicitly in work that refers to or is derived from its content.
 The citation and DOI can be version-specific or general, as appropriate.
-For version 1.0.1, use:
+For version 1.0.2, use:
 
 \begin{quote}
 \footnotesize
-R.~D. Zimmerman, C.~E. Murillo-S{\'a}nchez. \mostname{} (\most{}) User's Manual, Verision 1.0.1. 2018. [Online]. Available: \url{https://matpower.org/docs/MOST-manual-1.0.1.pdf}\\
-\doi{10.5281/zenodo.3236533}
+R.~D. Zimmerman, C.~E. Murillo-S{\'a}nchez. \mostname{} (\most{}) User's Manual, Verision 1.0.2. 2019. [Online]. Available: \url{https://matpower.org/docs/MOST-manual-1.0.2.pdf}\\
+\doi{10.5281/zenodo.3251047}
 \end{quote}
 For a version non-specific citation, use the following citation and DOI,
 with \emph{\textless{}YEAR\textgreater{}} replaced by the year of the most recent release:
@@ -384,22 +384,17 @@ To run the test suite and verify that \most{} is properly installed and function
 % UPDATE BEFORE RELEASE
 \begin{Code}
 >> test_most
+>> test_most
 t_most_3b_1_1_0........ok
 t_most_3b_3_1_0........ok
-t_most_3b_1_1_2........ok
-t_most_3b_3_1_2........ok
 t_most_30b_1_1_0.......ok
 t_most_30b_3_1_0.......ok
-t_most_30b_1_1_17......ok
-t_most_30b_3_1_17......ok
 t_most_fixed_res.......ok
 t_most_30b_1_1_0_uc....ok
-t_most_sp..............ok
-t_most_spuc............ok (432 of 720 skipped)
-t_most_uc..............ok (156 of 260 skipped)
-t_most_suc.............ok (111 of 185 skipped)
+t_most_uc..............ok
+t_most_suc.............ok
 t_most_w_ds............ok
-All tests successful (995 passed, 699 skipped of 1694)
+All tests successful (615 of 615)
 Elapsed time 84.68 seconds.
 \end{Code}
 
@@ -463,12 +458,12 @@ mdo = most(mdi, mpopt);
 
 \begin{Code}
 =============================================================================
-          MATPOWER Optimal Scheduling Tool  --  MOST Version 1.0.1
+          MATPOWER Optimal Scheduling Tool  --  MOST Version 1.0.2
           A multiperiod stochastic secure OPF with unit commitment
                        -----  Built on MATPOWER  -----
   by Carlos E. Murillo-Sanchez, Universidad Nacional de Colombia--Manizales
                   and Ray D. Zimmerman, Cornell University
-       (c) 2012-2018 Power Systems Engineering Research Center (PSERC)       
+       (c) 2012-2019 Power Systems Engineering Research Center (PSERC)       
 =============================================================================
 - Building indexing structures.
 - Building expected storage-tracking mechanism.
@@ -488,9 +483,9 @@ mdo = most(mdi, mpopt);
 
 ============================================================================
 
-Gurobi Version 8.1.0 -- automatic MILP solver
+Gurobi Version 8.1.1 -- automatic MILP solver
 --- Integer stage complete, starting price computation stage ---
-Gurobi Version 8.1.0 -- automatic LP solver
+Gurobi Version 8.1.1 -- automatic LP solver
 
 ============================================================================
 - MOST: MILP solved successfully.
@@ -3315,6 +3310,22 @@ The \href{https://matpower.org/docs/MOST-manual-1.0.1.pdf}{\most{} 1.0.1 User's 
 \item Requires \matpower{} 7.x or later.
 \end{itemize}
 
+\subsection{Version 1.0.2 -- released Jun 20, 2019}
+\label{app:v102}
+
+The \href{https://matpower.org/docs/MOST-manual-1.0.2.pdf}{\most{} 1.0.2 User's Manual} is available online.\footnote{\url{https://matpower.org/docs/MOST-manual-1.0.2.pdf}}
+
+\subsubsection*{Bugs Fixed}
+\begin{itemize}
+\item Fix default solver selection issue in \code{t\_most\_w\_ds} test.
+\end{itemize}
+
+\subsubsection*{Other Changes}
+\begin{itemize}
+\item Add \code{CITATION} file.
+\item Other miscellaneous documentation updates, e.g. \matpower{} website links updated to \url{https://matpower.org}, separate references for \matpower{} software and User's Manual, with DOIs.
+\end{itemize}
+
 \end{appendices}
 
 
@@ -3355,7 +3366,7 @@ General Meeting, 2009 IEEE}, pp. 1--7, July 26--30 2009.
 The BSD 3-Clause License. [Online]. Available: \url{https://opensource.org/licenses/BSD-3-Clause}.
 
 \bibitem{most_manual}
-R.~D. Zimmerman, C.~E. Murillo-S{\'a}nchez. \mostname{} (\most{}) User's Manual. 2018. [Online]. Available: \url{https://matpower.org/docs/MOST-manual.pdf}\\
+R.~D. Zimmerman, C.~E. Murillo-S{\'a}nchez. \mostname{} (\most{}) User's Manual. 2019. [Online]. Available: \url{https://matpower.org/docs/MOST-manual.pdf}\\
 \doi{10.5281/zenodo.3236531}
 
 \bibitem{superopf2008}
