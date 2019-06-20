@@ -118,8 +118,8 @@ Publications
 3.  A. J. Lamadrid, D. Munoz-Alvarez, C. E. Murillo-Sanchez,
     R. D. Zimmerman, H. D. Shin and R. J. Thomas, ["Using the MATPOWER
     Optimal Scheduling Tool to Test Power System Operation Methodologies
-    Under Uncertainty,"][11] *Sustainable Energy, IEEE Transactions on*,
-    2018.
+    Under Uncertainty,"][19] *Sustainable Energy, IEEE Transactions on*,
+    vol. 10, no. 3, pp. 1280-1289, July 2019.
     doi: [10.1109/TSTE.2018.2865454][11].
 
 
