@@ -1228,10 +1228,11 @@ if mpopt.most.build_model
         om.add_lin_constraint('Sm', {1,j}, A, [], u, vs);
       end
     else
-      % sm(1) + beta2*Delta_T*[eta_c*psc(1,j,0) + (1/eta_d)*psd(1,j,0)] <= beta1*Initial/baseMVA
+      % sm(1) + beta2*Delta_T*[eta_c*psc(1,j,0) + (1/eta_d)*psd(1,j,0)] <= beta1*(rho*InitialLB+(1-rho)*Initial)/baseMVA
       for j = 1:mdi.idx.nj(1)
         A = [ diagBeta2EtaIn1 diagBeta2overEtaOut1 Ins ];
-        u = beta1(:,1).*mdi.Storage.InitialStorageLowerBound/baseMVA;
+        u = beta1(:,1) .* ( rho(:,t).*mdi.Storage.InitialStorageLowerBound + ...
+                            (1-rho(:,t)).*mdi.Storage.InitialStorage ) / baseMVA;
         vs = struct('name', {'Psc', 'Psd', 'Sm'}, 'idx', {{1,j,1}, {1,j,1}, {1}});
         om.add_lin_constraint('Sm', {1,j}, A, [], u, vs);
       end
@@ -1272,10 +1273,11 @@ if mpopt.most.build_model
         om.add_lin_constraint('Sp', {1,j}, A, [], u, vs);
       end
     else
-      % -sp(1) - beta2*Delta_T*[eta_c*psc(1,j,0) + (1/eta_d)*psd(1,j,0)] <= -beta1*Initial/baseMVA
+      % -sp(1) - beta2*Delta_T*[eta_c*psc(1,j,0) + (1/eta_d)*psd(1,j,0)] <= -beta1*(rho*InitialUB+(1-rho)*Initial)/baseMVA
       for j = 1:mdi.idx.nj(1)
         A = [ -diagBeta2EtaIn1 -diagBeta2overEtaOut1 -Ins ];
-        u = -beta1(:,1).*mdi.Storage.InitialStorageUpperBound/baseMVA;
+        u = -beta1(:,1) .* ( rho(:,t).*mdi.Storage.InitialStorageUpperBound + ...
+                            (1-rho(:,t)).*mdi.Storage.InitialStorage ) / baseMVA;
         vs = struct('name', {'Psc', 'Psd', 'Sp'}, 'idx', {{1,j,1}, {1,j,1}, {1}});
         om.add_lin_constraint('Sp', {1,j}, A, [], u, vs);
       end
