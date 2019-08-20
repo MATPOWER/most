@@ -148,7 +148,7 @@
 \newcommand{\most}[0]{{MOST}}
 \newcommand{\mostname}[0]{{{\bf M}{\sc atpower} \textbf{O}ptimal \textbf{S}cheduling \textbf{T}ool}}
 \newcommand{\mosturl}[0]{https://github.com/MATPOWER/most}
-\newcommand{\mostver}[0]{1.0.2}
+\newcommand{\mostver}[0]{1.0.2+}
 \newcommand{\md}[0]{{\most{} Data struct}}
 \newcommand{\powerweb}[0]{{\sc PowerWeb}}
 \newcommand{\pserc}[0]{{\sc PSerc}}
@@ -165,7 +165,7 @@
 \newcommand{\ot}[0]{{Optimization Toolbox}}
 \newcommand{\pardiso}[0]{{PARDISO}}
 \newcommand{\sdppf}[0]{\texttt{SDP\_PF}}
-\newcommand{\sdppfver}[0]{1.0}
+\newcommand{\sdppfver}[0]{1.0.1}
 \newcommand{\sdpopf}[0]{SDPOPF}
 \newcommand{\code}[1]{{\relsize{-0.5}{\tt{{#1}}}}}  % requires package relsize
 % Note: to get straight single quotes in \code you have to use one of the
@@ -226,7 +226,7 @@ User's Manual}
 %%% BEFORE PUBLISHING A NEW VERSION:
 %%%   Update the publication year for \bibitem{matpower} and
 %%%   \bibitem{matpower_manual} to the year of the latest release
-\date{June 20, 2019} % comment this line to display the current date
+%\date{June 20, 2019} % comment this line to display the current date
 %\date{December 14, 2011\thanks{Second revision. First revision was December 13, 2011}} % comment this line to display the current date
 
 %%% BEGIN DOCUMENT
@@ -3292,6 +3292,7 @@ The \href{https://matpower.org/docs/MOST-manual-1.0.1.pdf}{\most{} 1.0.1 User's 
 \subsubsection*{Bugs Fixed}
 \begin{itemize}
 \item Fix bugs in \code{plot\_uc\_data()} resulting in incorrect legends.
+\item Fix bug \#1 in \code{loadmd()} where profiles that modify xGenData or StorageData resulted in a fatal error.
 \item Fix dimension of \code{RampWear} cost indexing if \code{mdi.OpenEnded} is true.
 \item Add missing constant term to objective function value reported by \code{most\_summary}.
 \end{itemize}
