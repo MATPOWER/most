@@ -5,6 +5,11 @@ Change history for MOST
 Changes since 1.0.2
 -------------------
 
+#### 8/21/19
+  - Fix [bug #6][3] where building a model without solving it, or
+    solving a previously built model resulted in a fatal error.
+    *Thanks to Baraa Mohandes.*
+
 #### 8/20/19
   - Fix [bug #11][2] where storage constraints were not correct for
     t=1 and `rho ~= 1`. *Thanks to Baraa Mohandes.*
@@ -193,3 +198,4 @@ Version 1.0 - *Jun 1, 2016*
 
 [1]: https://github.com/MATPOWER/most/issues/1
 [2]: https://github.com/MATPOWER/most/issues/11
+[3]: https://github.com/MATPOWER/most/issues/6

@@ -1942,6 +1942,9 @@ if mpopt.most.build_model
   mdi.QP.H1 = Q;
   mdi.QP.C1 = c;
   mdi.QP.c1 = k0;
+  mdi.om = om;
+else
+  om = mdi.om;
 end     % if mpopt.most.build_model
 
 % With all pieces of the cost in place, can proceed to build the total
@@ -1968,7 +1971,6 @@ if isfield(mdi, 'CoordCost') && ...
 %   om.add_legacy_cost('CoordCost', cp);
 end
 
-mdi.om = om;
 [vv, ll] = om.get_idx();
 if verbose
   fprintf('- Assembling full set of constraints.\n');
@@ -2298,11 +2300,11 @@ if mpopt.most.solve_model
     end
     mdo.results.f = mdo.QP.f;
   end   % if success
+  mdo.results.success = success;
+  mdo.results.SolveTime = toc(t0);
 end     % if mpopt.most.solve_model
 
-mdo.results.success = success;
 mdo.results.SetupTime = et_setup;
-mdo.results.SolveTime = toc(t0);
 
 if verbose
   fprintf('- MOST: Done.\n\n');
