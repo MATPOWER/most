@@ -6,6 +6,9 @@ Changes since 1.0.2
 -------------------
 
 #### 8/27/19
+  - Update `most_summary` to include sections for fixed loads and
+    storage expected stored energy.
+    *Thanks to Baraa Mohandes.*
   - Move assembly of constraints and variable bounds inside the
     `build_model` conditional.
     *Thanks to Baraa Mohandes.*

@@ -2464,12 +2464,16 @@ name & description \\
 \code{nb}	& $n_b$, number of buses	\\
 \code{ng}	& $n_g$, number of generators (incl. storage, disp. load, etc.)	\\
 \code{nl}	& $n_l$, number of branches	\\
+\code{ns}	& $n_s$, number of storage units	\\
 \code{nt}	& $n_t$, number of periods in planning horizon	\\
 \code{nj\_max}	& $n_j^{\rm max}$, max number of scenarios per period	\\
 \code{nc\_max}	& $n_c^{\rm max}$, max number of contingencies per scenario in any period	\\
+\code{psi}	& $n_t \times n_j^{\rm max} \times (n_c^{\rm max}+1)$, adjusted cost weights, $\psi_\alpha^{tjk}$, see \eqref{eq:psialpha}	\\
 \code{Pg}	& $n_g \times n_t \times n_j^{\rm max} \times (n_c^{\rm max}+1)$, real power generation	\\
+\code{Pd}	& $n_b \times n_t \times n_j^{\rm max} \times (n_c^{\rm max}+1)$, fixed real power demand	\\
 \code{Rup}	& $n_g \times n_t$, upward ramping reserve quantities	\\
 \code{Rdn}	& $n_g \times n_t$, downward ramping reserve quantities	\\
+\code{SoC}	& $n_s \times n_t$, expected stored energy (state-of-charge)	\\
 \code{Pf}	& $n_g \times n_t \times n_j^{\rm max} \times (n_c^{\rm max}+1)$, real power generation	\\
 \code{u}	& $n_g \times n_t \times n_j^{\rm max} \times (n_c^{\rm max}+1)$, generator commitment status	\\
 \code{lamP}	& $n_b \times n_t \times n_j^{\rm max} \times (n_c^{\rm max}+1)$, shadow price on power balance	\\
@@ -2479,6 +2483,7 @@ name & description \\
 \end{threeparttable}
 \end{table}
 
+\clearpage
 \subsection{\tt mostver}
 \label{sec:mostver}
 
@@ -3160,6 +3165,7 @@ name & description \\
 \code{~~loadxgendata}	& loads extra generator data, see Section~\ref{sec:loadxgendata}	\\
 \code{~~md\_init}	& data structure initialization	\\
 \code{~~most}	& top-level solver, see Chapter~\ref{sec:mostfcn}	\\
+\code{~~most\_summary}	& summarizes some output data, returned in a struct and optionally prints to console, see Section~\ref{sec:most_summary}	\\
 \code{~~mostver}	& prints/returns version info for \most{}, see Section~\ref{sec:mostver}	\\
 \code{~~mpoption\_info\_most}	& option information for \most{}	\\
 \code{~~plot\_gen}	& create plots of generator results	\\
@@ -3343,7 +3349,8 @@ previously built model resulted in a fatal error. \emph{Thanks to Baraa Mohandes
 
 \subsubsection*{Other Changes}
 \begin{itemize}
-\item 
+\item Update \code{most\_summary()} to include sections for fixed loads
+and storage expected stored energy.
 \end{itemize}
 
 \end{appendices}
