@@ -5,6 +5,11 @@ Change history for MOST
 Changes since 1.0.2
 -------------------
 
+#### 8/27/19
+  - Move assembly of constraints and variable bounds inside the
+    `build_model` conditional.
+    *Thanks to Baraa Mohandes.*
+
 #### 8/21/19
   - Fix [bug #6][3] where building a model without solving it, or
     solving a previously built model resulted in a fatal error.

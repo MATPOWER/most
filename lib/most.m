@@ -821,6 +821,9 @@ if mpopt.most.build_model
       end
     end
   end
+
+  %% handing of user-defined variables would go here
+
   nvars = om.getN('var');
   mdi.idx.nvars = nvars;
 
@@ -1931,11 +1934,23 @@ if mpopt.most.build_model
     Cfstor = sparse(1, nvars);
   end
 
-  % Plug into struct
+  %% handing of user-defined constraints and costs would go here
+
+  % Asssemble contraints, variable bounds and costs
+  if verbose
+    fprintf('- Assembling full set of constraints.\n');
+  end
+  [mdi.QP.A, mdi.QP.l, mdi.QP.u] = om.params_lin_constraint();
+  if verbose
+    fprintf('- Assembling full set of variable bounds.\n');
+  end
+  [mdi.QP.x0, mdi.QP.xmin, mdi.QP.xmax, mdi.QP.vtype] = om.params_var();
   if verbose
     fprintf('- Assembling full set of costs.\n');
   end
   [Q, c, k0] = om.params_quad_cost();
+
+  % Plug into struct
   mdi.QP.Cfstor = Cfstor;
   mdi.QP.H1 = Q;
   mdi.QP.C1 = c;
@@ -1969,21 +1984,12 @@ if isfield(mdi, 'CoordCost') && ...
 %   om.add_legacy_cost('CoordCost', cp);
 end
 
-[vv, ll] = om.get_idx();
-if verbose
-  fprintf('- Assembling full set of constraints.\n');
-end
-[mdi.QP.A, mdi.QP.l, mdi.QP.u] = om.params_lin_constraint();
-if verbose
-  fprintf('- Assembling full set of variable bounds.\n');
-end
-[mdi.QP.x0, mdi.QP.xmin, mdi.QP.xmax, mdi.QP.vtype] = om.params_var();
-
 et_setup = toc(t0);
 t0 = tic;
 
 % Call solver!
 mdo = mdi;
+[vv, ll] = om.get_idx();
 if mpopt.most.solve_model
   %% check consistency of model options (in case mdi was built in previous call)
   if mdi.DCMODEL ~= mo.DCMODEL
