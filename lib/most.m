@@ -708,16 +708,14 @@ if mpopt.most.build_model
   % injections
   om.init_indexed_name('var', 'Psc', {nt, nj_max, nc_max+1});
   om.init_indexed_name('var', 'Psd', {nt, nj_max, nc_max+1});
-  for t = 1:nt
-    for j = 1:mdi.idx.nj(t)
-      for k = 1:mdi.idx.nc(t,j)+1
-        if ns
+  if ns
+    for t = 1:nt
+      for j = 1:mdi.idx.nj(t)
+        for k = 1:mdi.idx.nc(t,j)+1
           om.add_var('Psc', {t,j,k}, ns, [], [], zeros(ns,1));
         end
       end
     end
-  end
-  if ns
     for t = 1:nt
       for j = 1:mdi.idx.nj(t)
         for k = 1:mdi.idx.nc(t,j)+1
@@ -1040,7 +1038,7 @@ if mpopt.most.build_model
     fprintf('  - Building CCV constraints for piecewise-linear costs.\n');
   end
   om.init_indexed_name('lin', 'ycon', {nt, nj_max, nc_max+1});
-  for t = 1:nt,
+  for t = 1:nt
     for j = 1:mdi.idx.nj(t)
       for k = 1:mdi.idx.nc(t,j)+1
         mpc = mdi.flow(t,j,k).mpc;
@@ -1116,7 +1114,7 @@ if mpopt.most.build_model
   % Include all units that are potentially committed.
   om.init_indexed_name('lin', 'dPdef', {nt, nj_max, nc_max+1});
   for t = 1:nt
-    for j = 1:mdi.idx.nj(t);
+    for j = 1:mdi.idx.nj(t)
       for k = 1:mdi.idx.nc(t,j)+1
         ii = find(mdi.flow(t,j,k).mpc.gen(:, GEN_STATUS) > 0);
         ngtmp = length(ii);
