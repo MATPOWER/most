@@ -1988,8 +1988,10 @@ et_setup = toc(t0);
 t0 = tic;
 
 % Call solver!
-mdo = mdi;
-[vv, ll] = om.get_idx();
+mdo = mdi;              %% initialize output
+mdo.om = opt_model(om); %% make copy of opt_model object, so changes to
+                        %% output obj (mdo) don't modify input obj (mdi)
+[vv, ll] = mdo.om.get_idx();
 if mpopt.most.solve_model
   %% check consistency of model options (in case mdi was built in previous call)
   if mdi.DCMODEL ~= mo.DCMODEL
@@ -2149,7 +2151,7 @@ if mpopt.most.solve_model
             r.R   = z;
             r.prc = z;
             r.mu = struct('l', z, 'u', z, 'Pmax', z);
-            r.totalcost = sum(om.eval_quad_cost(mdo.QP.x, 'Rcost', {t,j,k}));
+            r.totalcost = sum(mdo.om.eval_quad_cost(mdo.QP.x, 'Rcost', {t,j,k}));
             r.R(r.igr) = mdo.QP.x(vv.i1.R(t,j,k):vv.iN.R(t,j,k)) * baseMVA;
             for gg = r.igr
               iz = find(r.zones(:, gg));

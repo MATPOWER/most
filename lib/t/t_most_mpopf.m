@@ -15,7 +15,7 @@ if nargin < 1
     quiet = 0;      %% verbose by default
 end
 
-ntests = 35;
+ntests = 36;
 t_begin(ntests, quiet);
 
 if quiet
@@ -133,7 +133,8 @@ t = 'solve previously built model : ';
 mpopt = mpoption(mpopt, 'most.build_model', 0, ...
                         'most.solve_model', 1, ...
                         'most.resolve_new_cost', 1);
-mdo = most(mdo, mpopt);
+mdi1 = mdo;
+mdo = most(mdi1, mpopt);
 t_is(mdo.results.success, 1, 12, [t 'success']);
 if verbose
     most_summary(mdo);
@@ -150,6 +151,10 @@ t_is(ms.lamP, ex.lamP, 2.5, [t 'lamP']);
 t_is(ms.muF, ex.muF, 2, [t 'muF']);
 % wwear = most_summary(mdo);
 % keyboard;
+
+t = 'output model is copy of input model';
+mdo.om.add_var('test', 10);
+t_is(mdo.om.var.N, mdi1.om.var.N+10, 12, t);
 
 if have_fcn('octave')
     warning(s1.state, file_in_path_warn_id);
