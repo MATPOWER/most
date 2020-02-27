@@ -1989,7 +1989,7 @@ t0 = tic;
 
 % Call solver!
 mdo = mdi;              %% initialize output
-mdo.om = opt_model(om); %% make copy of opt_model object, so changes to
+mdo.om = om.copy();     %% make copy of opt_model object, so changes to
                         %% output obj (mdo) don't modify input obj (mdi)
 [vv, ll] = mdo.om.get_idx();
 if mpopt.most.solve_model
