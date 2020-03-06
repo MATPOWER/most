@@ -5,6 +5,13 @@ Change history for MOST
 Changes since 1.0.2
 -------------------
 
+#### 3/19/20
+  - Convert to using `@opt_model/solve()` method rather than calling
+    `miqps_matpower()` or `qps_matpower()` directly. Requires MATPOWER
+    7.1 or later.
+  - **INCOMPATIBLE CHANGE**: Update objective function value returned in
+    `mdo.QP.f` to include the previously missing constant term.
+
 #### 2/27/20
   - Fix [issue #16][4], where the `om` field of the output MOST data
     struct (`mdo`) was a handle to the same object as as the `om`

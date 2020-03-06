@@ -1948,13 +1948,10 @@ if mpopt.most.build_model
   if verbose
     fprintf('- Assembling full set of costs.\n');
   end
-  [Q, c, k0] = om.params_quad_cost();
+  [mdi.QP.H1, mdi.QP.C1, mdi.QP.c1] = om.params_quad_cost();
 
   % Plug into struct
   mdi.QP.Cfstor = Cfstor;
-  mdi.QP.H1 = Q;
-  mdi.QP.C1 = c;
-  mdi.QP.c1 = k0;
   mdi.om = om;
 else
   om = mdi.om;
@@ -1962,27 +1959,19 @@ end     % if mpopt.most.build_model
 
 % With all pieces of the cost in place, can proceed to build the total
 % cost now.
-mdi.QP.H = mdi.QP.H1;
-mdi.QP.C = mdi.QP.C1;
-mdi.QP.c = mdi.QP.c1;
 if isfield(mdi, 'CoordCost') && ...
         (~isempty(mdi.CoordCost.Cuser) || ~isempty(mdi.CoordCost.Huser))
   if verbose
     fprintf('- Adding coordination cost to standard cost.\n');
   end
   nvuser = length(mdi.CoordCost.Cuser);
-  nvars = mdi.idx.nvars;
-  mdi.QP.H = mdi.QP.H + ...
-            [ mdi.CoordCost.Huser       sparse(nvuser,nvars-nvuser) ;
-            sparse(nvars-nvuser,nvuser)  sparse(nvars-nvuser,nvars-nvuser) ];
-  mdi.QP.C(1:nvuser) = mdi.QP.C(1:nvuser) +  mdi.CoordCost.Cuser(:);
-  mdi.QP.c = mdi.QP.c + mdi.CoordCost.cuser;
-  
-%   cp = struct('Cw', mdi.CoordCost.Cuser(:), ...
-%         'H', [ mdi.CoordCost.Huser     sparse(nvuser,nvars-nvuser) ;
-%             sparse(nvars-nvuser,nvuser) sparse(nvars-nvuser,nvars-nvuser) ]);
-%   om.add_legacy_cost('CoordCost', cp);
+  nvdiff = mdi.idx.nvars - nvuser;
+  om.add_quad_cost( 'CoordCost', ...
+                    [ mdi.CoordCost.Huser    sparse(nvuser,nvdiff);
+                      sparse(nvdiff,nvuser)  sparse(nvdiff,nvdiff) ], ...
+                    mdi.CoordCost.Cuser(:), mdi.CoordCost.cuser);
 end
+[mdi.QP.H, mdi.QP.C, mdi.QP.c] = om.params_quad_cost();
 
 et_setup = toc(t0);
 t0 = tic;
@@ -2016,30 +2005,15 @@ if mpopt.most.solve_model
     error('MDI.UC.run inconsistent with MPOPT.most.uc.run (and possible presence of MDI.UC.CommitKey)');
   end
   %% set options
-  if any(any(mdi.QP.H))
-    model = 'QP';
-  else
-    model = 'LP';
-  end
-  if UC
-    model = ['MI' model];
-  end
+  model = om.problem_type();
   mdo.QP.opt = mpopt2qpopt(mpopt, model, 'most');
+  mdo.QP.opt.x0 = [];
   if verbose
     fprintf('- Calling %s solver.\n\n', model);
     fprintf('============================================================================\n\n');
   end
-  if UC
-    [mdo.QP.x, mdo.QP.f, mdo.QP.exitflag, mdo.QP.output, ...
-            mdo.QP.lambda ] = miqps_matpower( mdi.QP.H, mdi.QP.C, ...
-                mdi.QP.A, mdi.QP.l, mdi.QP.u, mdi.QP.xmin, mdi.QP.xmax, ...
-                [], mdi.QP.vtype, mdo.QP.opt);
-  else
-    [mdo.QP.x, mdo.QP.f, mdo.QP.exitflag, mdo.QP.output, ...
-            mdo.QP.lambda ] = qps_matpower( mdi.QP.H, mdi.QP.C, ...
-                mdi.QP.A, mdi.QP.l, mdi.QP.u, mdi.QP.xmin, mdi.QP.xmax, ...
-                [], mdo.QP.opt);
-  end
+  [mdo.QP.x, mdo.QP.f, mdo.QP.exitflag, mdo.QP.output, mdo.QP.lambda ] = ...
+        mdo.om.solve(mdo.QP.opt);
   if mdo.QP.exitflag > 0
     success = 1;
     if verbose

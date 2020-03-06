@@ -362,7 +362,7 @@ The first step in beginning to use the \most{} is to get familiar with \matpower
 \label{sec:sysreq}
 To use \most{}~\mostver{} you will need:
 \begin{itemize}
-\item \matpower{} version 7.x or later\footnote{\most{}~1.0 required \matpower{}~6.}
+\item \matpower{} version \hl{7.1} or later\footnote{\most{}~1.0.1 required \matpower{}~7 and \most{}~1.0 required \matpower{}~6.}
 \item \emph{(highly recommended)} a high-performance LP/MILP, QP/MIQP solver such as \gurobi{}, \cplex{}, \mosek{}, \matlab{}'s \ot{} or \glpk{} \emph{(included with Octave)}.
 \end{itemize}
 
@@ -3352,6 +3352,12 @@ previously built model resulted in a fatal error. \emph{Thanks to Baraa Mohandes
 \begin{itemize}
 \item Update \code{most\_summary()} to include sections for fixed loads
 and storage expected stored energy.
+\item Convert to using \code{@opt\_model/solve()} method rather than calling \code{miqps\_matpower()} or \code{qps\_matpower()} directly. Requires \matpower{} \hl{7.1} or later.
+\end{itemize}
+
+\subsubsection*{Incompatible Changes}
+\begin{itemize}
+\item Objective function value returned in \code{mdo.QP.f} updated to include the previously missing constant term.
 \end{itemize}
 
 \end{appendices}

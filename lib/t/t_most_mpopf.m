@@ -104,7 +104,7 @@ if verbose
 end
 ms = most_summary(mdo);
 ex = soln.wwear;
-t_is(ms.f, ex.f, 0.5, [t 'f']);
+t_is(ms.f, ex.f+35625, 0.5, [t 'f']);
 t_is(ms.Pg, ex.Pg, 2.8, [t 'Pg']);
 t_is(ms.Rup, ex.Rup, 2.5, [t 'Rup']);
 t_is(ms.Rdn, ex.Rdn, 2.5, [t 'Rdn']);
@@ -141,7 +141,7 @@ if verbose
 end
 ms = most_summary(mdo);
 ex = soln.wwear;
-t_is(ms.f, ex.f, 0.5, [t 'f']);
+t_is(ms.f, ex.f+35625, 0.5, [t 'f']);
 t_is(ms.Pg, ex.Pg, 2.8, [t 'Pg']);
 t_is(ms.Rup, ex.Rup, 2.5, [t 'Rup']);
 t_is(ms.Rdn, ex.Rdn, 2.5, [t 'Rdn']);
