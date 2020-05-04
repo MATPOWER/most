@@ -44,13 +44,13 @@ function mdo = most(mdi, mpopt)
 %                   times) roll over from end of horizon back to beginning
 %           most.alpha (0) - 0 = contingencies happen at beginning of period,
 %                   1 = at end of period
-%           most.solver ('DEFAULT') - see ALG argument to MIQPS_MATPOWER or
-%                   QPS_MATPOWER for details
+%           most.solver ('DEFAULT') - see ALG argument to OPT_MODEL/SOLVE
+%                   (i.e. MIQPS_MASTER or QPS_MASTER) for details
 %           most.skip_prices (0) - skip price computation stage for mixed
-%                   integer problems, see 'help miqps_matpower' for details
+%                   integer problems, see MIQPS_MASTER for details
 %           most.price_stage_warn_tol (1e-7) - tolerance on the objective fcn
 %               value and primal variable relative match required to avoid
-%               mis-match warning message, see 'help miqps_matpower' for details
+%               mis-match warning message, see MIQPS_MASTER for details
 %
 %   Outputs:
 %       MDO   MOST data structure, output
