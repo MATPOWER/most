@@ -155,7 +155,7 @@ t = sprintf('(t=%d) downward contingency reserve prices', tt);
 t_is(r.results.RpmPrices(:,tt)/r.StepProb(tt), s.rdc.reserve.prc.Rp_neg, 6, t);
 
 t = sprintf('(t=%d) contingency physical ramp price', tt);
-[vv, ll] = get_idx(r.om);
+[vv, ll] = r.om.get_idx();
 Ramp_P_max = zeros(ng, nc);
 sum_muPmax = zeros(ng, 1);
 sum_muPmin = zeros(ng, 1);

@@ -233,7 +233,7 @@ for t = 1:nt
     SSp(2*t)   = sum(Sp(:, t), 1);
     eeS(2*t)   = sum(eS(:, t), 1);
 
-    vv = get_idx(md.om);
+    vv = md.om.get_idx();
     for j = 1:md.idx.nj(t)
         dS = -md.Delta_T * ...
             (InEff(:,t)  .* md.QP.x(vv.i1.Psc(t,j,1)-1+(1:ns)) + ...
