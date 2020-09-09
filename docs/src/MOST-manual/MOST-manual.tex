@@ -3353,6 +3353,7 @@ previously built model resulted in a fatal error. \emph{Thanks to Baraa Mohandes
 \item Update \code{most\_summary()} to include sections for fixed loads
 and storage expected stored energy.
 \item Convert to using \code{@opt\_model/solve()} method rather than calling \code{miqps\_matpower()} or \code{qps\_matpower()} directly. Requires \matpower{} \hl{7.1} or later.
+\item Use \code{@opt\_model/get\_soln()} to extract variable and shadow price results, rather than doing the indexing manually. Requires \matpower{} \hl{7.1} or later.
 \end{itemize}
 
 \subsubsection*{Incompatible Changes}
