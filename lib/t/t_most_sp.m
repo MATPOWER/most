@@ -52,7 +52,7 @@ end
 % mpopt = mpoption(mpopt, 'out.all', -1);
 
 %% turn off warnings
-if have_fcn('octave')
+if have_feature('octave')
     s = warning('query', 'Octave:nearly-singular-matrix');
     warning('off', 'Octave:nearly-singular-matrix');
 end
@@ -685,7 +685,7 @@ if create_plots
 end
 
 %% turn warnings back on
-if have_fcn('octave')
+if have_feature('octave')
     warning(s.state, 'Octave:nearly-singular-matrix');
 end
 

@@ -35,7 +35,7 @@ mpoptdc = mpoption(mpopt, 'model', 'DC');
 mpopt = mpoption(mpopt, 'most.solver', algs.dc{1});
 
 %% turn off warnings
-if have_fcn('octave')
+if have_feature('octave')
     s = warning('query', 'Octave:nearly-singular-matrix');
     warning('off', 'Octave:nearly-singular-matrix');
 else
@@ -204,7 +204,7 @@ end
 
 
 %% turn warnings back on
-if have_fcn('octave')
+if have_feature('octave')
     warning(s.state, 'Octave:nearly-singular-matrix');
 else
     warning(s7.state, 'MATLAB:nearlySingularMatrix');

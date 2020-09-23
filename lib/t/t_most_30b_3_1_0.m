@@ -27,8 +27,8 @@ fudging = struct( ...       %% paramters for fudging reserve contract for sopf2
 %% options
 mpopt = mpoption('verbose', 0, 'out.all', 0);
 mpopt = mpoption(mpopt, 'opf.violation', 5e-7, 'mips.comptol', 5e-8);
-if have_fcn('linprog')
-    if have_fcn('linprog_ds')
+if have_feature('linprog')
+    if have_feature('linprog_ds')
         mpopt = mpoption(mpopt, 'linprog.Algorithm', 'dual-simplex');
     else
         mpopt = mpoption(mpopt, 'linprog.Algorithm', 'simplex');

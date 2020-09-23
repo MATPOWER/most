@@ -30,15 +30,15 @@ algs.ac     = {'DEFAULT'};  %% opf.ac.solver sequence to try for c3sopf (AC run)
 mpopt = mpoption('verbose', 0, 'out.all', 0);
 mpopt = mpoption(mpopt, 'opf.violation', 5e-7, 'mips.comptol', 5e-8);
 mpopt = mpoption(mpopt, 'sopf.force_Pc_eq_P0', 0);  %% don't constrain contracted == base case dispatch
-if have_fcn('gurobi')
+if have_feature('gurobi')
     mpopt = mpoption(mpopt, 'gurobi.method', 1);    %% dual-simplex
 end
-if have_fcn('mosek')
+if have_feature('mosek')
     sc = mosek_symbcon;
     mpopt = mpoption(mpopt, 'mosek.lp_alg', sc.MSK_OPTIMIZER_DUAL_SIMPLEX);     %% dual simplex
 end
-if have_fcn('linprog')
-    if have_fcn('linprog_ds')
+if have_feature('linprog')
+    if have_feature('linprog_ds')
         mpopt = mpoption(mpopt, 'linprog.Algorithm', 'dual-simplex');
     else
         mpopt = mpoption(mpopt, 'linprog.Algorithm', 'simplex');

@@ -24,7 +24,7 @@ mpopt = mpoption('verbose', 0, 'out.all', 0);
 % mpopt = mpoption('verbose', 2, 'out.all', -1);
 mpopt = mpoption(mpopt, 'out.bus', 0, 'out.branch', 0, 'out.gen', 2);
 mpopt = mpoption(mpopt, 'opf.violation', 5e-7, 'mips.comptol', 5e-8);
-if have_fcn('intlinprog')
+if have_feature('intlinprog')
     mpopt = mpoption(mpopt, 'linprog.Algorithm', 'dual-simplex');
     mpopt = mpoption(mpopt, 'intlinprog.RootLPAlgorithm', 'dual-simplex');
     mpopt = mpoption(mpopt, 'intlinprog.TolCon', 1e-9);
@@ -157,13 +157,13 @@ ng = size(mpc.gen, 1);      %% number of gens
 xgd = loadxgendata(xgd_table, mpc);
 md = loadmd(mpc, [], xgd);
 
-if have_fcn('cplex')
+if have_feature('cplex')
     mpopt = mpoption(mpopt, 'cplex.lpmethod', 2);   %% dual-simplex
 end
-if have_fcn('gurobi')
+if have_feature('gurobi')
     mpopt = mpoption(mpopt, 'gurobi.method', 1);    %% dual-simplex
 end
-if have_fcn('linprog')
+if have_feature('linprog')
     mpopt = mpoption(mpopt, 'linprog.Algorithm', 'dual-simplex');
 %     mpopt = mpoption(mpopt, 'linprog.Algorithm', 'simplex');
 %     mpopt = mpoption(mpopt, 'linprog.Algorithm', 'interior-point');
