@@ -2,10 +2,13 @@ Change history for MOST
 =======================
 
 
-Changes since 1.0.2
--------------------
+Version 1.1 - *Oct 8, 2020*
+---------------------------
 
-*Requires MATPOWER with 7.1 or later (for MP-Opt-Model 2.2 or later).*
+*Requires MATPOWER with 7.1 or later (for MP-Opt-Model 3.0 or later).*
+
+#### 10/8/20
+  - Release 1.1.
 
 #### 9/9/20
   - Use `@opt_model/get_soln()` to extract variable and shadow price
