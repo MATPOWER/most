@@ -440,7 +440,7 @@ rr = r.cont(1);
 % fprintf('[%.7f; %.7f; %.7f; %.7f; %.7f]\n', rr.gen(:, PG));
 % fprintf('[%.7f; %.7f; %.7f]\n', rr.bus(:, LAM_P));
 % fprintf('[%.7f; %.7f; %.7f]\n', rr.branch(:, MU_SF) + rr.branch(:, MU_ST));
-t_is(rr.gen(:, PG), [128.7823267; 141.2176733; 180; -450; 0], 7, [t 'Pg 1']);
+t_is(rr.gen(:, PG), [128.7823267; 141.2176733; 180; -450; 0], 6, [t 'Pg 1']);
 t_is(rr.bus(:, LAM_P), [4.4809852; 7.2115891; 9.9421931], 7, [t 'lam P 1']);
 t_is(rr.branch(:, MU_SF) + rr.branch(:, MU_ST), [0; 8.1918119; 0], 7, [t 'mu flow 1']);
 rr = r.base;
