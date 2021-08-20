@@ -1,10 +1,16 @@
 name: CI
 
-on: [push]
+# controls when action will run
+on:
+  # triggers workflow on push events
+  push:
+  # allows workflow to be triggered manually from Actions tab
+  workflow_dispatch:
 
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
 #        os: [macos-10.15, macos-11.0, ubuntu-16.04, ubuntu-18.04, ubuntu-20.04]
         os: [macos-latest, ubuntu-16.04, ubuntu-18.04, ubuntu-20.04]
@@ -12,29 +18,19 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Check out repository
+      uses: actions/checkout@v2
 
-    - name: Initialize Package Manager (Linux)
+    - name: Install Octave (Linux)
       if: startsWith(matrix.os, 'ubuntu')
-      run: sudo apt-get update -qq
+      uses: MATPOWER/action-install-octave-linux@v1
 
-    - name: Initialize Package Manager (Mac)
+    - name: Install Octave (macOS)
       if: startsWith(matrix.os, 'macos')
-      run: brew update
+      uses: MATPOWER/action-install-octave-macos@v1
 
-    - name: Install GNU Octave (Linux)
-      if: startsWith(matrix.os, 'ubuntu')
-      run: |
-        sudo apt-get install -y -qq liboctave-dev octave
-        octave-cli --no-gui --eval ver
-        echo "OCTAVE_VER=`octave-cli --no-gui --eval "fprintf('%s', ver('octave').Version)"`" >> $GITHUB_ENV
-
-    - name: Install GNU Octave (Mac)
-      if: startsWith(matrix.os, 'macos')
-      run: |
-        brew install octave
-        octave-cli --no-gui --eval ver
-        echo "OCTAVE_VER=`octave-cli --no-gui --eval "fprintf('%s', ver('octave').Version)"`" >> $GITHUB_ENV
+    - name: ${{ env.ML_NAME }} ${{ env.ML_VER }} Installed
+      run: $ML_CMD ver
 
     - name: Install MP-Test, Set MPTEST_PATH
       run: |
@@ -54,11 +50,11 @@ jobs:
     - name: Install MATPOWER
       run: |
         git clone --depth=1 https://github.com/MATPOWER/matpower.git $HOME/matpower
-        octave-cli --no-gui -p $HOME/matpower --eval "install_matpower(1,1,1)"
-        octave-cli --no-gui --eval mpver
+        env $ML_PATHVAR=$HOME/matpower $ML_CMD "install_matpower(1,1,1)"
+        $ML_CMD mpver
         echo "TEST_PATH=${GITHUB_WORKSPACE}/lib:${GITHUB_WORKSPACE}/lib/t:${MP_OPT_MODEL_PATH}" >> $GITHUB_ENV
 
     - name: Test MOST
       run: |
-        octave-cli --no-gui -p $TEST_PATH --eval mpver
-        octave-cli --no-gui -p $TEST_PATH --eval "test_most(0,1)"
+        env $ML_PATHVAR=$TEST_PATH $ML_CMD mpver
+        env $ML_PATHVAR=$TEST_PATH $ML_CMD "test_most(0,1)"
