@@ -25,10 +25,6 @@ jobs:
     - name: Check out repository
       uses: actions/checkout@v2
 
-    - name: Install MATLAB
-      if: matrix.platform == 'matlab'
-      uses: matlab-actions/setup-matlab@v1
-
     - name: Install Octave (Linux)
       if: matrix.platform == 'octave' && startsWith(matrix.os, 'ubuntu')
       uses: MATPOWER/action-install-octave-linux@v1
@@ -36,6 +32,10 @@ jobs:
     - name: Install Octave (macOS)
       if: matrix.platform == 'octave' && startsWith(matrix.os, 'macos')
       uses: MATPOWER/action-install-octave-macos@v1
+
+    - name: Install MATLAB
+      if: matrix.platform == 'matlab'
+      uses: matlab-actions/setup-matlab@v1
 
     - name: Configure MATLAB
       if: matrix.platform == 'matlab'
@@ -67,6 +67,4 @@ jobs:
         echo "TEST_PATH=${GITHUB_WORKSPACE}/lib:${GITHUB_WORKSPACE}/lib/t:${MP_OPT_MODEL_PATH}" >> $GITHUB_ENV
 
     - name: Test MOST
-      run: |
-        env $ML_PATHVAR=$TEST_PATH $ML_CMD mpver
-        env $ML_PATHVAR=$TEST_PATH $ML_CMD "test_most(0,1)"
+      run: env $ML_PATHVAR=$TEST_PATH $ML_CMD "mpver; test_most(0,1)"
