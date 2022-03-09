@@ -335,7 +335,7 @@ For version 1.1, use:
 
 \begin{quote}
 \footnotesize
-R.~D. Zimmerman, C.~E. Murillo-S{\'a}nchez. \mostname{} (\most{}) User's Manual, Verision 1.1. 2020. [Online]. Available: \url{https://matpower.org/docs/MOST-manual-1.1.pdf}\\
+R.~D. Zimmerman, C.~E. Murillo-S{\'a}nchez. \mostname{} (\most{}) User's Manual, Version 1.1. 2020. [Online]. Available: \url{https://matpower.org/docs/MOST-manual-1.1.pdf}\\
 \doi{10.5281/zenodo.4073878}
 \end{quote}
 For a version non-specific citation, use the following citation and DOI,
@@ -1762,7 +1762,7 @@ name & type\tnote{*} & default & description \\
 \code{~~~.ymax}	& I	 & 	 & $y_{\rm max}^t$, upper bound on output from \eqref{eq:dynout1}--\eqref{eq:dynout2} \\
 \code{~~~.zmin}	& I	 & 	 & $z_{\rm min}^t$, lower bound on $z^t$ from \eqref{eq:dynbounds} \\
 \code{~~~.zmax}	& I	 & 	 & $z_{\rm max}^t$, upper bound on $z^t$ from \eqref{eq:dynbounds} \\
-\code{FixedReserves(t,j,k)}	& I	 & \emph{empty}	 & zonal reserve input parameters for  period~$t$, scenario~$j$, contingency~$k$, in form of \code{reserves} field of \mpc{} from Table~\ref{MUM-tab:reserves} in the \mum{}, with \code{cost}, \code{qty}, \code{zones}, \code{req} sub-fields. \\
+\code{FixedReserves(t,j,k)}	& I\tnote{\dag}	 & \emph{empty}	 & zonal reserve input parameters for  period~$t$, scenario~$j$, contingency~$k$, in form of \code{reserves} field of \mpc{} from Table~\ref{MUM-tab:reserves} in the \mum{}, with \code{cost}, \code{qty}, \code{zones}, \code{req} sub-fields. \\
 \code{UC}	& B	 & 	 & struct with unit commitment parameters \\
 \code{~~~.CommitKey(i,t)}	& I	 & \emph{empty}	 & optional $n_g \times n_t$ vector specifying availability of unit~$i$ for commitment at time~$t$ \\
 &&& \begin{tabular}{r @{ -- } p{0.35\textwidth}}
@@ -1771,17 +1771,18 @@ name & type\tnote{*} & default & description \\
 2 & must run, unit forced \emph{on} \\
 \end{tabular}	\\
 \code{~~~.CommitSched(i,t)}	& B	 & 	 & $n_g \times n_t$ matrix UC status (0 or 1) of unit~$i$ at time~$t$, input for non-UC runs, result for UC runs \\
-\code{~~~.InitialState(i)}\tnote{\dag}	& I	 & \emph{empty}	 & $n_g \times 1$ vector of initial states,
+\code{~~~.InitialState(i)}\tnote{\ddag}	& I	 & \emph{empty}	 & $n_g \times 1$ vector of initial states,
 if positive (negative), number of uptime (downtime) periods at time t = 0 \\
-\code{~~~.MinUp(i)}\tnote{\dag}	& I	 & \emph{empty}	 & $n_g \times 1$ vector, minimum up time in number of periods \\
-\code{~~~.MinDown(i)}\tnote{\dag}	& I	 & \emph{empty}	 & $n_g \times 1$ vector, minimum down time in number of periods \\
+\code{~~~.MinUp(i)}\tnote{\ddag}	& I	 & \emph{empty}	 & $n_g \times 1$ vector, minimum up time in number of periods \\
+\code{~~~.MinDown(i)}\tnote{\ddag}	& I	 & \emph{empty}	 & $n_g \times 1$ vector, minimum down time in number of periods \\
 \code{z1}	& I	 & \emph{empty}	 & initial state $z^1$ of optional dynamical system model \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}
  \scriptsize
  \item [*] {I = input, O = output, B = both, opt = taken from \matpower{} options.}
- \item [\dag] {Requires that \code{CommitKey} be present and non-empty.}
+ \item [\dag] {Output for fixed reserves is found in \code{md.flow(t,j,k).mpc.reserves}, for compatibility with \matpower{}.}
+ \item [\ddag] {Requires that \code{CommitKey} be present and non-empty.}
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
