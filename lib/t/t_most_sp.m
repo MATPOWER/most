@@ -27,7 +27,7 @@ if nargin < 4
     end
 end
 
-t_begin(156, quiet);
+t_begin(157, quiet);
 
 if quiet
     verbose = 0;
@@ -46,6 +46,9 @@ mpopt = mpoption(mpopt, 'model', 'DC');
 mpopt = mpoption(mpopt, 'sopf.force_Pc_eq_P0', 0);
 mpopt = mpoption(mpopt, 'opf.dc.solver', 'MIPS');
 mpopt = mpoption(mpopt, 'most.solver', mpopt.opf.dc.solver);
+if have_feature('octave') && have_feature('octave', 'vnum') > 7
+    mpopt = mpoption(mpopt, 'mips.linsolver', 'LU');
+end
 if ~verbose
     mpopt = mpoption(mpopt, 'out.all', 0);
 end
@@ -274,6 +277,7 @@ t = 'DC OPF (w/contingencies) : runopf ';
 ff = [-443115; -439750; -297000];
 mpc = mpc0;
 r = runopf(mpc, mpopt);
+t_ok(r.success, [t 'success']);
 t_is(r.f, ff(1), 5, [t 'f']);
 t_is(r.gen(:, PG), [135; 135; 180; -450], 7, [t 'Pg']);
 t_is(r.bus(:, LAM_P), [27; 36; 45], 7, [t 'lam P']);
@@ -282,8 +286,8 @@ t_is(r.branch(:, MU_SF) + r.branch(:, MU_ST), [0; 27; 0], 7, [t 'mu flow']);
 mpc = mpc0;
 mpc.gen(2, GEN_STATUS) = 0;
 r = runopf(mpc, mpopt);
-t_is(r.f, ff(2), 5, [t 'f']);
 t_ok(r.success, [t 'success']);
+t_is(r.f, ff(2), 5, [t 'f']);
 t_is(r.gen(:, PG), [200; 0; 250; -450], 7, [t 'Pg']);
 t_is(r.bus(:, LAM_P), [50; 50; 50], 7, [t 'lam P']);
 t_is(r.branch(:, MU_SF) + r.branch(:, MU_ST), [0; 0; 0], 7, [t 'mu flow']);

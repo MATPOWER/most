@@ -5,6 +5,9 @@ Change history for MOST
 since version 1.1
 -----------------
 
+#### 4/22/22
+  - Fix tests that were failing under Octave 7.x.
+
 #### 5/24/21
   - Fix bug in `plot_uc()` that prevented it from working properly in a
     subplot, such as in `t_most_uc()`.
