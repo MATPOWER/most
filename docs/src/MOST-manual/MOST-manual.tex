@@ -662,7 +662,7 @@ For this reason \most{} defines decision variables representing the upper and lo
 The formulation also includes the option to relax the restrictions on the stored energy bounds in some or all periods to base them on the range of \emph{expected} stored energy quantities in the previous period, rather than on the worst case ranges.
 
 An important aspect of modeling storage is to include some way of either valuing or constraining both the initial amount of stored energy in each unit and the amount of leftover storage in terminal states, both end-of-horizon states and contingency states. \most{} includes several options. First, for each unit there is a cost assigned to any initial stored energy at the beginning of the horizon. Similarly, there are a number of parameters used to specify the value of leftover stored energy in terminal states. Furthermore, the initial stored energy amount can be specified and the final expected stored energy amount can be constrained to equal a target quantity. Finally, there is also the option to simply constrain the initial amount and the final expected amount to be equal while letting that level be determined as an output of the optimization.
- 
+
 \subsection{Linear Time-Varying Dynamical System}
 
 The main decision variables in the problem are the dispatches, and they in turn can affect subsequent systems of different kinds.
@@ -686,7 +686,7 @@ So far, the discussion has been restricted to problems with continuous optimizat
 
 For stochastic problems modeling multiple scenarios and/or contingency states there is a single commitment schedule shared by all states. That is, in the current formulation, a single binary variable is used to model the commitment for a given unit across all scenarios and contingencies in a given period.\footnote{To correctly model the commitment of fast start units with non-zero minimum generation constraints requires individual commitment variables for each scenario.}
 
-Figure~\ref{fig:most_multi_period} illustrates the ways in which any one of the single period continuous variable problems of Figure~\ref{fig:most_single_period} can be extended to include combinations of multiple periods, ramping, storage, integer commitment, startup and shutdown costs and minimum up and down times. 
+Figure~\ref{fig:most_multi_period} illustrates the ways in which any one of the single period continuous variable problems of Figure~\ref{fig:most_single_period} can be extended to include combinations of multiple periods, ramping, storage, integer commitment, startup and shutdown costs and minimum up and down times.
 
 \begin{figure}[hbtp]
   \centering
@@ -1142,7 +1142,7 @@ where
 \begin{equation}
 \beta_1^{ti} \equiv \frac{1 - \Delta \frac{\eta^{ti}_{\rm loss}}{2}}{1 + \Delta \frac{\eta^{ti}_{\rm loss}}{2}}, \quad
 \beta_2^{ti} \equiv \frac{1}{1 + \Delta \frac{\eta^{ti}_{\rm loss}}{2}}.
-\label{eq:beta1and2} 
+\label{eq:beta1and2}
 \end{equation}
 
 For a period where a contingency occurs at a fraction $\alpha$ of the way through the period, the losses are more tricky to compute. Let us call the expected stored energy at the moment the contingency occurs $s_\alpha^{tijk}$, expressed as
@@ -1382,7 +1382,7 @@ The following sections describe the input data, the \most{} options, the \md{} i
 \subsection{Input Data}
 \label{sec:inputdata}
 
-The \md{}, containing all of the data needed for the problem, is sufficiently complex that it is not typically created directly, but rather is assembled from numerous other files or data structures by the \code{loadmd} function as illustrated in Figure~\ref{fig:loadmd}. 
+The \md{}, containing all of the data needed for the problem, is sufficiently complex that it is not typically created directly, but rather is assembled from numerous other files or data structures by the \code{loadmd} function as illustrated in Figure~\ref{fig:loadmd}.
 \begin{Code}
 mdi = loadmd(mpc, transmat, xgd, sd, contab, profiles);
 \end{Code}
@@ -2434,8 +2434,8 @@ name & default & description \\
 \end{threeparttable}
 \end{table}
 
- An example \code{xGenDataTable} struct is created by the following code.
- 
+An example \code{xGenDataTable} struct is created by the following code.
+
 \begin{Code}
 xgd_table.colnames = {  % indented to align with data cols
     'CommitSched', ...
@@ -2891,7 +2891,7 @@ xgd.PositiveLoadFollowReserveQuantity(3) = 250; % remove ramp reserve
 xgd.PositiveLoadFollowReservePrice(3) = 1e-6;   % constraint and costs
 xgd.NegativeLoadFollowReservePrice(3) = 1e-6;
 \end{Code}
-This model can then be run after turning off the DC network modeling. 
+This model can then be run after turning off the DC network modeling.
 \begin{Code}
 mpopt = mpoption(mpopt, 'most.dc_model', 0);    % use model with no network
 mdi = loadmd(mpc, nt, xgd, [], [], profiles);

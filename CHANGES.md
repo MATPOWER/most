@@ -137,7 +137,7 @@ Version 1.0b2 - *Nov 1, 2016*
 
 #### 11/1/16
   - Released 1.0b2.
-  
+
 #### 10/27/16
   - Fixed some MOSEK related issues in tests and tutorial examples.
 

@@ -282,7 +282,7 @@ if ns
       mdi.Storage.InitialStorageUpperBound = mdi.Storage.InitialStorage;
     end
   end
-  
+
   LossCoeff = mdi.Delta_T * LossFactor/2;
   beta1 = (1-LossCoeff) ./ (1+LossCoeff);
   beta2 = 1 ./ (1+LossCoeff);
@@ -518,7 +518,7 @@ if mpopt.most.build_model
       end
     end
   end
-  
+
   % Build variable indexing mechanism
   % Find total number of flows, buses and ny variables; (including offline gens)
   mdi.idx.nf_total = 0;
@@ -575,7 +575,7 @@ if mpopt.most.build_model
           Va_min = -Va_max;
           Va_min(iref) = mdi.flow(t,j,k).mpc.bus(iref,VA)*pi/180;
           Va_max(iref) = Va_min(iref);
-          
+
           om.add_var('Va', {t,j,k}, mdi.idx.nb(t,j,k), Va0, Va_min, Va_max);
         end
       end
@@ -786,7 +786,7 @@ if mpopt.most.build_model
       % set variable types
       vt = vt0;                 % initialize all variable types to binary
       vt(umin == umax) = 'C';   % make continuous for those that are fixed
-      
+
       om.add_var('u', {t}, ng, zeros(ng, 1), umin, umax, vt);
     end
     % v variables mean startup events
@@ -1011,7 +1011,7 @@ if mpopt.most.build_model
       end
     end
   end
-  
+
   % Set relationships between generator injections and charge/discharge
   % variables (-pg + psc + psd = 0)
   if verbose && ~isempty(mdi.Storage.UnitIdx)
@@ -1028,7 +1028,7 @@ if mpopt.most.build_model
       end
     end
   end
-  
+
   % Construct y-variable restrictions on piecewise-linear costs. Note that
   % the restriction lines are computed using the full non-scaled cost in
   % gencost; any weighting of the cost must be then specified later in the
@@ -1129,7 +1129,7 @@ if mpopt.most.build_model
       end
     end
   end
-  
+
   % Go on to load following ramping restrictions.  Note that these
   % restrictions apply even if there is a change in the commitment status
   % of the generator.
@@ -1406,7 +1406,7 @@ if mpopt.most.build_model
       end
     end
   end
-  
+
   % Now, if required, constrain the expected terminal storage quantity; two
   % different ways:
   if mdi.Storage.ForceExpectedTerminalStorage && mdi.Storage.ForceCyclicStorage
@@ -1492,7 +1492,7 @@ if mpopt.most.build_model
       om.add_lin_constraint('DSz', {t}, A, b, b);
     end
   end
-  
+
   % Form the output equations and their restrictions
   if nyds
     om.init_indexed_name('lin', 'DSy', {ntds});
@@ -1510,7 +1510,7 @@ if mpopt.most.build_model
       om.add_lin_constraint('DSy', {t}, A, l, u);
     end
   end
-  
+
   % UNIT COMMITMENT
   if UC
     if verbose
@@ -1804,7 +1804,7 @@ if mpopt.most.build_model
         end
       end
     end
-    
+
     % contingency reserve costs
     c = baseMVA * mdi.StepProb(t) * mdi.offer(t).PositiveActiveReservePrice(:);
     vs = struct('name', {'Rpp'}, 'idx', {{t}});
@@ -2061,11 +2061,11 @@ if mpopt.most.solve_model
             %% bus angles
             Va = om.get_soln('var', 'Va', {t,j,k});
             mpc.bus(:, VA) = (180/pi) * Va;
-          
+
             %% nodal prices
             price = (om.get_soln('lin', 'mu_u', 'Pmis', {t,j,k})-om.get_soln('lin', 'mu_l', 'Pmis', {t,j,k})) / baseMVA;
             mpc.bus(:, LAM_P) = price;
-          
+
             %% line flows and line limit shadow prices
             mpc.branch(:, PF) = 0;
             mpc.branch(:, QF) = 0;
