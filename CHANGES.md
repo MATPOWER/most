@@ -5,6 +5,20 @@ Change history for MOST
 since version 1.1
 -----------------
 
+#### 5/4/22
+  - Ramping reserves and constraints are now included for the transition
+    from the initial state into period 1, except for single-period problems.
+  - **INCOMPATIBLE CHANGE**: Modified definition of ramping reserves for
+    period _t_ (and all corresponding input and output parameters) to refer
+    to the transition from _t-1_ to _t_, not _t_ to _t+1_. This means that
+    the ramping reserves for the transition into the first period are now
+    optimization variables and the corresponding constraints are explicit.
+    This is for multiperiod problems only. Ramping reserves and contraints
+    are explicitly excluded for single-period problems.  
+    _Note:_ This change also corrects an error in (4.11) in the manual. The
+    superscript _t_ on gamma is now correct. Previously it should have been
+    _t+1_, as it was in the code.
+
 #### 4/22/22
   - Fix tests that were failing under Octave 7.x.
 

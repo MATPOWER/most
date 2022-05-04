@@ -133,6 +133,7 @@ nc = length(clist);
 %% load the case
 mpc = loadcase(casename);
 gbus = mpc.gen(:, GEN_BUS);
+mpc.gen(:, RAMP_30) = Inf;      %% avoid binding ramp reserves in period 1
 
 %%-----  get OPF results  -----
 rdc = rundcopf(mpc, mpoptdc);

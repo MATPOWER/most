@@ -141,6 +141,7 @@ nc = length(clist);
 %% load the case
 mpc = loadcase(casename);
 gbus = mpc.gen(:, GEN_BUS);
+mpc.gen(:, RAMP_30) = Inf;      %% avoid binding ramp reserves in period 1
 
 %%-----  get c3sopf results  -----
 rdc = c3sopf_retry(algs.dc, mpc, xgd_table.data, contab, mpoptdc);

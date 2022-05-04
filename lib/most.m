@@ -58,7 +58,7 @@ function mdo = most(mdi, mpopt)
 
 
 %   MOST
-%   Copyright (c) 2010-2020, Power Systems Engineering Research Center (PSERC)
+%   Copyright (c) 2010-2022, Power Systems Engineering Research Center (PSERC)
 %   by Carlos E. Murillo-Sanchez, PSERC Cornell & Universidad Nacional de Colombia
 %   and Ray Zimmerman, PSERC Cornell
 %
@@ -681,15 +681,18 @@ if mpopt.most.build_model
     om.add_var('Rpm', {t}, ng, [], Rpmin, mdi.offer(t).NegativeActiveReserveQuantity/baseMVA);
   end
   % Now load following ramping reserves.  In open ended problem, we need to
-  % specify nt-1 ramping reserves, those needed to transition 1-2, 2-3, ..
-  % (nt-1)-nt . The initial ramp constraint (from t=0 to t=1) is data, not a
-  % variable.  But in terminal state (at t=nt+1) or cyclical problems (when
-  % the t=nt to t=1 transition is also considered) we need nt ramping
-  % reserves.
-  if ~mdi.OpenEnded
-    mdi.idx.ntramp = nt;
+  % specify nt ramping reserves, those needed to transition 0-1, 1-2, 2-3, ..
+  % (nt-1)-nt. But in terminal state (when t=nt+1 is also considered) we need
+  % nt + 1 ramping reserves.
+  if nt == 1
+    % exclude ramp reserves/constraints for single-period problems
+    mdi.idx.ntramp = 0;
   else
-    mdi.idx.ntramp = nt - 1;
+    if ~mdi.OpenEnded
+      mdi.idx.ntramp = nt + 1;
+    else
+      mdi.idx.ntramp = nt;
+    end
   end
   om.init_indexed_name('var', 'Rrp', {mdi.idx.ntramp});
   om.init_indexed_name('var', 'Rrm', {mdi.idx.ntramp});
@@ -1135,83 +1138,107 @@ if mpopt.most.build_model
   % of the generator.
   %
   % First, bound upward ramping reserves from below by all base-case
-  % ramping possibilities, 0 <= rrp(t) -p(t+1)(j2)0 + p(t)(j1)0.  A ramping
-  % reserve is needed at time t to be able to change to the needed dispatch at
-  % time t+1.  An initial ramping reserve (t=0) would be data, not a
-  % variable, and while ramping transitions from t=0 to t=1 should be
-  % enforced, we do not allocate the reserve for t = 0.
+  % ramping possibilities, 0 <= rrp(t) -p(t)(j2)0 + p(t-1)(j1)0.  A ramping
+  % reserve is needed at time t-1 to be able to change to the needed dispatch
+  % at time t. The initial ramping reserve (t=1) restricts the dispatch
+  % deviations from InitialPg.
   % Note: in the event that some future reserves are already locked in, we may
   %       not want to start at t = 1
   if verbose
     fprintf('  - Building ramping transitions and reserve constraints.\n');
   end
-  om.init_indexed_name('lin', 'Rrp', {nt, nj_max, nj_max});
-  % First, do from t=1:nt-1, since the last one is different and may not
-  % even exist depending on the type of horizon
-  for t = 1:nt-1
-    for j1 = 1:mdi.idx.nj(t)      % j1 is at time t
-      for j2 = 1:mdi.idx.nj(t+1)  % j2 is at time t+1
-        if mdi.tstep(t+1).TransMask(j2,j1)
-          A = [Ing -Ing Ing];
-          l = zeros(ng, 1);
-          vs = struct('name', {'Pg', 'Pg', 'Rrp'}, ...
-                      'idx', {{t,j1,1}, {t+1,j2,1}, {t}});
-          om.add_lin_constraint('Rrp', {t,j1,j2}, A, l, [], vs);
+  om.init_indexed_name('lin', 'Rrp', {mdi.idx.ntramp, nj_max, nj_max});
+  if mdi.idx.ntramp
+    % First, do t=1, since it is different
+    t = 1;
+    j1 = 1;                       % j1 is at time t-1
+    for j2 = 1:mdi.idx.nj(t)      % j2 is at time t
+      if mdi.tstep(t).TransMask(j2,j1)
+        A = [-Ing Ing];
+        l = -mdi.InitialPg/baseMVA;
+        vs = struct('name', {'Pg', 'Rrp'}, ...
+                    'idx', {{t,j2,1}, {t}});
+        om.add_lin_constraint('Rrp', {t,j1,j2}, A, l, [], vs);
+      end
+    end
+    % Next, do from t=2:nt, since nt+1 is different and may not
+    % even exist depending on the type of horizon
+    for t = 2:nt
+      for j1 = 1:mdi.idx.nj(t-1)  % j1 is at time t-1
+        for j2 = 1:mdi.idx.nj(t)  % j2 is at time t
+          if mdi.tstep(t).TransMask(j2,j1)
+            A = [Ing -Ing Ing];
+            l = zeros(ng, 1);
+            vs = struct('name', {'Pg', 'Pg', 'Rrp'}, ...
+                        'idx', {{t-1,j1,1}, {t,j2,1}, {t}});
+            om.add_lin_constraint('Rrp', {t,j1,j2}, A, l, [], vs);
+          end
         end
       end
     end
-  end
-  % Now, pay special attention to a possible last type of ramping
-  % constraint. If the horizon involves a terminal value at t=nt+1, then
-  % this must also be enforced; in this case, additional ramping
-  % reserves procured for t=nt must be defined.  If this
-  % condition does not apply, then these reserves are not needed.
-  if ~mdi.OpenEnded
-    % pterminal <= rrp(nt) + p(nt,j1,0)
-    for j1 = 1:mdi.idx.nj(nt)
-      A = [Ing Ing];
-      l = mdi.TerminalPg/baseMVA;
-      vs = struct('name', {'Pg', 'Rrp'}, ...
-                  'idx', {{nt,j1,1}, {nt}});
-      om.add_lin_constraint('Rrp', {nt,j1,1}, A, l, [], vs);
+    % Now, pay special attention to a possible last type of ramping
+    % constraint. If the horizon involves a terminal value at t=nt+1, then
+    % this must also be enforced; in this case, additional ramping
+    % reserves procured for t=nt+1 must be defined.  If this
+    % condition does not apply, then these reserves are not needed.
+    if ~mdi.OpenEnded
+      % pterminal <= rrp(nt+1) + p(nt,j1,0)
+      for j1 = 1:mdi.idx.nj(nt)
+        A = [Ing Ing];
+        l = mdi.TerminalPg/baseMVA;
+        vs = struct('name', {'Pg', 'Rrp'}, ...
+                    'idx', {{nt,j1,1}, {nt+1}});
+        om.add_lin_constraint('Rrp', {nt+1,j1,1}, A, l, [], vs);
+      end
     end
-  end
-  % Now on to downward ramping reserves.
-  % First, bound downward ramping reserves from below by all base-case
-  % ramping possibilities, 0 <= rrm(t) + p(t+1)j20 - p(t)j10
-  om.init_indexed_name('lin', 'Rrm', {nt, nj_max, nj_max});
-  % First, do from t=1:nt-1, since the last one is different and may not
-  % even exist depending on the type of horizon
-  for t = 1:nt-1
-    for j1 = 1:mdi.idx.nj(t)      % j1 is at time t
-      for j2 = 1:mdi.idx.nj(t+1)  % j2 is at time t+1
-        if mdi.tstep(t+1).TransMask(j2,j1)
-          A = [-Ing Ing Ing];
-          l = zeros(ng, 1);
-          vs = struct('name', {'Pg', 'Pg', 'Rrm'}, ...
-                      'idx', {{t,j1,1}, {t+1,j2,1}, {t}});
-          om.add_lin_constraint('Rrm', {t,j1,j2}, A, l, [], vs);
+    % Now on to downward ramping reserves.
+    % Bound downward ramping reserves from below by all base-case
+    % ramping possibilities, 0 <= rrm(t) + p(t)j20 - p(t-1)j10
+    om.init_indexed_name('lin', 'Rrm', {mdi.idx.ntramp, nj_max, nj_max});
+    % First, do t=1, since it is different
+    t = 1;
+    j1 = 1;                       % j1 is at time t-1
+    for j2 = 1:mdi.idx.nj(t)      % j2 is at time t
+      if mdi.tstep(t).TransMask(j2,j1)
+        A = [Ing Ing];
+        l = mdi.InitialPg/baseMVA;
+        vs = struct('name', {'Pg', 'Rrm'}, ...
+                    'idx', {{t,j2,1}, {t}});
+        om.add_lin_constraint('Rrm', {t,j1,j2}, A, l, [], vs);
+      end
+    end
+    % Next, do from t=2:nt, since nt+1 is different and may not
+    % even exist depending on the type of horizon
+    for t = 2:nt
+      for j1 = 1:mdi.idx.nj(t-1)  % j1 is at time t-1
+        for j2 = 1:mdi.idx.nj(t)  % j2 is at time t
+          if mdi.tstep(t).TransMask(j2,j1)
+            A = [-Ing Ing Ing];
+            l = zeros(ng, 1);
+            vs = struct('name', {'Pg', 'Pg', 'Rrm'}, ...
+                        'idx', {{t-1,j1,1}, {t,j2,1}, {t}});
+            om.add_lin_constraint('Rrm', {t,j1,j2}, A, l, [], vs);
+          end
         end
       end
     end
-  end
-  % Now, pay special attention to a possible last type of ramping
-  % constraint. If the horizon involves a terminal value at t=nt+1, then
-  % this must also be enforced; in this case, additional ramping
-  % reserves procured for t=nt must be defined.  If this
-  % condition does not apply, then these reserves are not needed.
-  if ~mdi.OpenEnded
-    % -pterminal <= rrm(nt) - p(nt,j1,0)
-    for j1 = 1:mdi.idx.nj(nt)
-      A = [-Ing Ing];
-      l = -mdi.TerminalPg/baseMVA;
-      vs = struct('name', {'Pg', 'Rrm'}, ...
-                  'idx', {{nt,j1,1}, {nt}});
-      om.add_lin_constraint('Rrm', {nt,j1,1}, A, l, [], vs);
+    % Now, pay special attention to a possible last type of ramping
+    % constraint. If the horizon involves a terminal value at t=nt+1, then
+    % this must also be enforced; in this case, additional ramping
+    % reserves procured for t=nt+1 must be defined.  If this
+    % condition does not apply, then these reserves are not needed.
+    if ~mdi.OpenEnded
+      % -pterminal <= rrm(nt+1) - p(nt,j1,0)
+      for j1 = 1:mdi.idx.nj(nt)
+        A = [-Ing Ing];
+        l = -mdi.TerminalPg/baseMVA;
+        vs = struct('name', {'Pg', 'Rrm'}, ...
+                    'idx', {{nt,j1,1}, {nt+1}});
+        om.add_lin_constraint('Rrm', {nt+1,j1,1}, A, l, [], vs);
+      end
     end
   end
-  %
-  %
+
   % Now for the storage restrictions.
   if ns
     if verbose
@@ -1813,26 +1840,16 @@ if mpopt.most.build_model
     vs = struct('name', {'Rpm'}, 'idx', {{t}});
     om.add_quad_cost('Crpm', {t}, [], c, 0, vs);
   end
-  % Assign load following ramp reserve costs.  Do first nt-1 periods first
+  % Assign load following ramp reserve costs.  Do first nt periods first
   om.init_indexed_name('qdc', 'Crrp', {mdi.idx.ntramp});
   om.init_indexed_name('qdc', 'Crrm', {mdi.idx.ntramp});
-  for t = 1:nt-1,
-    c = baseMVA * mdi.StepProb(t+1) * mdi.offer(t).PositiveLoadFollowReservePrice(:);
+  for t = 1:mdi.idx.ntramp
+    c = baseMVA * mdi.StepProb(t) * mdi.offer(t).PositiveLoadFollowReservePrice(:);
     vs = struct('name', {'Rrp'}, 'idx', {{t}});
     om.add_quad_cost('Crrp', {t}, [], c, 0, vs);
-    c = baseMVA * mdi.StepProb(t+1) * mdi.offer(t).NegativeLoadFollowReservePrice(:);
+    c = baseMVA * mdi.StepProb(t) * mdi.offer(t).NegativeLoadFollowReservePrice(:);
     vs = struct('name', {'Rrm'}, 'idx', {{t}});
     om.add_quad_cost('Crrm', {t}, [], c, 0, vs);
-  end
-  % Then do last period if needed Terminal state case
-  if ~mdi.OpenEnded
-    %% are these costs missing a mdi.StepProb(t)?  -- rdz
-    c = baseMVA * mdi.offer(nt).PositiveLoadFollowReservePrice(:);
-    vs = struct('name', {'Rrp'}, 'idx', {{nt}});
-    om.add_quad_cost('Crrp', {nt}, [], c, 0, vs);
-    c = baseMVA * mdi.offer(nt).NegativeLoadFollowReservePrice(:);
-    vs = struct('name', {'Rrm'}, 'idx', {{nt}});
-    om.add_quad_cost('Crrm', {nt}, [], c, 0, vs);
   end
   % Assign startup/shutdown costs, if any, and fixed operating costs
   if UC
@@ -2184,22 +2201,16 @@ if mpopt.most.solve_model
     % Obtain ramping reserve prices, per generator and period
     mdo.results.RrpPrices = zeros(ng, mdo.idx.ntramp);
     mdo.results.RrmPrices = zeros(ng, mdo.idx.ntramp);
-    % First, 1:nt-1
-    for t = 1:nt-1
-      for j1 = 1:mdo.idx.nj(t)
-        for j2 = 1:mdo.idx.nj(t+1)
-          if mdi.tstep(t+1).TransMask(j2,j1)
+    for t = 1:mdo.idx.ntramp
+      if t == 1,    nj1 = 1; else, nj1 = mdo.idx.nj(t-1); end
+      if t == nt+1, nj2 = 1; else, nj2 = mdo.idx.nj(t);   end
+      for j1 = 1:nj1
+        for j2 = 1:nj2
+          if mdi.tstep(t).TransMask(j2,j1)
             mdo.results.RrpPrices(:, t) = mdo.results.RrpPrices(:, t) + om.get_soln('lin', 'mu_l', 'Rrp', {t,j1,j2}) / baseMVA;
             mdo.results.RrmPrices(:, t) = mdo.results.RrmPrices(:, t) + om.get_soln('lin', 'mu_l', 'Rrm', {t,j1,j2}) / baseMVA;
           end
         end
-      end
-    end
-    % then last period only if specified for with terminal state
-    if ~mdo.OpenEnded
-      for j1 = 1:mdo.idx.nj(nt)
-        mdo.results.RrpPrices(:, nt) = mdo.results.RrpPrices(:, nt) + om.get_soln('lin', 'mu_l', 'Rrp', {nt,j1,1}) / baseMVA;
-        mdo.results.RrmPrices(:, nt) = mdo.results.RrmPrices(:, nt) + om.get_soln('lin', 'mu_l', 'Rrm', {nt,j1,1}) / baseMVA;
       end
     end
     % Expected wear and tear costs per gen and period

@@ -22,7 +22,7 @@ end
 
 include_MIPS = 0;   %% set to 1, to attempt even if MIPS is the best solver
                     %% available (takes a LONG time and currently fails)
-n_tests = 2;
+n_tests = 3;
 
 t_begin(n_tests, quiet);
 
@@ -247,9 +247,18 @@ if have_feature('cplex') || have_feature('gurobi') || ...
     end
     mdi.z1 = zeros(m1*m2, 1);
 
+    %% avoid binding ramp reserve limits into period 1
+    mdi.offer(1).PositiveLoadFollowReservePrice(:) = 0;
+    mdi.offer(1).NegativeLoadFollowReservePrice(:) = 0;
+    mdi.offer(1).PositiveLoadFollowReserveQuantity(:) = Inf;
+    mdi.offer(1).NegativeLoadFollowReserveQuantity(:) = Inf;
+
     mdo = most(mdi, mpopt);
 
     s = load(solnfile);
+
+    t = 'success';
+    t_is(mdo.results.success, 1, 12, t);
 
     t = 'objective function value (f)';
     t_is(mdo.QP.f, 1575531.9, -0.5, t);
@@ -261,7 +270,7 @@ if have_feature('cplex') || have_feature('gurobi') || ...
     t = 'dynamical system state (Z)';
     t_is(mdo.results.Z, s.Z, 3.7, t);
 else
-    t_skip(2, 'requires MOSEK, CPLEX, Gurobi or quadprog');
+    t_skip(3, 'requires MOSEK, CPLEX, Gurobi or quadprog');
 end
 
 % YorN = input('Play movie? (y/n) : ', 's');
