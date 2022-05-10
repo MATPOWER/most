@@ -74,23 +74,16 @@ xgd_full = xgd;
 %%-----  Multiperiod DC OPF (w/ramp)  -----
 t = 'Multiperiod DC OPF w/ramp : ';
 mdi = loadmd(mpc, nt, xgd, [], [], profiles);
-%% avoid binding ramp reserve limits into period 1
-mdi.offer(1).PositiveLoadFollowReservePrice(3) = 1e-6;
-mdi.offer(1).NegativeLoadFollowReservePrice(3) = 1e-6;
-mdi.offer(1).PositiveLoadFollowReserveQuantity(3) = 200;
-% mdi.InitialPg = [ 195.001; 65; 99.998; -439.999; 80 ];
 mdo = most(mdi, mpopt);
 % EPg1 = mdo.results.ExpectedDispatch;    % active generation
 % Elam1 = mdo.results.GenPrices;          % nodal energy price
 t_is(mdo.results.success, 1, 12, [t 'success']);
 ms = most_summary(mdo);
 ex = soln.wramp;
-ex.Rup(:, 1) = [70.001;0;0;10.001;80];
-ex.Rdn(:, 1) = [0;60;100.002;0;0];
 t_is(ms.f, ex.f, 1.8, [t 'f']);
 t_is(ms.Pg, ex.Pg, 3.5, [t 'Pg']);
-t_is(ms.Rup, ex.Rup, 2.3, [t 'Rup']);
-t_is(ms.Rdn, ex.Rdn, 2.3, [t 'Rdn']);
+t_is(ms.Rup, ex.Rup, 2.5, [t 'Rup']);
+t_is(ms.Rdn, ex.Rdn, 2.5, [t 'Rdn']);
 t_is(ms.Pf, ex.Pf, 4, [t 'Pf']);
 t_is(ms.u, ex.u, 8, [t 'u']);
 t_is(ms.lamP, ex.lamP, 5, [t 'lamP']);
@@ -102,19 +95,13 @@ t_is(ms.muF, ex.muF, 5, [t 'muF']);
 t = 'Multiperiod DC OPF w/ramp+wear/tear : ';
 xgd.RampWearCostCoeff(1:3) = 1;
 mdi = loadmd(mpc, nt, xgd, [], [], profiles);
-%% avoid binding ramp reserve limits into period 1
-mdi.offer(1).PositiveLoadFollowReservePrice(3) = 1e-6;
-mdi.offer(1).NegativeLoadFollowReservePrice(3) = 1e-6;
-mdi.offer(1).PositiveLoadFollowReserveQuantity(3) = 200;
 mdo = most(mdi, mpopt);
 % EPg1 = mdo.results.ExpectedDispatch;    % active generation
 % Elam1 = mdo.results.GenPrices;          % nodal energy price
 t_is(mdo.results.success, 1, 12, [t 'success']);
 ms = most_summary(mdo);
 ex = soln.wwear;
-ex.Rup(:, 1) = [0;0;6.110388;10.001;49.9995015];
-ex.Rdn(:, 1) = [22.2219443;43.8889456;0;0;0];
-t_is(ms.f, ex.f+35625, 0.5, [t 'f']);
+t_is(ms.f, ex.f, 0.5, [t 'f']);
 t_is(ms.Pg, ex.Pg, 2.8, [t 'Pg']);
 t_is(ms.Rup, ex.Rup, 2.5, [t 'Rup']);
 t_is(ms.Rdn, ex.Rdn, 2.5, [t 'Rdn']);
@@ -148,9 +135,7 @@ mdo = most(mdi1, mpopt);
 t_is(mdo.results.success, 1, 12, [t 'success']);
 ms = most_summary(mdo);
 ex = soln.wwear;
-ex.Rup(:, 1) = [0;0;6.110388;10.001;49.9995015];
-ex.Rdn(:, 1) = [22.2219443;43.8889456;0;0;0];
-t_is(ms.f, ex.f+35625, 0.5, [t 'f']);
+t_is(ms.f, ex.f, 0.5, [t 'f']);
 t_is(ms.Pg, ex.Pg, 2.8, [t 'Pg']);
 t_is(ms.Rup, ex.Rup, 2.5, [t 'Rup']);
 t_is(ms.Rdn, ex.Rdn, 2.5, [t 'Rdn']);

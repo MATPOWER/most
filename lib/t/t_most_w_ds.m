@@ -247,12 +247,6 @@ if have_feature('cplex') || have_feature('gurobi') || ...
     end
     mdi.z1 = zeros(m1*m2, 1);
 
-    %% avoid binding ramp reserve limits into period 1
-    mdi.offer(1).PositiveLoadFollowReservePrice(:) = 0;
-    mdi.offer(1).NegativeLoadFollowReservePrice(:) = 0;
-    mdi.offer(1).PositiveLoadFollowReserveQuantity(:) = Inf;
-    mdi.offer(1).NegativeLoadFollowReserveQuantity(:) = Inf;
-
     mdo = most(mdi, mpopt);
 
     s = load(solnfile);
@@ -261,14 +255,17 @@ if have_feature('cplex') || have_feature('gurobi') || ...
     t_is(mdo.results.success, 1, 12, t);
 
     t = 'objective function value (f)';
-    t_is(mdo.QP.f, 1575531.9, -0.5, t);
-% 1575531.87 % CPLEX
-% 1575532.66 % GUROBI
-% 1575534.08 % MOSEK
-% 1575531.87 % OT
+    t_is(mdo.QP.f, 1593399.5, -0.5, t);
+% 1593399.487 % CPLEX ~25 sec
+% 1594112.218 % GUROBI ~183 sec (fails)
+% 1593400.863 % MOSEK ~10 sec
+% 1593399.481 % OT ~88 sec
 
     t = 'dynamical system state (Z)';
-    t_is(mdo.results.Z, s.Z, 3.7, t);
+    t_is(mdo.results.Z, s.Z, 4, t);
+
+    % Z = mdo.results.Z;
+    % save t_most_w_ds_z Z
 else
     t_skip(3, 'requires MOSEK, CPLEX, Gurobi or quadprog');
 end

@@ -95,8 +95,8 @@ if have_feature('glpk')
 end
 if have_feature('gurobi')
     %mpopt = mpoption(mpopt, 'gurobi.method', -1);       %% automatic
-    %mpopt = mpoption(mpopt, 'gurobi.method', 0);        %% primal simplex
-    mpopt = mpoption(mpopt, 'gurobi.method', 1);        %% dual simplex
+    mpopt = mpoption(mpopt, 'gurobi.method', 0);        %% primal simplex
+    %mpopt = mpoption(mpopt, 'gurobi.method', 1);        %% dual simplex
     %mpopt = mpoption(mpopt, 'gurobi.method', 2);        %% barrier
     mpopt = mpoption(mpopt, 'gurobi.threads', 2);
     mpopt = mpoption(mpopt, 'gurobi.opts.MIPGap', 0);
@@ -116,8 +116,6 @@ if have_feature('mosek')
     %mpopt = mpoption(mpopt, 'mosek.opts.MSK_DPAR_MIO_TOL_REL_RELAX_INT', 0);
     mpopt = mpoption(mpopt, 'mosek.opts.MSK_DPAR_MIO_TOL_REL_GAP', 0);
     mpopt = mpoption(mpopt, 'mosek.opts.MSK_DPAR_MIO_TOL_ABS_GAP', 0);
-    %% pre-solve causing problems for last problem with MOSEK 9.x
-    mpopt = mpoption(mpopt, 'mosek.opts.MSK_IPAR_PRESOLVE_USE', 0);
 end
 if have_feature('intlinprog')
     %mpopt = mpoption(mpopt, 'linprog.Algorithm', 'interior-point');
@@ -199,9 +197,7 @@ for s = 1:length(solvers)
         ms = most_summary(mdo);
         t_ok(mdo.QP.exitflag > 0, [t 'success']);
         ex = soln.ed;
-        ex.Rup(:, 1) = [75;34.999;0;10.001;80];
-        ex.Rdn(:, 1) = [0;0;200;0;0];
-        t_is(ms.f, ex.f+0.0004, 8, [t 'f']);
+        t_is(ms.f, ex.f, 8, [t 'f']);
         t_is(ms.Pg, ex.Pg, 8, [t 'Pg']);
         t_is(ms.Rup, ex.Rup, 8, [t 'Rup']);
         t_is(ms.Rdn, ex.Rdn, 8, [t 'Rdn']);
@@ -225,9 +221,7 @@ for s = 1:length(solvers)
         ms = most_summary(mdo);
         t_ok(mdo.QP.exitflag > 0, [t 'success']);
         ex = soln.dcopf;
-        ex.Rup(:, 1) = [75;0;0;10.001;80];
-        ex.Rdn(:, 1) = [0;44.999;120.002;0;0];
-        t_is(ms.f, ex.f+0.00033, 8, [t 'f']);
+        t_is(ms.f, ex.f, 8, [t 'f']);
         t_is(ms.Pg, ex.Pg, 8, [t 'Pg']);
         t_is(ms.Rup, ex.Rup, 8, [t 'Rup']);
         t_is(ms.Rdn, ex.Rdn, 8, [t 'Rdn']);
@@ -258,15 +252,13 @@ for s = 1:length(solvers)
         ms = most_summary(mdo);
         t_ok(mdo.QP.exitflag > 0, [t 'success']);
         ex = soln.wstart;
-        ex.Rup(:, 1) = [75;0;0;10.001;80];
-        ex.Rdn(:, 1) = [0;44.999;120.002;0;0];
-        t_is(ms.f, ex.f+0.00033, 8, [t 'f']);
+        t_is(ms.f, ex.f, 8, [t 'f']);
         t_is(ms.Pg, ex.Pg, 8, [t 'Pg']);
         t_is(ms.Rup, ex.Rup, 8, [t 'Rup']);
         t_is(ms.Rdn, ex.Rdn, 8, [t 'Rdn']);
         t_is(ms.Pf, ex.Pf, 8, [t 'Pf']);
         t_is(ms.u, ex.u, 8, [t 'u']);
-        t_is(ms.lamP, ex.lamP, 5.9, [t 'lamP']);
+        t_is(ms.lamP, ex.lamP, 8, [t 'lamP']);
         t_is(ms.muF, ex.muF, 8, [t 'muF']);
         % wstart = most_summary(mdo);
         if create_plots
@@ -285,15 +277,13 @@ for s = 1:length(solvers)
         ms = most_summary(mdo);
         t_ok(mdo.QP.exitflag > 0, [t 'success']);
         ex = soln.wminup;
-        ex.Rup(:, 1) = [75;0;0;10.001;80];
-        ex.Rdn(:, 1) = [0;44.999;120.002;0;0];
-        t_is(ms.f, ex.f+0.00033, 6, [t 'f']);
+        t_is(ms.f, ex.f, 6, [t 'f']);
         t_is(ms.Pg, ex.Pg, 7, [t 'Pg']);
         t_is(ms.Rup, ex.Rup, 7, [t 'Rup']);
-        t_is(ms.Rdn, ex.Rdn, 7, [t 'Rdn']);
+        t_is(ms.Rdn, ex.Rdn, 8, [t 'Rdn']);
         t_is(ms.Pf, ex.Pf, 8, [t 'Pf']);
         t_is(ms.u, ex.u, 8, [t 'u']);
-        t_is(ms.lamP, ex.lamP, 5.9, [t 'lamP']);
+        t_is(ms.lamP, ex.lamP, 8, [t 'lamP']);
         t_is(ms.muF, ex.muF, 8, [t 'muF']);
         % wminup = most_summary(mdo);
         if create_plots
@@ -308,24 +298,17 @@ for s = 1:length(solvers)
         end
         xgd = xgd_full;
         mdi = loadmd(mpc, nt, xgd, [], [], profiles);
-        %% avoid binding ramp reserve limits into period 1
-        mdi.offer(1).PositiveLoadFollowReservePrice(3) = 1e-6;
-        mdi.offer(1).NegativeLoadFollowReservePrice(3) = 1e-6;
-        mdi.offer(1).PositiveLoadFollowReserveQuantity(3) = 200;
-        mdi.tstep(1).OpCondSched.tab(end+1, :) = [0 0 CT_TGEN 0 RAMP_30 CT_REP Inf];
         mdo = most(mdi, mpopt);
         ms = most_summary(mdo);
         t_ok(mdo.QP.exitflag > 0, [t 'success']);
         ex = soln.wramp;
-        ex.Rup(:, 1) = [75;0;0;10.001;80];
-        ex.Rdn(:, 1) = [0;125;40.001;0;0];
-        t_is(ms.f, ex.f+0.00033, 8, [t 'f']);
+        t_is(ms.f, ex.f, 8, [t 'f']);
         t_is(ms.Pg, ex.Pg, 8, [t 'Pg']);
         t_is(ms.Rup, ex.Rup, 8, [t 'Rup']);
         t_is(ms.Rdn, ex.Rdn, 8, [t 'Rdn']);
         t_is(ms.Pf, ex.Pf, 8, [t 'Pf']);
         t_is(ms.u, ex.u, 8, [t 'u']);
-        t_is(ms.lamP, ex.lamP, 5.9, [t 'lamP']);
+        t_is(ms.lamP, ex.lamP, 8, [t 'lamP']);
         t_is(ms.muF, ex.muF, 8, [t 'muF']);
         % wramp = most_summary(mdo);
         if create_plots
@@ -340,18 +323,11 @@ for s = 1:length(solvers)
         end
         [iess, mpc, xgd, sd] = addstorage('ex_storage', mpc, xgd);
         mdi = loadmd(mpc, nt, xgd, sd, [], profiles);
-        %% avoid binding ramp reserve limits into period 1
-        mdi.offer(1).PositiveLoadFollowReservePrice(3) = 1e-6;
-        mdi.offer(1).NegativeLoadFollowReservePrice(3) = 1e-6;
-        mdi.offer(1).PositiveLoadFollowReserveQuantity(3) = 200;
-        mdi.tstep(1).OpCondSched.tab(end+1, :) = [0 0 CT_TGEN 0 RAMP_30 CT_REP Inf];
         mdo = most(mdi, mpopt);
         ms = most_summary(mdo);
         t_ok(mdo.QP.exitflag > 0, [t 'success']);
         ex = soln.wstorage;
-        ex.Rup(:, 1) = [75;0;0;10.001;80;0];
-        ex.Rdn(:, 1) = [0;47.30020299;115.39959403;0;0;2.30120299];
-        t_is(ms.f, ex.f+0.00033, 8, [t 'f']);
+        t_is(ms.f, ex.f, 8, [t 'f']);
         t_is(ms.Pg, ex.Pg, 8, [t 'Pg']);
         t_is(ms.Rup, ex.Rup, 8, [t 'Rup']);
         t_is(ms.Rdn, ex.Rdn, 8, [t 'Rdn']);
@@ -377,9 +353,7 @@ for s = 1:length(solvers)
         ms = most_summary(mdo);
         t_ok(mdo.QP.exitflag > 0, [t 'success']);
         ex = soln.wstorage2;
-        ex.Rup(:, 1) = [75;0;0;10.001;80;0];
-        ex.Rdn(:, 1) = [0;125;39.999;0;0;0.002];
-        t_is(ms.f, ex.f+0.00033, 8, [t 'f']);
+        t_is(ms.f, ex.f, 8, [t 'f']);
         t_is(ms.Pg, ex.Pg, 8, [t 'Pg']);
         t_is(ms.Rup, ex.Rup, 8, [t 'Rup']);
         t_is(ms.Rdn, ex.Rdn, 8, [t 'Rdn']);
@@ -404,9 +378,7 @@ for s = 1:length(solvers)
         ms = most_summary(mdo);
         t_ok(mdo.QP.exitflag > 0, [t 'success']);
         ex = soln.wstorage3;
-        ex.Rup(:, 1) = [75;0;20;10.001;80;0];
-        ex.Rdn(:, 1) = [0;125;0;0;0;60.001];
-        t_is(ms.f, ex.f+0.00037, 8, [t 'f']);
+        t_is(ms.f, ex.f, 8, [t 'f']);
         t_is(ms.Pg, ex.Pg, 8, [t 'Pg']);
         t_is(ms.Rup, ex.Rup, 8, [t 'Rup']);
         t_is(ms.Rdn, ex.Rdn, 8, [t 'Rdn']);

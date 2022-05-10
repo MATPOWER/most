@@ -184,24 +184,17 @@ for s = 1:length(solvers)
 
         t = sprintf('%s : deterministic : ', solvers{s});
         mdi = loadmd(mpc, nt, xgd, [], [], profiles_d);
-        %% avoid binding ramp reserve limits into period 1
-        mdi.offer(1).PositiveLoadFollowReservePrice(3) = 1e-6;
-        mdi.offer(1).NegativeLoadFollowReservePrice(3) = 1e-6;
-        mdi.offer(1).PositiveLoadFollowReserveQuantity(3) = 200;
-        mdi.tstep(1).OpCondSched.tab(end+1, :) = [0 0 CT_TGEN 0 RAMP_30 CT_REP Inf];
         mdo = most(mdi, mpopt);
         ms = most_summary(mdo);
         t_ok(mdo.QP.exitflag > 0, [t 'success']);
         ex = soln.determ;
-        ex.Rup(:, 1) = [75;0;0;10.001;80];
-        ex.Rdn(:, 1) = [0;125;40.001;0;0];
-        t_is(ms.f, ex.f+0.00033, 5, [t 'f']);
+        t_is(ms.f, ex.f, 8, [t 'f']);
         t_is(ms.Pg, ex.Pg, 8, [t 'Pg']);
         t_is(ms.Rup, ex.Rup, 8, [t 'Rup']);
         t_is(ms.Rdn, ex.Rdn, 8, [t 'Rdn']);
         t_is(ms.Pf, ex.Pf, 8, [t 'Pf']);
         t_is(ms.u, ex.u, 8, [t 'u']);
-        t_is(ms.lamP, ex.lamP, 5.9, [t 'lamP']);
+        t_is(ms.lamP, ex.lamP, 8, [t 'lamP']);
         t_is(ms.muF, ex.muF, 8, [t 'muF']);
         % determ = most_summary(mdo);
         if create_plots
@@ -217,20 +210,11 @@ for s = 1:length(solvers)
         transmat_s{1} = [ 0.158655253931457; 0.682689492137086; 0.158655253931457 ];
         mdi = loadmd(mpc, transmat_s, xgd, [], [], profiles_s);
         mdi = filter_ramp_transitions(mdi, 0.1);
-        %% avoid binding ramp reserve limits into period 1
-        mdi.offer(1).PositiveLoadFollowReservePrice(3) = 1e-6;
-        mdi.offer(1).NegativeLoadFollowReservePrice(3) = 1e-6;
-        mdi.offer(1).PositiveLoadFollowReserveQuantity(3) = 200;
-        mdi.tstep(1).OpCondSched(1).tab(end+1, :) = [0 0 CT_TGEN 0 RAMP_30 CT_REP Inf];
-        mdi.tstep(1).OpCondSched(2).tab(end+1, :) = [0 0 CT_TGEN 0 RAMP_30 CT_REP Inf];
-        mdi.tstep(1).OpCondSched(3).tab(end+1, :) = [0 0 CT_TGEN 0 RAMP_30 CT_REP Inf];
         mdo = most(mdi, mpopt);
         ms = most_summary(mdo);
         t_ok(mdo.QP.exitflag > 0, [t 'success']);
         ex = soln.transprob1;
-        ex.Rup(:, 1) = [75;0;0;10.001;80];
-        ex.Rdn(:, 1) = [0;125;40.001;0;0];
-        t_is(ms.f, ex.f+0.00033, 5, [t 'f']);
+        t_is(ms.f, ex.f, 5, [t 'f']);
         t_is(ms.Pg, ex.Pg, 6, [t 'Pg']);
         t_is(ms.Rup, ex.Rup, 6, [t 'Rup']);
         t_is(ms.Rdn, ex.Rdn, 6, [t 'Rdn']);
@@ -254,20 +238,11 @@ for s = 1:length(solvers)
 %         transmat_sf{1} = T;
         mdi = loadmd(mpc, transmat_sf, xgd, [], [], profiles_s);
 %        mdi = filter_ramp_transitions(mdi, 0.9);
-        %% avoid binding ramp reserve limits into period 1
-        mdi.offer(1).PositiveLoadFollowReservePrice(3) = 1e-6;
-        mdi.offer(1).NegativeLoadFollowReservePrice(3) = 1e-6;
-        mdi.offer(1).PositiveLoadFollowReserveQuantity(3) = 200;
-        mdi.tstep(1).OpCondSched(1).tab(end+1, :) = [0 0 CT_TGEN 0 RAMP_30 CT_REP Inf];
-        mdi.tstep(1).OpCondSched(2).tab(end+1, :) = [0 0 CT_TGEN 0 RAMP_30 CT_REP Inf];
-        mdi.tstep(1).OpCondSched(3).tab(end+1, :) = [0 0 CT_TGEN 0 RAMP_30 CT_REP Inf];
         mdo = most(mdi, mpopt);
         ms = most_summary(mdo);
         t_ok(mdo.QP.exitflag > 0, [t 'success']);
         ex = soln.transprobfull;
-        ex.Rup(:, 1) = [75;0;0;10.001;80];
-        ex.Rdn(:, 1) = [0;125;40.001;0;0];
-        t_is(ms.f, ex.f+0.00033, 5, [t 'f']);
+        t_is(ms.f, ex.f, 3, [t 'f']);
         t_is(ms.Pg, ex.Pg, 3, [t 'Pg']);
         t_is(ms.Rup, ex.Rup, 3, [t 'Rup']);
         t_is(ms.Rdn, ex.Rdn, 3, [t 'Rdn']);
@@ -285,20 +260,11 @@ for s = 1:length(solvers)
         t = sprintf('%s : full transition probabilities + cont : ', solvers{s});
         mdi = loadmd(mpc, transmat_sf, xgd, [], 'ex_contab', profiles_s);
 %        mdi = filter_ramp_transitions(mdi, 0.9);
-        %% avoid binding ramp reserve limits into period 1
-        mdi.offer(1).PositiveLoadFollowReservePrice(3) = 1e-6;
-        mdi.offer(1).NegativeLoadFollowReservePrice(3) = 1e-6;
-        mdi.offer(1).PositiveLoadFollowReserveQuantity(3) = 200;
-        mdi.tstep(1).OpCondSched(1).tab(end+1, :) = [0 0 CT_TGEN 0 RAMP_30 CT_REP Inf];
-        mdi.tstep(1).OpCondSched(2).tab(end+1, :) = [0 0 CT_TGEN 0 RAMP_30 CT_REP Inf];
-        mdi.tstep(1).OpCondSched(3).tab(end+1, :) = [0 0 CT_TGEN 0 RAMP_30 CT_REP Inf];
         mdo = most(mdi, mpopt);
         ms = most_summary(mdo);
         t_ok(mdo.QP.exitflag > 0, [t 'success']);
         ex = soln.transprobcont;
-        ex.Rup(:, 1) = [75;0;0;10.001;80];
-        ex.Rdn(:, 1) = [0;125;40.001;0;0];
-        t_is(ms.f, ex.f+0.00028, 3, [t 'f']);
+        t_is(ms.f, ex.f, 3.5, [t 'f']);
         t_is(ms.Pg, ex.Pg, 6, [t 'Pg']);
         t_is(ms.Rup, ex.Rup, 6, [t 'Rup']);
         t_is(ms.Rdn, ex.Rdn, 6, [t 'Rdn']);
@@ -319,23 +285,14 @@ for s = 1:length(solvers)
         end
         [iess, mpc, xgd, sd] = addstorage('ex_storage', mpc, xgd);
         mdi = loadmd(mpc, transmat_sf, xgd, sd, 'ex_contab', profiles_s);
-        %% avoid binding ramp reserve limits into period 1
-        mdi.offer(1).PositiveLoadFollowReservePrice(3) = 1e-6;
-        mdi.offer(1).NegativeLoadFollowReservePrice(3) = 1e-6;
-        mdi.offer(1).PositiveLoadFollowReserveQuantity(3) = 200;
-        mdi.tstep(1).OpCondSched(1).tab(end+1, :) = [0 0 CT_TGEN 0 RAMP_30 CT_REP Inf];
-        mdi.tstep(1).OpCondSched(2).tab(end+1, :) = [0 0 CT_TGEN 0 RAMP_30 CT_REP Inf];
-        mdi.tstep(1).OpCondSched(3).tab(end+1, :) = [0 0 CT_TGEN 0 RAMP_30 CT_REP Inf];
         mdo = most(mdi, mpopt);
         ms = most_summary(mdo);
         t_ok(mdo.QP.exitflag > 0, [t 'success']);
         ex = soln.wstorage;
-        ex.Rup(:, 1) = [75;0;0;10.001;88;4.4995];
-        ex.Rdn(:, 1) = [0;60;117.5005;0;0;0];
-        t_is(ms.f, ex.f+0.00029, 3, [t 'f']);
+        t_is(ms.f, ex.f, 3, [t 'f']);
         t_is(ms.Pg, ex.Pg, 3, [t 'Pg']);
         t_is(ms.Rup, ex.Rup, 3, [t 'Rup']);
-        t_is(ms.Rdn, ex.Rdn, 8, [t 'Rdn']);
+        t_is(ms.Rdn, ex.Rdn, 4, [t 'Rdn']);
         t_is(ms.Pf, ex.Pf, 3, [t 'Pf']);
         t_is(ms.u, ex.u, 8, [t 'u']);
         % t_is(ms.lamP, ex.lamP, 5, [t 'lamP']);
