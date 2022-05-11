@@ -1439,19 +1439,19 @@ In this context, all fields are optional and \code{loadxgendata} will provide de
 name & default\tnote{\dag} & description \\
 \midrule
 \code{CommitSched}	&	\code{C} &  0 or 1, UC status to use for non-UC runs	\\
-\code{InitialPg}	&	\code{P} &  active power dispatch at time~$t=0$	\\
+\code{InitialPg}\tnote{\dag\dag}	&	\code{P} &  active power dispatch at time~$t=0$	\\
 \code{TerminalPg}	&	&  active power dispatch at time~$t=n_t+1$ \emph{(only included if explicitly specified)}	\\
-\code{RampWearCostCoeff}	&	0 &  quadratic coefficient for $C_\delta^i(\cdot)$\tnote{\ddag}~ in \eqref{eq:rampcost} 	\\
+\code{RampWearCostCoeff}\tnote{\dag\dag}	&	0 &  quadratic coefficient for $C_\delta^i(\cdot)$\tnote{\ddag}~ in \eqref{eq:rampcost} 	\\
 \code{PositiveActiveReservePrice}	&	0 & linear coefficient for $C_{R+}^{ti}(\cdot)$\tnote{\ddag}~ in \eqref{eq:most_cres_cost} 	\\
 \code{PositiveActiveReserveQuantity}	&	\code{R} & max upward reserve quantity $R_{{\rm max}+}^{ti}$ in \eqref{eq:maxresp}	\\
 \code{NegativeActiveReservePrice}	&	0 & linear coefficient for $C_{R-}^{ti}(\cdot)$\tnote{\ddag}~ in \eqref{eq:most_cres_cost}	\\
 \code{NegativeActiveReserveQuantity}	&	\code{R} & max downward reserve quantity $R_{{\rm max}-}^{ti}$ in \eqref{eq:maxresm}	\\
 \code{PositiveActiveDeltaPrice}	&	0 & linear coefficient for $C_{P+}^{ti}(\cdot)$\tnote{\ddag}~ in \eqref{eq:most_energy_cost}	\\
 \code{NegativeActiveDeltaPrice}	&	0 & linear coefficient for $C_{P-}^{ti}(\cdot)$\tnote{\ddag}~ in \eqref{eq:most_energy_cost}	\\
-\code{PositiveLoadFollowReservePrice}	&	0 & linear coefficient for $C_{\delta+}^{ti}(\cdot)$\tnote{\ddag}~ in \eqref{eq:most_rampres_cost}	\\
-\code{PositiveLoadFollowReserveQuantity}	&	\code{R} & max upward ramp reserve $\delta^{ti}_{\rm max+}$ in \eqref{eq:deltapbounds}	\\
-\code{NegativeLoadFollowReservePrice}	&	0 & linear coefficient for $C_{\delta-}^{ti}(\cdot)$\tnote{\ddag}~ in \eqref{eq:most_rampres_cost}	\\
-\code{NegativeLoadFollowReserveQuantity}	&	\code{R} & max downward ramp reserve $\delta^{ti}_{\rm max-}$ in \eqref{eq:deltambounds}	\\
+\code{PositiveLoadFollowReservePrice}\tnote{\dag\dag}	&	0 & linear coefficient for $C_{\delta+}^{ti}(\cdot)$\tnote{\ddag}~ in \eqref{eq:most_rampres_cost}	\\
+\code{PositiveLoadFollowReserveQuantity}\tnote{\dag\dag}	&	\code{R} & max upward ramp reserve $\delta^{ti}_{\rm max+}$ in \eqref{eq:deltapbounds}	\\
+\code{NegativeLoadFollowReservePrice}\tnote{\dag\dag}	&	0 & linear coefficient for $C_{\delta-}^{ti}(\cdot)$\tnote{\ddag}~ in \eqref{eq:most_rampres_cost}	\\
+\code{NegativeLoadFollowReserveQuantity}\tnote{\dag\dag}	&	\code{R} & max downward ramp reserve $\delta^{ti}_{\rm max-}$ in \eqref{eq:deltambounds}	\\
 \code{CommitKey}	&	&  required for problems with UC	\\
 && \begin{tabular}{r @{ -- } p{0.35\textwidth}}
 -1 & offline, unit forced \emph{off} \\
@@ -1467,6 +1467,7 @@ name & default\tnote{\dag} & description \\
  \scriptsize
  \item [*] {All fields are $n_g \times 1$ vectors of per-generator values.}
  \item [\dag] {These are defaults provided by \code{loadxgendata}. If \code{gen} is provided, either directly or as the \code{gen} field of \mpc{}, then \code{P = gen(:, PG)}, \code{C = gen(:, GEN\_STATUS)} and \code{R = 2*(gen(:, PMAX) - MIN(0, gen(:, PMIN)))}, otherwise $\code{C}~=~1$, $\code{R}~=~0$ and no default is provided for \code{P} (corresponding field is not optional).}
+ \item [\dag\dag] {Ramping costs/restrictions from the initial dispatch at $t=0$ are ignored for single-period problems.}
  \item [\ddag] {Each of these costs $C(\cdot)$ is presented in the formulation as a general function, but is implmented as a simple linear function of the form $C(x) = a x$, where the linear coefficient being supplied is $a$. The only exception is the ramping cost, which has the quadratic form $C_\delta^i(x) = a x^2$.}
  \item [\S] {Requires that \code{CommitKey} be present and non-empty.}
  \item [\P] {Sign is based on \code{C}\tnote{\dag}, i.e. $+\infty$ for \code{C} = 1, $-\infty$ for \code{C} = 0.}
