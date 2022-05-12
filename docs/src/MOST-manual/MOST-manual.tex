@@ -2031,7 +2031,9 @@ name & type\tnote{*} & description \\
 \code{Sp}	& O	& $n_s \times n_t$, endogenously computed upper stored energy bounds $s_+^{ti}$	\\
 \code{Sm}	& O	& $n_s \times n_t$, endogenously computed lower stored energy bounds $s_-^{ti}$	\\
 \code{GenPrices(i,t)}	& O	& $n_g \times n_t$, expected energy price	\\
+\code{GenTLMP(i,t)}	& O	& $n_g \times n_t$, expected TLMP\tnote{\dag}	\\
 \code{CondGenPrices(i,t)}	& O	& $n_g \times n_t$, expected energy price, conditional on making it to time~$t$	\\
+\code{CondGenTLPM(i,t)}	& O	& $n_g \times n_t$, expected TLMP\tnote{\dag}, conditional on making it to time~$t$	\\
 \code{RppPrices(i,t)}	& O	& $n_g \times n_t$, price on upward active contingency reserve	\\
 \code{RpmPrices(i,t)}	& O	& $n_g \times n_t$, price on downward active contingency reserve	\\
 \code{RrpPrices(i,t)}	& O	& $n_g \times n_t$, price on upward load-following ramping reserve	\\
@@ -2047,6 +2049,7 @@ name & type\tnote{*} & description \\
 \begin{tablenotes}
  \scriptsize
  \item [*] {I = input, O = output, B = both, opt = taken from \matpower{} options.}
+ \item [\dag] {The TLMP (temporal locational marginal price) is adjusted from the standard expected energy price (LMP) using shadow prices on ramping consistent with the methodology outlined in \cite{guo2021, chen2021}. Currently, this only involves the ramping reserve constraints from  \eqref{eq:inter1}--\eqref{eq:rampconstr}, not ramping wear and tear costs or storage.}
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
@@ -3392,7 +3395,7 @@ The \href{https://matpower.org/docs/MOST-manual-1.2.pdf}{\most{} 1.2 User's Manu
 \item Ramping reserves and constraints are now included for the
 transition from the initial state into period~1, except for single-period
 problems.
-\item 
+\item Added calculation of expected TLMP (temporal locational marginal price) based on work by Guo, Chen, Tong in \cite{guo2021,chen2021} and returned in \code{mdo.results.GenTLMP} and \code{mdo.results.CondGenTLMP}. See Table~\ref{tab:md_results} in the \mostman{}.
 \item 
 \end{itemize}
 
@@ -3468,6 +3471,12 @@ A.~J.~Lamadrid, S.~Maneevitjit, T.~D.~Mount, C.~E.~Murillo-S{\'a}nchez,
 \bibitem{murillo-sanchez2013}
 C.~E. Murillo-S{\'a}nchez, R.~D. Zimmerman, C.~L. Anderson, and R.~J. Thomas, ``A Stochastic, Contingency-Based Security-Constrained Optimal Power Flow for the Procurement of Energy and Distributed Reserve,'' \emph{Decision Support Systems}, Vol.~56, pp.~1-10, Dec.~2013, ISSN 0167-9236.
 \doi{10.1016/j.dss.2013.04.006}
+
+\bibitem{guo2021}
+Y.~Guo, C.~Chen and L.~Tong,``Pricing Multi-Interval Dispatch Under Uncertainty Part I: Dispatch-Following Incentives,'' \emph{IEEE Transactions on Power Systems}, vol.~36, no.~5, pp.~3865--3877, Sept. 2021, \doi{10.1109/TPWRS.2021.3055730}
+
+\bibitem{chen2021}
+C.~Chen, Y.~Guo and L.~Tong, ``Pricing Multi-Interval Dispatch Under Uncertainty Part II: Generalization and Performance,'' \emph{IEEE Transactions on Power Systems}, vol.~36, no.~5, pp.~3878--3886, Sept. 2021, \doi{10.1109/TPWRS.2020.3045162}
 
 \end{thebibliography}
 

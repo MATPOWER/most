@@ -43,7 +43,7 @@ fcn = {'cplex', 'glpk', 'gurobi', 'mosek', 'intlinprog'};
 % fcn = {'gurobi'};
 % solvers = {'MOSEK'};
 % fcn = {'mosek'};
-ntests = 66;
+ntests = 68;
 t_begin(ntests*length(solvers), quiet);
 
 if quiet
@@ -310,6 +310,10 @@ for s = 1:length(solvers)
         t_is(ms.u, ex.u, 8, [t 'u']);
         t_is(ms.lamP, ex.lamP, 8, [t 'lamP']);
         t_is(ms.muF, ex.muF, 8, [t 'muF']);
+        ex = soln.rramp;
+        t_is(mdo.results.GenPrices, ex.GenPrices, 8, [t 'GenPrices']);
+        t_is(mdo.results.GenTLMP, ex.GenTLMP, 5, [t 'TLMP']);
+        % rramp = mdo.results;
         % wramp = most_summary(mdo);
         if create_plots
             pp = pp + 1;
@@ -380,8 +384,8 @@ for s = 1:length(solvers)
         ex = soln.wstorage3;
         t_is(ms.f, ex.f, 8, [t 'f']);
         t_is(ms.Pg, ex.Pg, 8, [t 'Pg']);
-        t_is(ms.Rup, ex.Rup, 8, [t 'Rup']);
-        t_is(ms.Rdn, ex.Rdn, 8, [t 'Rdn']);
+        t_is(ms.Rup, ex.Rup, 3.5, [t 'Rup']);
+        t_is(ms.Rdn, ex.Rdn, 3.5, [t 'Rdn']);
         t_is(ms.Pf, ex.Pf, 8, [t 'Pf']);
         t_is(ms.u, ex.u, 8, [t 'u']);
         % t_is(ms.lamP, ex.lamP, 5, [t 'lamP']);
@@ -402,7 +406,7 @@ end
 
 t_end;
 
-% save t_most_uc_soln ed dcopf wstart wminup wramp wstorage wstorage2 wstorage3
+% save t_most_uc_soln ed dcopf wstart wminup wramp wstorage wstorage2 wstorage3 rramp
 
 function h = plot_case(label, md, ms, maxq, maxp, mypath, pp, fname)
 

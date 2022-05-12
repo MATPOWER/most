@@ -15,7 +15,7 @@ if nargin < 1
     quiet = 0;      %% verbose by default
 end
 
-ntests = 36;
+ntests = 42;
 t_begin(ntests, quiet);
 
 if quiet
@@ -88,6 +88,10 @@ t_is(ms.Pf, ex.Pf, 4, [t 'Pf']);
 t_is(ms.u, ex.u, 8, [t 'u']);
 t_is(ms.lamP, ex.lamP, 5, [t 'lamP']);
 t_is(ms.muF, ex.muF, 5, [t 'muF']);
+ex = soln.rramp;
+t_is(mdo.results.GenPrices, ex.GenPrices, 3, [t 'GenPrices']);
+t_is(mdo.results.GenTLMP, ex.GenTLMP, 2, [t 'TLMP']);
+% rramp = mdo.results;
 % wramp = most_summary(mdo);
 % keyboard;
 
@@ -109,6 +113,10 @@ t_is(ms.Pf, ex.Pf, 3, [t 'Pf']);
 t_is(ms.u, ex.u, 8, [t 'u']);
 t_is(ms.lamP, ex.lamP, 2.5, [t 'lamP']);
 t_is(ms.muF, ex.muF, 2, [t 'muF']);
+ex = soln.rwear;
+t_is(mdo.results.GenPrices, ex.GenPrices, 2.8, [t 'GenPrices']);
+t_is(mdo.results.GenTLMP, ex.GenTLMP, 2, [t 'TLMP']);
+% rwear = mdo.results;
 % wwear = most_summary(mdo);
 % keyboard;
 
@@ -143,6 +151,9 @@ t_is(ms.Pf, ex.Pf, 3, [t 'Pf']);
 t_is(ms.u, ex.u, 8, [t 'u']);
 t_is(ms.lamP, ex.lamP, 2.5, [t 'lamP']);
 t_is(ms.muF, ex.muF, 2, [t 'muF']);
+ex = soln.rwear;
+t_is(mdo.results.GenPrices, ex.GenPrices, 2.8, [t 'GenPrices']);
+t_is(mdo.results.GenTLMP, ex.GenTLMP, 2, [t 'TLMP']);
 % wwear = most_summary(mdo);
 % keyboard;
 
@@ -157,4 +168,4 @@ end
 
 t_end;
 
-% save t_most_mpopf_soln wramp wwear
+% save t_most_mpopf_soln wramp wwear rramp rwear

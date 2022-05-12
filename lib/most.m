@@ -2271,6 +2271,20 @@ if mpopt.most.solve_model
       mdo.Storage.ExpectedStorageDispatch = ...
           mdo.results.ExpectedDispatch(mdo.Storage.UnitIdx, :);
     end
+    % Compute TLMP
+    if nt > 1
+      mdo.results.GenTLMP = zeros(ng, nt);
+      mdo.results.CondGenTLMP = zeros(ng, nt);
+      for t = 1:nt
+        mdo.results.GenTLMP(:,t) = mdo.results.GenPrices(:,t) - ...
+            mdo.results.RrpPrices(:,t) + mdo.results.RrmPrices(:,t);
+        if t < nt || nt < mdo.idx.ntramp
+            mdo.results.GenTLMP(:,t) = mdo.results.GenTLMP(:,t) + ...
+               mdo.results.RrpPrices(:,t+1) - mdo.results.RrmPrices(:,t+1);
+        end
+        mdo.results.CondGenTLMP(:,t) = mdo.results.GenTLMP(:,t) / mdo.StepProb(t);
+      end
+    end
     % If there is a dynamical system, extract the state vectors and outputs
     % from the solution
     if ntds

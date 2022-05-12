@@ -5,6 +5,12 @@ Change history for MOST
 since version 1.1
 -----------------
 
+#### 5/12/22
+  - Add calculation of expected TLMP (temporal locational marginal price)
+    based on work by Guo, Chen, Tong in [[Guo2021]][5] and [[Chen2021]][6]
+    and returned in `mdo.results.GenTLMP` and `mdo.results.CondGenTLMP`.
+    See Table 5-13 in the User's Manual.
+
 #### 5/4/22
   - Ramping reserves and constraints are now included for the transition
     from the initial state into period 1, except for single-period problems.
@@ -256,3 +262,5 @@ Version 1.0 - *Jun 1, 2016*
 [2]: https://github.com/MATPOWER/most/issues/11
 [3]: https://github.com/MATPOWER/most/issues/6
 [4]: https://github.com/MATPOWER/most/issues/16
+[5]: https://doi.org/10.1109/TPWRS.2021.3055730
+[6]: https://doi.org/10.1109/TPWRS.2020.3045162
