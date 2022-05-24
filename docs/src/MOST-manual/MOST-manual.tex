@@ -984,7 +984,7 @@ s^{ti}_+ &\leq S^{ti}_{\rm max}
 \item[--] storage dispatch vs. base scenario energy bounds
 \begin{align}
 s^{ti}_- &\leq \beta_1^{ti} \left[\rho^{ti} s^{(t-1)i}_- + \left(1-\rho^{ti}\right) \bar{s}_I^{tij0}\right] + \beta_2^{ti} s_\Delta^{tij0} \label{eq:storage1st} \\
-s^{ti}_+ &\geq \beta_1^{ti} \left[\rho^{ti} s^{(t-1)i}_+ + \left(1-\rho^{ti}\right) \bar{s}_I^{tij0}\right] + \beta_2^{ti} s_\Delta^{tij0}
+s^{ti}_+ &\geq \beta_1^{ti} \left[\rho^{ti} s^{(t-1)i}_+ + \left(1-\rho^{ti}\right) \bar{s}_I^{tij0}\right] + \beta_2^{ti} s_\Delta^{tij0} \label{eq:storage2nd}
 \end{align}
 
 \item[--] storage dispatch vs. contingency scenario energy limits
@@ -2032,8 +2032,12 @@ name & type\tnote{*} & description \\
 \code{Sm}	& O	& $n_s \times n_t$, endogenously computed lower stored energy bounds $s_-^{ti}$	\\
 \code{GenPrices(i,t)}	& O	& $n_g \times n_t$, expected energy price	\\
 \code{GenTLMP(i,t)}	& O	& $n_g \times n_t$, expected TLMP\tnote{\dag}	\\
+\code{StorageTLMPc(i,t)}	& O	& $n_s \times n_t$, expected charging TLMP for storage units\tnote{\dag}	\\
+\code{StorageTLMPd(i,t)}	& O	& $n_s \times n_t$, expected discharging TLMP for storage units\tnote{\dag}	\\
 \code{CondGenPrices(i,t)}	& O	& $n_g \times n_t$, expected energy price, conditional on making it to time~$t$	\\
 \code{CondGenTLPM(i,t)}	& O	& $n_g \times n_t$, expected TLMP\tnote{\dag}, conditional on making it to time~$t$	\\
+\code{CondStorageTLPMc(i,t)}	& O	& $n_s \times n_t$, expected chargingTLMP for storage units\tnote{\dag}, conditional on making it to time~$t$	\\
+\code{CondStorageTLPMd(i,t)}	& O	& $n_s \times n_t$, expected discharging TLMP for storage units\tnote{\dag}, conditional on making it to time~$t$	\\
 \code{RppPrices(i,t)}	& O	& $n_g \times n_t$, price on upward active contingency reserve	\\
 \code{RpmPrices(i,t)}	& O	& $n_g \times n_t$, price on downward active contingency reserve	\\
 \code{RrpPrices(i,t)}	& O	& $n_g \times n_t$, price on upward load-following ramping reserve	\\
@@ -2049,7 +2053,7 @@ name & type\tnote{*} & description \\
 \begin{tablenotes}
  \scriptsize
  \item [*] {I = input, O = output, B = both, opt = taken from \matpower{} options.}
- \item [\dag] {The TLMP (temporal locational marginal price) is adjusted from the standard expected energy price (LMP) using shadow prices on ramping consistent with the methodology outlined in \cite{guo2021, chen2021}. Currently, this only involves the ramping reserve constraints from  \eqref{eq:inter1}--\eqref{eq:rampconstr}, not ramping wear and tear costs or storage.}
+ \item [\dag] {The TLMP (temporal locational marginal price) is adjusted from the standard expected energy price (LMP) using shadow prices on ramping consistent with the methodology outlined in \cite{guo2021, chen2021, chen2022}. Currently, for generators, this involves the ramping reserve constraints from  \eqref{eq:inter1}--\eqref{eq:rampconstr}, but not ramping wear and tear costs. For storage units, it also involves the constraints \eqref{eq:storage1st}--\eqref{eq:storage2nd}, but requires that all $\rho^{ti}$ be set to 1.}
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
@@ -3395,7 +3399,8 @@ The \href{https://matpower.org/docs/MOST-manual-1.2.pdf}{\most{} 1.2 User's Manu
 \item Ramping reserves and constraints are now included for the
 transition from the initial state into period~1, except for single-period
 problems.
-\item Added calculation of expected TLMP (temporal locational marginal price) based on work by Guo, Chen, Tong in \cite{guo2021,chen2021} and returned in \code{mdo.results.GenTLMP} and \code{mdo.results.CondGenTLMP}. See Table~\ref{tab:md_results} in the \mostman{}.
+\item Added calculation of expected TLMP (temporal locational marginal price) based on work by Guo, Chen, Tong in \cite{guo2021,chen2021,chen2022}. For generators, these are returned in \code{mdo.results.GenTLMP} and \code{mdo.results.CondGenTLMP}. For storage units they are returned in  \code{mdo.results.StorageTLMPc}, \code{mdo.results.StorageTLMPd}, \code{mdo.results.CondStorageTLMPc}, and \code{mdo.results.CondStorageTLMPd}.
+See Table~\ref{tab:md_results} in the \mostman{}.
 \item For deterministic cases with storage where \code{ForceCyclicStorage} is 0, ensure that initial storage bounds are equal to initial storage and output a warning if they are modified. Fix deterministic UC tests where this was causing results to change depending on value of \code{rho}.
 
 \end{itemize}
@@ -3478,6 +3483,9 @@ Y.~Guo, C.~Chen and L.~Tong,``Pricing Multi-Interval Dispatch Under Uncertainty 
 
 \bibitem{chen2021}
 C.~Chen, Y.~Guo and L.~Tong, ``Pricing Multi-Interval Dispatch Under Uncertainty Part II: Generalization and Performance,'' \emph{IEEE Transactions on Power Systems}, vol.~36, no.~5, pp.~3878--3886, Sept. 2021, \doi{10.1109/TPWRS.2020.3045162}
+
+\bibitem{chen2022}
+C.~Chen and L.~Tong, ``Pricing Real-time Stochastic Storage Operations,'' \emph{2022 Power Systems Computation Conference (PSCC)}, June 27--July 1, 2022, \doi{10.48550/arXiv.2204.08140}
 
 \end{thebibliography}
 

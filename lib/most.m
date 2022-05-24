@@ -2278,6 +2278,30 @@ if mpopt.most.solve_model
       end
       mdo.Storage.ExpectedStorageDispatch = ...
           mdo.results.ExpectedDispatch(mdo.Storage.UnitIdx, :);
+      if all(mdo.Storage.rho == 1)
+        % Obtain storage shadow prices, per unit, period
+        mdo.Storage.SpPricesC = zeros(ns,nt);
+        mdo.Storage.SpPricesD = zeros(ns,nt);
+        ll = mdo.om.get_idx('lin');
+        A = mdo.QP.A;
+        [m, n] = size(A);
+        for t = 1:nt
+          for j = 1:mdo.idx.nj(t)
+            mu_Sp = om.get_soln('lin', 'mu_u', 'Sp', {t,j});
+            mu_Sm = om.get_soln('lin', 'mu_u', 'Sm', {t,j});
+            cf_psc = A(sub2ind( [m n], ...
+                                ll.i1.Sm(t,j):ll.iN.Sm(t,j), ...
+                                vv.i1.Psc(t,j,1):vv.iN.Psc(t,j,1) ))';
+            cf_psd = A(sub2ind( [m n], ...
+                                ll.i1.Sm(t,j):ll.iN.Sm(t,j), ...
+                                vv.i1.Psd(t,j,1):vv.iN.Psd(t,j,1) ))';
+            mdo.Storage.SpPricesC(:, t) = mdo.Storage.SpPricesC(:, t) - ...
+                cf_psc .* (mu_Sp - mu_Sm) / baseMVA;
+            mdo.Storage.SpPricesD(:, t) = mdo.Storage.SpPricesD(:, t) - ...
+                cf_psd .* (mu_Sp - mu_Sm) / baseMVA;
+          end
+        end
+      end
     end
     % Compute TLMP
     if nt > 1
@@ -2291,6 +2315,28 @@ if mpopt.most.solve_model
                mdo.results.RrpPrices(:,t+1) - mdo.results.RrmPrices(:,t+1);
         end
         mdo.results.CondGenTLMP(:,t) = mdo.results.GenTLMP(:,t) / mdo.StepProb(t);
+      end
+      if ns && all(mdo.Storage.rho == 1)
+        cond_prc = any(mdo.StepProb ~= 1);
+        mdo.results.StorageTLMPc = zeros(ns, nt);
+        mdo.results.StorageTLMPd = zeros(ns, nt);
+        if cond_prc
+          mdo.results.CondStorageTLMPc = zeros(ns, nt);
+          mdo.results.CondStorageTLMPd = zeros(ns, nt);
+        end
+        for t = 1:nt
+          s = mdo.Storage.UnitIdx;
+          mdo.results.StorageTLMPc(:,t) = mdo.results.GenTLMP(s,t) - ...
+                mdo.Storage.SpPricesC(:,t);
+          mdo.results.StorageTLMPd(:,t) = mdo.results.GenTLMP(s,t) - ...
+                mdo.Storage.SpPricesD(:,t);
+          if cond_prc
+            mdo.results.CondStorageTLMPc(:,t) = mdo.results.CondGenTLMP(s,t) - ...
+                mdo.Storage.SpPricesC(:,t) / mdo.StepProb(t);
+            mdo.results.CondStorageTLMPd(:,t) = mdo.results.CondGenTLMP(s,t) - ...
+                mdo.Storage.SpPricesD(:,t) / mdo.StepProb(t);
+          end
+        end
       end
     end
     % If there is a dynamical system, extract the state vectors and outputs

@@ -5,6 +5,13 @@ Change history for MOST
 since version 1.1
 -----------------
 
+#### 6/15/22
+  - Add TLMP (temporal locational marginal price) for storage units
+    based on work by Chen, Tong in [[Chen2022]][7] and returned in
+    `mdo.results.StorageTLMPc`, `mdo.results.StorageTLMPd`, 
+    `mdo.results.CondStorageTLMPc`, `mdo.results.CondStorageTLMPd`.
+    See Table 5-13 in the User's Manual.
+
 #### 6/14/22
   - For deterministic cases with storage where `ForceCyclicStorage` is 0,
     ensure that initial storage bounds are equal to initial storage and
@@ -270,3 +277,4 @@ Version 1.0 - *Jun 1, 2016*
 [4]: https://github.com/MATPOWER/most/issues/16
 [5]: https://doi.org/10.1109/TPWRS.2021.3055730
 [6]: https://doi.org/10.1109/TPWRS.2020.3045162
+[7]: https://arxiv.org/abs/2204.08140
