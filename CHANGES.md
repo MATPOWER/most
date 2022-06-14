@@ -5,6 +5,12 @@ Change history for MOST
 since version 1.1
 -----------------
 
+#### 6/14/22
+  - For deterministic cases with storage where `ForceCyclicStorage` is 0,
+    ensure that initial storage bounds are equal to initial storage and
+    output a warning if they are modified. Fix deterministic UC tests
+    where this was causing results to change depending on value of `rho`.
+
 #### 5/12/22
   - Add calculation of expected TLMP (temporal locational marginal price)
     based on work by Guo, Chen, Tong in [[Guo2021]][5] and [[Chen2021]][6]

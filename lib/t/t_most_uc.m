@@ -353,10 +353,11 @@ for s = 1:length(solvers)
         end
         mpopt = mpoption(mpopt, 'most.storage.cyclic', 0);
         mdi.Storage.rho = 1;
+        mdi.Storage.InitialStorageUpperBound = 0;
         mdo = most(mdi, mpopt);
         ms = most_summary(mdo);
         t_ok(mdo.QP.exitflag > 0, [t 'success']);
-        ex = soln.wstorage2;
+        ex = soln.wstorage3;
         t_is(ms.f, ex.f, 8, [t 'f']);
         t_is(ms.Pg, ex.Pg, 8, [t 'Pg']);
         t_is(ms.Rup, ex.Rup, 8, [t 'Rup']);

@@ -3396,7 +3396,8 @@ The \href{https://matpower.org/docs/MOST-manual-1.2.pdf}{\most{} 1.2 User's Manu
 transition from the initial state into period~1, except for single-period
 problems.
 \item Added calculation of expected TLMP (temporal locational marginal price) based on work by Guo, Chen, Tong in \cite{guo2021,chen2021} and returned in \code{mdo.results.GenTLMP} and \code{mdo.results.CondGenTLMP}. See Table~\ref{tab:md_results} in the \mostman{}.
-\item 
+\item For deterministic cases with storage where \code{ForceCyclicStorage} is 0, ensure that initial storage bounds are equal to initial storage and output a warning if they are modified. Fix deterministic UC tests where this was causing results to change depending on value of \code{rho}.
+
 \end{itemize}
 
 \subsubsection*{Bugs Fixed}

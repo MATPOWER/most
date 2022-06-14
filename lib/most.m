@@ -268,19 +268,27 @@ if ns
   if size(rho, 2) == 1 && nt > 1    %% expand cols
     rho = rho * ones(1, nt);
   end
-  if isempty(mdi.Storage.InitialStorageLowerBound)
+  if ~isfield(mdi.Storage, 'InitialStorageLowerBound') || isempty(mdi.Storage.InitialStorageLowerBound)
     if mo.ForceCyclicStorage        %% lower bound for var s0, take from t=1
       mdi.Storage.InitialStorageLowerBound = MinStorageLevel(:, 1);
     else                            %% Sm(0), default = fixed param s0
       mdi.Storage.InitialStorageLowerBound = mdi.Storage.InitialStorage;
     end
+  elseif max(mdi.idx.nj) == 1 && ~mo.ForceCyclicStorage && ...
+        mdi.Storage.InitialStorageLowerBound ~= mdi.Storage.InitialStorage
+    warning('Deterministic problem with ForceCyclicStorage = 0, setting InitialStorageLowerBound = InitialStorage')
+    mdi.Storage.InitialStorageLowerBound = mdi.Storage.InitialStorage;
   end
-  if isempty(mdi.Storage.InitialStorageUpperBound)
+  if ~isfield(mdi.Storage, 'InitialStorageUpperBound') || isempty(mdi.Storage.InitialStorageUpperBound)
     if mo.ForceCyclicStorage        %% upper bound for var s0, take from t=1
       mdi.Storage.InitialStorageUpperBound = MaxStorageLevel(:, 1);
     else                            %% Sp(0), default = fixed param s0
       mdi.Storage.InitialStorageUpperBound = mdi.Storage.InitialStorage;
     end
+  elseif max(mdi.idx.nj) == 1 && ~mo.ForceCyclicStorage && ...
+        mdi.Storage.InitialStorageUpperBound ~= mdi.Storage.InitialStorage
+    warning('Deterministic problem with ForceCyclicStorage = 0, setting InitialStorageUpperBound = InitialStorage')
+    mdi.Storage.InitialStorageUpperBound = mdi.Storage.InitialStorage;
   end
 
   LossCoeff = mdi.Delta_T * LossFactor/2;
