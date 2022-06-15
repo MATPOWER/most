@@ -11,6 +11,8 @@ since version 1.1
     `mdo.results.StorageTLMPc`, `mdo.results.StorageTLMPd`, 
     `mdo.results.CondStorageTLMPc`, `mdo.results.CondStorageTLMPd`.
     See Table 5-13 in the User's Manual.
+  - Add tests for TLMP in `t_most_tlmp` based on toy examples from Cong Chen,
+    including both ramping and storage.
 
 #### 6/14/22
   - For deterministic cases with storage where `ForceCyclicStorage` is 0,
