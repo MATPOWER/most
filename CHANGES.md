@@ -5,6 +5,10 @@ Change history for MOST
 since version 1.1
 -----------------
 
+#### 9/29/22
+- Silence near singular matrix warnings in some tests that began with
+  MATLAB R2022b.
+
 #### 8/30/22
   - Fix [issue #29][8], where a type caused  a check on `md.UC.MinDown`
     >= 1 to be skipped.
