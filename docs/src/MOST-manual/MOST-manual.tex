@@ -3427,6 +3427,29 @@ excluded for single-period problems.\\
 Previously it should have been $\gamma^{t+1}$, as it was in the code.
 \end{itemize}
 
+
+\subsection{Version 1.2.x -- released xxx xx, 202x}
+\label{app:v12x}
+
+The \href{https://matpower.org/docs/MOST-manual-1.2.x.pdf}{\most{} 1.2.x User's Manual} is available online.\footnote{\url{https://matpower.org/docs/MOST-manual-1.2.pdf}}
+
+\subsubsection*{Changes}
+\begin{itemize}
+\item 
+
+\end{itemize}
+
+\subsubsection*{Bugs Fixed}
+\begin{itemize}
+\item Fix issue \#37 which caused a fatal error in storage input checks with multiple storage units under some circumstances. \emph{Thanks to Keir Steegstra.}
+\end{itemize}
+
+\subsubsection*{Incompatible Changes}
+\begin{itemize}
+\item Remove extra column in \code{mdo.results.ExpectedRampCost} and ignore for single period.
+\end{itemize}
+
+
 % \subsection{Version 1.2 -- released ??? ?, 2022}
 % \label{app:v12}
 % 

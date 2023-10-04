@@ -275,7 +275,7 @@ if ns
       mdi.Storage.InitialStorageLowerBound = mdi.Storage.InitialStorage;
     end
   elseif max(mdi.idx.nj) == 1 && ~mo.ForceCyclicStorage && ...
-        mdi.Storage.InitialStorageLowerBound ~= mdi.Storage.InitialStorage
+        any(mdi.Storage.InitialStorageLowerBound ~= mdi.Storage.InitialStorage)
     warning('Deterministic problem with ForceCyclicStorage = 0, setting InitialStorageLowerBound = InitialStorage')
     mdi.Storage.InitialStorageLowerBound = mdi.Storage.InitialStorage;
   end
@@ -286,7 +286,7 @@ if ns
       mdi.Storage.InitialStorageUpperBound = mdi.Storage.InitialStorage;
     end
   elseif max(mdi.idx.nj) == 1 && ~mo.ForceCyclicStorage && ...
-        mdi.Storage.InitialStorageUpperBound ~= mdi.Storage.InitialStorage
+        any(mdi.Storage.InitialStorageUpperBound ~= mdi.Storage.InitialStorage)
     warning('Deterministic problem with ForceCyclicStorage = 0, setting InitialStorageUpperBound = InitialStorage')
     mdi.Storage.InitialStorageUpperBound = mdi.Storage.InitialStorage;
   end

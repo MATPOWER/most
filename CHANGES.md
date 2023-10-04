@@ -5,6 +5,11 @@ Change history for MOST
 since 1.2
 ---------
 
+#### 10/4/23
+  - Fix [issue #37][9] which caused a fatal error in storage input checks
+    with multiple storage units under some circumstances.
+    *Thanks to Keir Steegstra.*
+
 #### 2/3/23
   - Remove extra column in ExpectedRampCost and ignore for single period.
 
@@ -304,3 +309,4 @@ Version 1.0 - *Jun 1, 2016*
 [6]: https://doi.org/10.1109/TPWRS.2020.3045162
 [7]: https://arxiv.org/abs/2204.08140
 [8]: https://github.com/MATPOWER/most/issues/29
+[9]: https://github.com/MATPOWER/most/issues/37
