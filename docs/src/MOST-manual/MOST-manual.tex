@@ -858,30 +858,30 @@ Each part is expressed in terms of the individual optimization variables as foll
 \item[--] expected cost of active power dispatch and redispatch
 \end{itemize}
 \begin{align}
-f_p(p,p_+,p_-) &= \sum_{t\in T} \sum_{j\in J^t} \sum_{k\in K^{tj}} \psi_\alpha^{tjk} \sum_{i\in I^{tjk}}
+f_p(p,p_+,p_-) &= \Delta \cdot \sum_{t\in T} \sum_{j\in J^t} \sum_{k\in K^{tj}} \psi_\alpha^{tjk} \sum_{i\in I^{tjk}}
     \Bigl[\widetilde{C}_P^{ti}(p^{tijk}) + C_{P+}^{ti}(p_+^{tijk}) + C_{P-}^{ti}(p_-^{tijk}) \Bigr]
 \label{eq:most_energy_cost}
 \end{align}
 \begin{itemize}
 \item[--] cost of zonal reserves\footnotemark[\value{footnote}]
 \begin{equation}
-f_z(r_z) = \sum_{t\in T} \sum_{j\in J^t} \sum_{k\in K^{tj}} \psi_\alpha^{tjk} \sum_{i\in I^{tjk}} C_z^{ti}(r_z^{tijk})
+f_z(r_z) = \Delta \cdot \sum_{t\in T} \sum_{j\in J^t} \sum_{k\in K^{tj}} \psi_\alpha^{tjk} \sum_{i\in I^{tjk}} C_z^{ti}(r_z^{tijk})
 \label{eq:most_zres_cost}
 \end{equation}
 \item[--] cost of endogenous contingency reserves\footnotemark[\value{footnote}]
 \begin{equation}
-f_r(r_+, r_-) = \sum_{t\in T}  \gamma^t  \sum_{i\in I^t} \left[C_{R+}^{ti}(r_+^{ti}) + C_{R-}^{ti}(r_-^{ti}) \right]
+f_r(r_+, r_-) = \Delta \cdot \sum_{t\in T}  \gamma^t  \sum_{i\in I^t} \left[C_{R+}^{ti}(r_+^{ti}) + C_{R-}^{ti}(r_-^{ti}) \right]
 \label{eq:most_cres_cost}
 \end{equation}
 \item[--] expected cost of load-following ramping (wear and tear)
 \begin{equation}
-f_\delta(p) = \sum_{t\in T} \! \gamma^t \!\!\!\!\! \sum_{\begin{aligned}\scriptstyle j_1 &\scriptstyle \in J^{t-1}\\[-6pt] \scriptstyle j_2 &\scriptstyle \in J^t\end{aligned}} \!\!\!\!\!
+f_\delta(p) = \Delta \cdot \sum_{t\in T} \! \gamma^t \!\!\!\!\! \sum_{\begin{aligned}\scriptstyle j_1 &\scriptstyle \in J^{t-1}\\[-6pt] \scriptstyle j_2 &\scriptstyle \in J^t\end{aligned}} \!\!\!\!\!
         \phi^{t j_2 j_1} \!\!\!\! \sum_{i\in I^{tj_2 0}} \!\!\! C_\delta^i(p^{tij_20} - p^{(t-1)ij_10})
 \label{eq:rampcost}
 \end{equation}
 \item[--] cost of load-following ramp reserves
 \begin{equation}
-f_{\rm lf}(\delta_+, \delta_-) = \sum_{t\in T}  \gamma^t  \sum_{i\in I^t} \left[C_{\delta+}^{ti}(\delta_+^{ti}) + C_{\delta-}^{ti}(\delta_-^{ti}) \right]
+f_{\rm lf}(\delta_+, \delta_-) = \Delta \cdot \sum_{t\in T}  \gamma^t  \sum_{i\in I^t} \left[C_{\delta+}^{ti}(\delta_+^{ti}) + C_{\delta-}^{ti}(\delta_-^{ti}) \right]
 \label{eq:most_rampres_cost}
 \end{equation}
 \item[--] cost of initial stored energy and value (since it is negative) of expected leftover stored energy in terminal states
@@ -890,7 +890,7 @@ f_s(s_0, p_{\rm sc}, p_{\rm sd}) = \trans{C_{s0}} s_0 - (\trans{C_{\rm ts0}} s_0
 \end{equation}
 \item[--] no load, startup and shutdown costs
 \begin{equation}
-f_{\rm uc}(u,v,w) = \sum_{t\in T} \gamma^t \sum_{i\in I^t} \Bigl( C_P^{ti}(0) u^{ti} + C_v^{ti} v^{ti} +  C_w^{ti} w^{ti} \Bigr)
+f_{\rm uc}(u,v,w) = \sum_{t\in T} \gamma^t \sum_{i\in I^t} \Bigl( \Delta \cdot C_P^{ti}(0) u^{ti} + C_v^{ti} v^{ti} +  C_w^{ti} w^{ti} \Bigr)
 \end{equation}
 \end{itemize}
 
@@ -3441,6 +3441,7 @@ The \href{https://matpower.org/docs/MOST-manual-1.2.x.pdf}{\most{} 1.2.x User's 
 
 \subsubsection*{Bugs Fixed}
 \begin{itemize}
+\item Fix issue \#39 in which the value of \code{mdi.Delta\_T}, the number of hours represented by each period, was not being accounted for in most of the terms in the objective function. \emph{Thanks to Stefano Nicolin.}
 \item Fix issue \#37 which caused a fatal error in storage input checks with multiple storage units under some circumstances. \emph{Thanks to Keir Steegstra.}
 \end{itemize}
 

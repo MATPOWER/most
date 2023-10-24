@@ -5,13 +5,20 @@ Change history for MOST
 since 1.2
 ---------
 
+#### 10/24/23
+  - Fix [issue #39][10] in which the value of `mdi.Delta_T`, the number of
+    hours represented by each period, was not being accounted for in most
+    of the terms in the objective function.
+    *Thanks to Stefano Nicolin.*
+
 #### 10/4/23
   - Fix [issue #37][9] which caused a fatal error in storage input checks
     with multiple storage units under some circumstances.
     *Thanks to Keir Steegstra.*
 
 #### 2/3/23
-  - Remove extra column in ExpectedRampCost and ignore for single period.
+  - Remove extra column in mdo.results.ExpectedRampCost and ignore for
+    single period.
 
 
 Version 1.2 - *Dec 13, 2022*
@@ -310,3 +317,4 @@ Version 1.0 - *Jun 1, 2016*
 [7]: https://arxiv.org/abs/2204.08140
 [8]: https://github.com/MATPOWER/most/issues/29
 [9]: https://github.com/MATPOWER/most/issues/37
+[10]: https://github.com/MATPOWER/most/issues/39

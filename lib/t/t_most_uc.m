@@ -43,7 +43,7 @@ fcn = {'cplex', 'glpk', 'gurobi', 'mosek', 'intlinprog'};
 % fcn = {'gurobi'};
 % solvers = {'MOSEK'};
 % fcn = {'mosek'};
-ntests = 68;
+ntests = 69;
 t_begin(ntests*length(solvers), quiet);
 
 if quiet
@@ -235,6 +235,10 @@ for s = 1:length(solvers)
             plot_case('+ DC Network', mdo, ms, 500, 100, savedir, pp, fname);
         end
         % keyboard;
+        mdi.Delta_T = 2;
+        mdo = most(mdi, mpopt);
+        ms = most_summary(mdo);
+        t_is(ms.f, 2 * ex.f, 8, [t '(Delta_T = 2) : f']);
 
         t = sprintf('%s : + startup/shutdown costs : ', solvers{s});
         if mpopt.out.all
