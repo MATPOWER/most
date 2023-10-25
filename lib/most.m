@@ -1722,10 +1722,10 @@ if mpopt.most.build_model
     om.init_indexed_name('qdc', 'RampWear', {nt+1, nj_max, nj_max});
   end
   for j = 1:mdi.idx.nj(1)
-    w = mdi.tstep(1).TransMat(j,1);  % the probability of going from initial state to jth
-    Q = mdi.Delta_T * spdiags(w * baseMVA^2 * mdi.RampWearCostCoeff(:,1), 0, ng, ng);
-    c = -mdi.Delta_T * w * baseMVA * mdi.RampWearCostCoeff(:,1) .* mdi.InitialPg;
-    k0 = mdi.Delta_T * w * 0.5 * mdi.RampWearCostCoeff(:,1)' * mdi.InitialPg.^2;
+    w = mdi.Delta_T * mdi.tstep(1).TransMat(j,1);  % the probability of going from initial state to jth
+    Q = spdiags(w * baseMVA^2 * mdi.RampWearCostCoeff(:,1) / mdi.Delta_T^2, 0, ng, ng);
+    c = -w * baseMVA * mdi.RampWearCostCoeff(:,1) .* mdi.InitialPg;
+    k0 = w * 0.5 * mdi.RampWearCostCoeff(:,1)' * mdi.InitialPg.^2;
     vs = struct('name', {'Pg'}, 'idx', {{1,j,1}});
     om.add_quad_cost('RampWear', {1,j,1}, Q, c, k0, vs);
   end
@@ -1733,8 +1733,8 @@ if mpopt.most.build_model
   for t = 2:nt
     for j2 = 1:mdi.idx.nj(t)
       for j1 = 1:mdi.idx.nj(t-1)
-        w = mdi.tstep(t).TransMat(j2,j1) * mdi.CostWeights(1, j1, t-1);
-        h = mdi.Delta_T * w * baseMVA^2 * mdi.RampWearCostCoeff(:,t);
+        w = mdi.Delta_T * mdi.tstep(t).TransMat(j2,j1) * mdi.CostWeights(1, j1, t-1);
+        h = w * baseMVA^2 * mdi.RampWearCostCoeff(:,t) / mdi.Delta_T^2;
         i = (1:ng)';
         j = ng+(1:ng)';
         Q = sparse([i;j;i;j], [i;i;j;j], [h;-h;-h;h], 2*ng, 2*ng);
@@ -1749,10 +1749,10 @@ if mpopt.most.build_model
   % that makes sense for nt+1; all other fields in mdi.tstep(nt+1) can be empty.
   if ~mdi.OpenEnded
     for j = 1:mdi.idx.nj(nt)
-      w = mdi.tstep(nt+1).TransMat(1, j) * mdi.CostWeights(1, j, nt);
-      Q = mdi.Delta_T * spdiags(w * baseMVA^2 * mdi.RampWearCostCoeff(:,nt+1), 0, ng, ng);
-      c = -mdi.Delta_T * w * baseMVA * mdi.RampWearCostCoeff(:,nt+1) .* mdi.TerminalPg;
-      k0 = mdi.Delta_T * w * 0.5 * mdi.RampWearCostCoeff(:,nt+1)' * mdi.TerminalPg.^2;
+      w = mdi.Delta_T * mdi.tstep(nt+1).TransMat(1, j) * mdi.CostWeights(1, j, nt);
+      Q = spdiags(w * baseMVA^2 * mdi.RampWearCostCoeff(:,nt+1) / mdi.Delta_T^2, 0, ng, ng);
+      c = -w * baseMVA * mdi.RampWearCostCoeff(:,nt+1) .* mdi.TerminalPg;
+      k0 = w * 0.5 * mdi.RampWearCostCoeff(:,nt+1)' * mdi.TerminalPg.^2;
       vs = struct('name', {'Pg'}, 'idx', {{nt,j,1}});
       om.add_quad_cost('RampWear', {nt+1,j,1}, Q, c, k0, vs);
     end
@@ -1772,7 +1772,7 @@ if mpopt.most.build_model
   for t = 1:nt
     for j = 1:mdi.idx.nj(t)
       for k = 1:mdi.idx.nc(t,j)+1
-        w = mdi.CostWeightsAdj(k,j,t);     %% NOTE (k,j,t) order !!!
+        w = mdi.Delta_T * mdi.CostWeightsAdj(k,j,t);    %% NOTE (k,j,t) order !!!
 
         % weighted polynomial energy costs for committed units
         gc = mdi.flow(t,j,k).mpc.gencost;
@@ -1784,15 +1784,15 @@ if mpopt.most.build_model
             if ncost > 3
               error('most: polynomial generator costs of order higher than quadratic not supported');
             elseif ncost == 3
-              Q = sparse(ipol, ipol, mdi.Delta_T * 2 * w * baseMVA^2*gc(ipol, COST), ng, ng);
+              Q = sparse(ipol, ipol, 2 * w * baseMVA^2*gc(ipol, COST), ng, ng);
             else
               Q = sparse(ng,ng);
             end
             c = zeros(ng, 1);
             if ncost >= 2
-              c(ipol) = mdi.Delta_T * w * baseMVA*gc(ipol, COST+ncost-2);
+              c(ipol) = w * baseMVA*gc(ipol, COST+ncost-2);
             end
-            k0 = mdi.Delta_T * w * sum(gc(ipol, COST+ncost-1));
+            k0 = w * sum(gc(ipol, COST+ncost-1));
           else                                %% non-uniform order of polynomials
             %% use a loop
             Q = sparse(ng,ng);
@@ -1802,12 +1802,12 @@ if mpopt.most.build_model
               if ncost > 3
                 error('most: polynomial generator costs of order higher than quadratic not supported');
               elseif ncost == 3
-                Q(i,i) = mdi.Delta_T * 2 * w * baseMVA^2*gc(i, COST);
+                Q(i,i) = 2 * w * baseMVA^2*gc(i, COST);
               end
               if ncost >= 2
-                c(i) = mdi.Delta_T * w * baseMVA*gc(i, COST+ncost-2);
+                c(i) = w * baseMVA*gc(i, COST+ncost-2);
               end
-              k0 = mdi.Delta_T * w * gc(i, COST+ncost-1);
+              k0 = w * gc(i, COST+ncost-1);
             end
           end
           vs = struct('name', {'Pg'}, 'idx', {{t,j,k}});
@@ -1817,22 +1817,22 @@ if mpopt.most.build_model
         % weighted y-variables for piecewise linear energy costs for committed units
         % ipwl = find( (mdi.flow(t,j,k).mpc.gen(:,GEN_STATUS) > 0) & (gc(:,MODEL) == PW_LINEAR));
         if mdi.idx.ny(t,j,k)
-          c = mdi.Delta_T * w * ones(mdi.idx.ny(t,j,k),1);
+          c = w * ones(mdi.idx.ny(t,j,k),1);
           vs = struct('name', {'y'}, 'idx', {{t,j,k}});
           om.add_quad_cost('Cy', {t,j,k}, [], c, 0, vs);
         end
 
         % inc and dec offers for each flow
-        c = mdi.Delta_T * w * baseMVA * mdi.offer(t).PositiveActiveDeltaPrice(:);
+        c = w * baseMVA * mdi.offer(t).PositiveActiveDeltaPrice(:);
         vs = struct('name', {'dPp'}, 'idx', {{t,j,k}});
         om.add_quad_cost('Cpp', {t,j,k}, [], c, 0, vs);
-        c = mdi.Delta_T * w * baseMVA * mdi.offer(t).NegativeActiveDeltaPrice(:);
+        c = w * baseMVA * mdi.offer(t).NegativeActiveDeltaPrice(:);
         vs = struct('name', {'dPm'}, 'idx', {{t,j,k}});
         om.add_quad_cost('Cpm', {t,j,k}, [], c, 0, vs);
 
         % weighted fixed reserves cost
         if mdi.IncludeFixedReserves
-          c = mdi.Delta_T * w * mdi.FixedReserves(t,j,k).cost(r.igr) * baseMVA;
+          c = w * mdi.FixedReserves(t,j,k).cost(r.igr) * baseMVA;
           vs = struct('name', {'R'}, 'idx', {{t,j,k}});
           om.add_quad_cost('Rcost', {t,j,k}, [], c, 0, vs);
         end

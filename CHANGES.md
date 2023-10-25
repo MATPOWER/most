@@ -5,7 +5,7 @@ Change history for MOST
 since 1.2
 ---------
 
-#### 10/24/23
+#### 10/25/23
   - Fix [issue #39][10] in which the value of `mdi.Delta_T`, the number of
     hours represented by each period, was not being accounted for in most
     of the terms in the objective function.
