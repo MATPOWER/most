@@ -56,9 +56,8 @@ function mdo = most(mdi, mpopt)
 %       MDO   MOST data structure, output
 %           (see MOST User's Manual for details)
 
-
 %   MOST
-%   Copyright (c) 2010-2022, Power Systems Engineering Research Center (PSERC)
+%   Copyright (c) 2010-2023, Power Systems Engineering Research Center (PSERC)
 %   by Carlos E. Murillo-Sanchez, PSERC Cornell & Universidad Nacional de Colombia
 %   and Ray Zimmerman, PSERC Cornell
 %
@@ -82,7 +81,7 @@ if verbose
     fprintf(  '                       -----  Built on MATPOWER  -----\n');
     fprintf(  '  by Carlos E. Murillo-Sanchez, Universidad Nacional de Colombia--Manizales\n');
     fprintf(  '                  and Ray D. Zimmerman, Cornell University\n');
-    fprintf(  '       (c) 2012-2022 Power Systems Engineering Research Center (PSERC)       \n');
+    fprintf(  '       (c) 2012-2023 Power Systems Engineering Research Center (PSERC)       \n');
     fprintf(  '=============================================================================\n');
 end
 
@@ -509,7 +508,7 @@ if mpopt.most.build_model
           for k = 1:mdi.idx.nc(t,j)+1
             mpc = mdi.flow(t,j,k).mpc;
             c00tjk = totcost(mpc.gencost, zeros(ng,1));
-            mdi.UC.c00(:, t) = mdi.UC.c00(:, t) + mdi.CostWeightsAdj(k, j, t) * c00tjk;
+            mdi.UC.c00(:, t) = mdi.UC.c00(:, t) + mdi.Delta_T * mdi.CostWeightsAdj(k, j, t) * c00tjk;
             c0col = COST + mpc.gencost(:,NCOST) - 1;
             ipoly = find(mpc.gencost(:, MODEL) == POLYNOMIAL);
             ipwl  = find(mpc.gencost(:, MODEL) == PW_LINEAR);
@@ -1723,19 +1722,19 @@ if mpopt.most.build_model
     om.init_indexed_name('qdc', 'RampWear', {nt+1, nj_max, nj_max});
   end
   for j = 1:mdi.idx.nj(1)
-    w = mdi.tstep(1).TransMat(j,1);  % the probability of going from initial state to jth
-    Q = spdiags(w * baseMVA^2 * mdi.RampWearCostCoeff(:,1), 0, ng, ng);
+    w = mdi.Delta_T * mdi.tstep(1).TransMat(j,1);  % the probability of going from initial state to jth
+    Q = spdiags(w * baseMVA^2 * mdi.RampWearCostCoeff(:,1) / mdi.Delta_T^2, 0, ng, ng);
     c = -w * baseMVA * mdi.RampWearCostCoeff(:,1) .* mdi.InitialPg;
-    vs = struct('name', {'Pg'}, 'idx', {{1,j,1}});
     k0 = w * 0.5 * mdi.RampWearCostCoeff(:,1)' * mdi.InitialPg.^2;
+    vs = struct('name', {'Pg'}, 'idx', {{1,j,1}});
     om.add_quad_cost('RampWear', {1,j,1}, Q, c, k0, vs);
   end
   % Then the remaining periods
   for t = 2:nt
     for j2 = 1:mdi.idx.nj(t)
       for j1 = 1:mdi.idx.nj(t-1)
-        w = mdi.tstep(t).TransMat(j2,j1) * mdi.CostWeights(1, j1, t-1);
-        h = w * baseMVA^2 * mdi.RampWearCostCoeff(:,t);
+        w = mdi.Delta_T * mdi.tstep(t).TransMat(j2,j1) * mdi.CostWeights(1, j1, t-1);
+        h = w * baseMVA^2 * mdi.RampWearCostCoeff(:,t) / mdi.Delta_T^2;
         i = (1:ng)';
         j = ng+(1:ng)';
         Q = sparse([i;j;i;j], [i;i;j;j], [h;-h;-h;h], 2*ng, 2*ng);
@@ -1750,11 +1749,11 @@ if mpopt.most.build_model
   % that makes sense for nt+1; all other fields in mdi.tstep(nt+1) can be empty.
   if ~mdi.OpenEnded
     for j = 1:mdi.idx.nj(nt)
-      w = mdi.tstep(nt+1).TransMat(1, j) * mdi.CostWeights(1, j, nt);
-      Q = spdiags(w * baseMVA^2 * mdi.RampWearCostCoeff(:,nt+1), 0, ng, ng);
+      w = mdi.Delta_T * mdi.tstep(nt+1).TransMat(1, j) * mdi.CostWeights(1, j, nt);
+      Q = spdiags(w * baseMVA^2 * mdi.RampWearCostCoeff(:,nt+1) / mdi.Delta_T^2, 0, ng, ng);
       c = -w * baseMVA * mdi.RampWearCostCoeff(:,nt+1) .* mdi.TerminalPg;
-      vs = struct('name', {'Pg'}, 'idx', {{nt,j,1}});
       k0 = w * 0.5 * mdi.RampWearCostCoeff(:,nt+1)' * mdi.TerminalPg.^2;
+      vs = struct('name', {'Pg'}, 'idx', {{nt,j,1}});
       om.add_quad_cost('RampWear', {nt+1,j,1}, Q, c, k0, vs);
     end
   end
@@ -1773,7 +1772,7 @@ if mpopt.most.build_model
   for t = 1:nt
     for j = 1:mdi.idx.nj(t)
       for k = 1:mdi.idx.nc(t,j)+1
-        w = mdi.CostWeightsAdj(k,j,t);     %% NOTE (k,j,t) order !!!
+        w = mdi.Delta_T * mdi.CostWeightsAdj(k,j,t);    %% NOTE (k,j,t) order !!!
 
         % weighted polynomial energy costs for committed units
         gc = mdi.flow(t,j,k).mpc.gencost;
@@ -1841,10 +1840,10 @@ if mpopt.most.build_model
     end
 
     % contingency reserve costs
-    c = baseMVA * mdi.StepProb(t) * mdi.offer(t).PositiveActiveReservePrice(:);
+    c = mdi.Delta_T * baseMVA * mdi.StepProb(t) * mdi.offer(t).PositiveActiveReservePrice(:);
     vs = struct('name', {'Rpp'}, 'idx', {{t}});
     om.add_quad_cost('Crpp', {t}, [], c, 0, vs);
-    c = baseMVA * mdi.StepProb(t) * mdi.offer(t).NegativeActiveReservePrice(:);
+    c = mdi.Delta_T * baseMVA * mdi.StepProb(t) * mdi.offer(t).NegativeActiveReservePrice(:);
     vs = struct('name', {'Rpm'}, 'idx', {{t}});
     om.add_quad_cost('Crpm', {t}, [], c, 0, vs);
   end
@@ -1852,10 +1851,10 @@ if mpopt.most.build_model
   om.init_indexed_name('qdc', 'Crrp', {mdi.idx.ntramp});
   om.init_indexed_name('qdc', 'Crrm', {mdi.idx.ntramp});
   for t = 1:mdi.idx.ntramp
-    c = baseMVA * mdi.StepProb(t) * mdi.offer(t).PositiveLoadFollowReservePrice(:);
+    c = mdi.Delta_T * baseMVA * mdi.StepProb(t) * mdi.offer(t).PositiveLoadFollowReservePrice(:);
     vs = struct('name', {'Rrp'}, 'idx', {{t}});
     om.add_quad_cost('Crrp', {t}, [], c, 0, vs);
-    c = baseMVA * mdi.StepProb(t) * mdi.offer(t).NegativeLoadFollowReservePrice(:);
+    c = mdi.Delta_T * baseMVA * mdi.StepProb(t) * mdi.offer(t).NegativeLoadFollowReservePrice(:);
     vs = struct('name', {'Rrm'}, 'idx', {{t}});
     om.add_quad_cost('Crrm', {t}, [], c, 0, vs);
   end
