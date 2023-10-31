@@ -1,4 +1,4 @@
-function profiles = uniformwindprofile(nt, nj, n);
+function profiles = uniformwindprofile(nt, nj, n)
 %UNIFORMWINDPROFILE Creates a wind profile with evenly spaced capacity values.
 %
 %   PROFILES = UNIFORMWINDPROFILE(NT, NJ, N)
