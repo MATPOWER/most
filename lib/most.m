@@ -67,7 +67,9 @@ function mdo = most(mdi, mpopt)
 
 t0 = tic;
 
-tsm = 1;    % used transposed storage matrices (Li, Lf, Mg, Mh, Ng, Nh, G, H)
+% used transposed storage matrices (Li, Lf, Mg, Mh, Ng, Nh, G, H)
+% and transposed A matrices for constraints (Sm, Sp)
+tsm = 1;
 
 %% default arguments
 if nargin < 2
@@ -1310,28 +1312,49 @@ if mpopt.most.build_model
       for j = 1:mdi.idx.nj(t)
         if tsm
           Mj = (mdi.tstep(t).Mg(:, j:mdi.idx.nj(t):(ns-1)*mdi.idx.nj(t)+j) + ...
-                mdi.tstep(t).Mh(:, j:mdi.idx.nj(t):(ns-1)*mdi.idx.nj(t)+j))';
-          Lij = mdi.tstep(t).Li(:, j:mdi.idx.nj(t):(ns-1)*mdi.idx.nj(t)+j)';
+                mdi.tstep(t).Mh(:, j:mdi.idx.nj(t):(ns-1)*mdi.idx.nj(t)+j));
+          Lij = mdi.tstep(t).Li(:, j:mdi.idx.nj(t):(ns-1)*mdi.idx.nj(t)+j);
         else
           Mj = mdi.tstep(t).Mg( j:mdi.idx.nj(t):(ns-1)*mdi.idx.nj(t)+j, :) + ...
                mdi.tstep(t).Mh( j:mdi.idx.nj(t):(ns-1)*mdi.idx.nj(t)+j, :);
           Lij = mdi.tstep(t).Li( j:mdi.idx.nj(t):(ns-1)*mdi.idx.nj(t)+j, :);
         end
         diag1minusRhoBeta1 = spdiags((1-rho(:,t)) .* beta1(:,t), 0, ns, ns);
-        A = sparse([1:ns,1:ns,1:ns,1:ns]', ...
-                   [vv.i1.Psc(t,j,1):vv.iN.Psc(t,j,1), vv.i1.Psd(t,j,1):vv.iN.Psd(t,j,1), vv.i1.Sm(t-1):vv.iN.Sm(t-1), vv.i1.Sm(t):vv.iN.Sm(t)]', ...
-                   [beta2EtaIn(:,t); beta2overEtaOut(:,t); -beta1(:,t).*rho(:,t); ones(ns,1)], ...
-                   ns, nvars) ...
-                - diag1minusRhoBeta1 * Mj;
+        if tsm
+          A = sparse([vv.i1.Psc(t,j,1):vv.iN.Psc(t,j,1), vv.i1.Psd(t,j,1):vv.iN.Psd(t,j,1), vv.i1.Sm(t-1):vv.iN.Sm(t-1), vv.i1.Sm(t):vv.iN.Sm(t)]', ...
+                     [1:ns,1:ns,1:ns,1:ns]', ...
+                     [beta2EtaIn(:,t); beta2overEtaOut(:,t); -beta1(:,t).*rho(:,t); ones(ns,1)], ...
+                     nvars, ns) ...
+                  - Mj * diag1minusRhoBeta1;
+        else
+          A = sparse([1:ns,1:ns,1:ns,1:ns]', ...
+                     [vv.i1.Psc(t,j,1):vv.iN.Psc(t,j,1), vv.i1.Psd(t,j,1):vv.iN.Psd(t,j,1), vv.i1.Sm(t-1):vv.iN.Sm(t-1), vv.i1.Sm(t):vv.iN.Sm(t)]', ...
+                     [beta2EtaIn(:,t); beta2overEtaOut(:,t); -beta1(:,t).*rho(:,t); ones(ns,1)], ...
+                     ns, nvars) ...
+                  - diag1minusRhoBeta1 * Mj;
+        end
         if mdi.Storage.ForceCyclicStorage
-          As0 = sparse(ns, nvars);
-          As0(:, vv.i1.S0:vv.iN.S0) = -diag1minusRhoBeta1 * Lij;
+          if tsm
+            As0 = sparse(nvars, ns);
+            As0(vv.i1.S0:vv.iN.S0, :) = -Lij * diag1minusRhoBeta1;
+          else
+            As0 = sparse(ns, nvars);
+            As0(:, vv.i1.S0:vv.iN.S0) = -diag1minusRhoBeta1 * Lij;
+          end
           A = A + As0;
           u = zeros(ns, 1);
         else
-          u = full(diag1minusRhoBeta1 * Lij * mdi.Storage.InitialStorage/baseMVA);
+          if tsm
+            u = full(mdi.Storage.InitialStorage'/baseMVA * Lij * diag1minusRhoBeta1)';
+          else
+            u = full(diag1minusRhoBeta1 * Lij * mdi.Storage.InitialStorage/baseMVA);
+          end
         end
-        om.add_lin_constraint('Sm', {t,j}, A, [], u);
+        if tsm
+          om.add_lin_constraint('Sm', {t,j}, A, [], u, {}, 1);  %% add transpose
+        else
+          om.add_lin_constraint('Sm', {t,j}, A, [], u);
+        end
       end
     end
     % Do the same we did for sm(t) for sp(t). First the initial step ...
@@ -1361,28 +1384,49 @@ if mpopt.most.build_model
       for j = 1:mdi.idx.nj(t)
         if tsm
           Mj = (mdi.tstep(t).Mg(:, j:mdi.idx.nj(t):(ns-1)*mdi.idx.nj(t)+j) + ...
-                mdi.tstep(t).Mh(:, j:mdi.idx.nj(t):(ns-1)*mdi.idx.nj(t)+j))';
-          Lij = mdi.tstep(t).Li(:, j:mdi.idx.nj(t):(ns-1)*mdi.idx.nj(t)+j)';
+                mdi.tstep(t).Mh(:, j:mdi.idx.nj(t):(ns-1)*mdi.idx.nj(t)+j));
+          Lij = mdi.tstep(t).Li(:, j:mdi.idx.nj(t):(ns-1)*mdi.idx.nj(t)+j);
         else
           Mj = mdi.tstep(t).Mg( j:mdi.idx.nj(t):(ns-1)*mdi.idx.nj(t)+j, :) + ...
                mdi.tstep(t).Mh( j:mdi.idx.nj(t):(ns-1)*mdi.idx.nj(t)+j, :);
           Lij = mdi.tstep(t).Li( j:mdi.idx.nj(t):(ns-1)*mdi.idx.nj(t)+j, :);
         end
         diag1minusRhoBeta1 = spdiags((1-rho(:,t)) .* beta1(:,t), 0, ns, ns);
-        A = sparse([1:ns,1:ns,1:ns,1:ns]', ...
-                   [vv.i1.Psc(t,j,1):vv.iN.Psc(t,j,1), vv.i1.Psd(t,j,1):vv.iN.Psd(t,j,1), vv.i1.Sp(t-1):vv.iN.Sp(t-1), vv.i1.Sp(t):vv.iN.Sp(t)]', ...
-                   [-beta2EtaIn(:,t); -beta2overEtaOut(:,t); beta1(:,t).*rho(:,t); -ones(ns,1)], ...
-                   ns, nvars) ...
-                + diag1minusRhoBeta1 * Mj;
+        if tsm
+          A = sparse([vv.i1.Psc(t,j,1):vv.iN.Psc(t,j,1), vv.i1.Psd(t,j,1):vv.iN.Psd(t,j,1), vv.i1.Sp(t-1):vv.iN.Sp(t-1), vv.i1.Sp(t):vv.iN.Sp(t)]', ...
+                     [1:ns,1:ns,1:ns,1:ns]', ...
+                     [-beta2EtaIn(:,t); -beta2overEtaOut(:,t); beta1(:,t).*rho(:,t); -ones(ns,1)], ...
+                     nvars, ns) ...
+                  + Mj * diag1minusRhoBeta1;
+        else
+          A = sparse([1:ns,1:ns,1:ns,1:ns]', ...
+                     [vv.i1.Psc(t,j,1):vv.iN.Psc(t,j,1), vv.i1.Psd(t,j,1):vv.iN.Psd(t,j,1), vv.i1.Sp(t-1):vv.iN.Sp(t-1), vv.i1.Sp(t):vv.iN.Sp(t)]', ...
+                     [-beta2EtaIn(:,t); -beta2overEtaOut(:,t); beta1(:,t).*rho(:,t); -ones(ns,1)], ...
+                     ns, nvars) ...
+                  + diag1minusRhoBeta1 * Mj;
+        end
         if mdi.Storage.ForceCyclicStorage
-          As0 = sparse(ns, nvars);
-          As0(:, vv.i1.S0:vv.iN.S0) = diag1minusRhoBeta1 * Lij;
+          if tsm
+            As0 = sparse(nvars, ns);
+            As0(vv.i1.S0:vv.iN.S0, :) = Lij * diag1minusRhoBeta1;
+          else
+            As0 = sparse(ns, nvars);
+            As0(:, vv.i1.S0:vv.iN.S0) = diag1minusRhoBeta1 * Lij;
+          end
           A = A + As0;
           u = zeros(ns, 1);
         else
-          u = full(-diag1minusRhoBeta1 * Lij * mdi.Storage.InitialStorage/baseMVA);
+          if tsm
+            u = full(-mdi.Storage.InitialStorage'/baseMVA * Lij * diag1minusRhoBeta1)';
+          else
+            u = full(-diag1minusRhoBeta1 * Lij * mdi.Storage.InitialStorage/baseMVA);
+          end
         end
-        om.add_lin_constraint('Sp', {t,j}, A, [], u);
+        if tsm
+          om.add_lin_constraint('Sp', {t,j}, A, [], u, {}, 1);
+        else
+          om.add_lin_constraint('Sp', {t,j}, A, [], u);
+        end
       end
     end
     % Now go on and limit the amount of energy that can be used if a

@@ -5,6 +5,11 @@ Change history for MOST
 since 1.2
 ---------
 
+#### 11/6/23
+  - Reduce memory requirements for long horizon cases with storage by
+    forming/storing transposes of matrices for storage constraints. Requires
+    MP-Opt-Model > 4.1.
+
 #### 10/25/23
   - Fix [issue #39][10] in which the value of `mdi.Delta_T`, the number of
     hours represented by each period, was not being accounted for in most
