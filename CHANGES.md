@@ -7,8 +7,8 @@ since 1.2
 
 #### 11/6/23
   - Reduce memory requirements for long horizon cases with storage by
-    forming/storing transposes of matrices for storage constraints. Requires
-    MP-Opt-Model > 4.1.
+    forming/storing transposes of matrices for storage constraints.
+    _Requires [MP-Opt-Model][11] version > 4.1._
 
 #### 10/25/23
   - Fix [issue #39][10] in which the value of `mdi.Delta_T`, the number of
@@ -41,7 +41,7 @@ Version 1.2 - *Dec 13, 2022*
   MATLAB R2022b.
 
 #### 8/30/22
-  - Fix [issue #29][8], where a type caused  a check on `md.UC.MinDown`
+  - Fix [issue #29][8], where a typo caused a check on `md.UC.MinDown`
     >= 1 to be skipped.
     *Thanks to Talha Iqbal.*
 
@@ -323,3 +323,4 @@ Version 1.0 - *Jun 1, 2016*
 [8]: https://github.com/MATPOWER/most/issues/29
 [9]: https://github.com/MATPOWER/most/issues/37
 [10]: https://github.com/MATPOWER/most/issues/39
+[11]: https://github.com/MATPOWER/mp-opt-model
