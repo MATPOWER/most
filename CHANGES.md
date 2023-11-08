@@ -5,6 +5,10 @@ Change history for MOST
 since 1.2
 ---------
 
+#### 11/8/23
+  - Speed up building unit commitment (min up/down time) constraints.
+    Improvement can be quite substantial on large problems.
+
 #### 11/6/23
   - Reduce memory requirements for long horizon cases with storage by
     forming/storing transposes of matrices for storage constraints.

@@ -1574,59 +1574,109 @@ if mpopt.most.build_model
       end
       om.add_lin_constraint('uvw', {t}, A, b, b, vs);
     end
-    % Then continue with minimimum up time constraints. Again, two
-    % different forms depending on whether the horizon is cyclical or not
-    om.init_indexed_name('lin', 'minup', {nt, ng});
+    % Continue with minimimum up time constraints, with option for
+    % cyclical horizon.
+    om.init_indexed_name('lin', 'minup', {nt});
+    % Sum of startups in "min up window" (win) must be <= u
     for t = 1:nt
-      for i = 1:ng
-        ti = t-mdi.UC.MinUp(i)+1:t;
-        if mdi.UC.CyclicCommitment     % window is circular
-          for tt = 1:length(ti)
-            if ti(tt) < 1
-              ti(tt) = nt + ti(tt);
-            end
-          end
+      % beginning of win
+      w0 = t - mdi.UC.MinUp + 1;    % full win(t,i) is w0(i):t
+      if mdi.UC.CyclicCommitment    % window is circular
+        % any window that starts before t=1 wraps back to end of horizon
+        w0(w0 < 1) = w0(w0 < 1) + nt;
+        % if we wrap all the way back to before t=1 again,
+        % include entire horizon, i.e. always ON
+        if t < nt
+          w0(w0 < 1) = t + 1;
+        else
+          w0(w0 < 1) = 1;
         end
-        % limit to positive time
-        % even with CyclicCommitment, in case MinUp is longer than horizon
-        % (which implies always ON or always OFF)
-        ti = ti(ti>0);
-        vs = struct('name', {'u'}, 'idx', {{t}});
-        A = sparse(1, i, -1, 1, ng);
-        for tt = 1:length(ti)
-            vs(end+1).name = 'v';
-            vs(end).idx  = {ti(tt)};
-            A = [A sparse(1, i, 1, 1, ng)];
-        end
-        om.add_lin_constraint('minup', {t, i}, A, [], 0, vs);
+      else
+        % clip non-positive w0
+        w0(w0 < 1) = 1;
       end
+
+      % b = -(sum of startups in win before t=1)
+      b = zeros(ng, 1);
+      % next line not necessary, since it is handled above by direct bounds on u
+      % b(mdi.UC.InitialState > 0 & w0 <= -mdi.UC.InitialState +1) = -1;
+
+      % period index list from t back to beginning of biggest win
+      if any(w0 > t)    % w/wrapping back to end of horizon
+        max_win = [t:-1:1 nt:-1:min(w0(w0 > t))];
+      else              % no wrapping back to end of horizon
+        max_win = [t:-1:min(w0)];
+      end
+
+      vs = struct('name', {'u'}, 'idx', {{t}});
+      A = [-speye(ng, ng) sparse(ng, ng*length(max_win))];
+      for tt = 1:length(max_win)
+          vs(end+1).name = 'v';
+          vs(end).idx  = {max_win(tt)};
+      end
+      for i = 1:ng
+        if w0(i) > t
+          win = [t:-1:1 nt:-1:w0(i)];
+        else
+          win = [t:-1:w0(i)];
+        end
+        for tt = 1:length(win)
+          A(i, ng*tt+i) = 1;
+        end
+      end
+      om.add_lin_constraint('minup', {t}, A, [], b, vs);
     end
-    % Continue with minimimum downtime constraints. Two
-    % different forms depending on whether the horizon is cyclical or not
-    om.init_indexed_name('lin', 'mindown', {nt, ng});
+    % Continue with minimimum downtime constraints, with option for
+    % cyclical horizon.
+    om.init_indexed_name('lin', 'mindown', {nt});
+    % Sum of shutdowns in "min down window" (win) must be <= (1-u)
     for t = 1:nt
-      for i = 1:ng
-        ti = t-mdi.UC.MinDown(i)+1:t;
-        if mdi.UC.CyclicCommitment     % window is circular
-          for tt = 1:length(ti)
-            if ti(tt) < 1
-              ti(tt) = nt + ti(tt);
-            end
-          end
+      % beginning of win
+      w0 = t - mdi.UC.MinDown + 1;  % full win(t,i) is w0(i):t
+      if mdi.UC.CyclicCommitment    % window is circular
+        % any window that starts before t=1 wraps back to end of horizon
+        w0(w0 < 1) = w0(w0 < 1) + nt;
+        % if we wrap all the way back to before t=1 again,
+        % include entire horizon, i.e. always ON
+        if t < nt
+          w0(w0 < 1) = t + 1;
+        else
+          w0(w0 < 1) = 1;
         end
-        % limit to positive time
-        % even with CyclicCommitment, in case MinDown is longer than horizon
-        % (which implies always ON or always OFF)
-        ti = ti(ti>0);
-        vs = struct('name', {'u'}, 'idx', {{t}});
-        A = sparse(1, i, 1, 1, ng);
-        for tt = 1:length(ti)
-            vs(end+1).name = 'w';
-            vs(end).idx  = {ti(tt)};
-            A = [A sparse(1, i, 1, 1, ng)];
-        end
-        om.add_lin_constraint('mindown', {t, i}, A, [], 1, vs);
+      else
+        % clip non-positive w0
+        w0(w0 < 1) = 1;
       end
+
+      % b = 1-(sum of shutdowns in win before t=1)
+      b = ones(ng, 1);
+      % next line not necessary, since it is handled above by direct bounds on u
+      % b(mdi.UC.InitialState < 0 & w0 <= -mdi.UC.InitialState +1) = 0;
+
+      % period index list from t back to beginning of biggest win
+      if any(w0 > t)    % w/wrapping back to end of horizon
+        max_win = [t:-1:1 nt:-1:min(w0(w0 > t))];
+      else              % no wrapping back to end of horizon
+        max_win = [t:-1:min(w0)];
+      end
+
+      vs = struct('name', {'u'}, 'idx', {{t}});
+      A = [speye(ng, ng) sparse(ng, ng*length(max_win))];
+      for tt = 1:length(max_win)
+          vs(end+1).name = 'w';
+          vs(end).idx  = {max_win(tt)};
+      end
+      for i = 1:ng
+        if w0(i) > t
+          win = [t:-1:1 nt:-1:w0(i)];
+        else
+          win = [t:-1:w0(i)];
+        end
+        for tt = 1:length(win)
+          A(i, ng*tt+i) = 1;
+        end
+      end
+      om.add_lin_constraint('mindown', {t}, A, [], b, vs);
     end
     % Limit generation ranges based on commitment status; first Pmax;
     % p - u*Pmax <= 0

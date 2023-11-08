@@ -159,7 +159,7 @@
 \newcommand{\mostname}[0]{{{\bf M}{\sc atpower} \textbf{O}ptimal \textbf{S}cheduling \textbf{T}ool}}
 \newcommand{\mosturl}[0]{https://github.com/MATPOWER/most}
 \newcommand{\mostlink}[0]{\href{\mosturl}{\most{}}}
-\newcommand{\mostver}[0]{1.2}
+\newcommand{\mostver}[0]{1.2+}
 \newcommand{\md}[0]{{\most{} Data struct}}
 \newcommand{\powerweb}[0]{{\sc PowerWeb}}
 \newcommand{\pserc}[0]{{\sc PSerc}}
@@ -240,7 +240,7 @@ User's Manual}
 %%% BEFORE PUBLISHING A NEW VERSION:
 %%%   Update the publication year for \bibitem{matpower} and
 %%%   \bibitem{matpower_manual} to the year of the latest release
-\date{December 13, 2022} % comment this line to display the current date
+%\date{December 13, 2022} % comment this line to display the current date
 %\date{December 14, 2011\thanks{Second revision. First revision was December 13, 2011}} % comment this line to display the current date
 
 %%% BEGIN DOCUMENT
@@ -250,7 +250,7 @@ User's Manual}
 \vfill
 \begin{center}
 {\scriptsize
-\copyright~2011--2022~\PSERC{}\\
+\copyright~2011--2023~\PSERC{}\\
 All Rights Reserved}
 \end{center}
 
@@ -3438,6 +3438,7 @@ The \href{https://matpower.org/docs/MOST-manual-1.2.x.pdf}{\most{} 1.2.x User's 
 \begin{itemize}
 \item Reduce memory requirements for long horizon cases with storage by forming/storing transposes of matrices for storage constraints.\\
 \emph{Requires \mpomlink{} version~$>$~4.1.}
+\item Speed up building unit commitment (min up/down time) constraints. Improvement can be quite substantial on large problems.
 
 \end{itemize}
 
