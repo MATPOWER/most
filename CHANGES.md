@@ -45,8 +45,8 @@ Version 1.2 - *Dec 13, 2022*
   MATLAB R2022b.
 
 #### 8/30/22
-  - Fix [issue #29][8], where a typo caused a check on `md.UC.MinDown`
-    >= 1 to be skipped.
+  - Fix [issue #29][8], where a typo caused a check on
+    `md.UC.MinDown` >= 1 to be skipped.
     *Thanks to Talha Iqbal.*
 
 #### 6/15/22
