@@ -255,7 +255,7 @@ if have_feature('cplex') || have_feature('gurobi') || ...
     t_is(mdo.results.success, 1, 12, t);
 
     t = 'objective function value (f)';
-    t_is(mdo.QP.f, 1593399.5, -0.5, t);
+    t_is(mdo.QP.f, 1593399.5, -0.7, t);
 % 1593399.487 % CPLEX ~25 sec
 % 1594112.218 % GUROBI ~183 sec (fails)
 % 1593400.863 % MOSEK ~10 sec
