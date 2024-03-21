@@ -1,63 +1,68 @@
 function mdo = most(mdi, mpopt)
-%MOST MATPOWER Optimal Scheduling Tool
-%   MDO = MOST(MDI)
-%   MDO = MOST(MDI, MPOPT)
+% most - The |MOSTname| (MOST)
+% ::
 %
-%   Solves a multiperiod, stochastic, contingency constrained, optimal
-%   power flow problem with linear constraints and unit commitment.
-%   Depending on inputs it may include DC power flow constraints or
-%   a simple total power balance condition.
+%   mdo = most(mdi)
+%   mdo = most(mdi, mpopt)
 %
-%   Inputs:
-%       MDI   MOST data structure, input
-%           (see MOST User's Manual for details)
-%       MPOPT   MATPOWER options struct, relevant fields are (default
-%               value in parens):
-%           verbose - see 'help mpoption'
-%           <solver specific options> - e.g. cplex, gurobi, etc,
-%                     see 'help mpoption'
-%           most.build_model (1) - build the MIQP, both constraints and
-%                   standard costs (not coordination cost) and store in
-%                   QP field of MDO
-%           most.solve_model (1) - solve the MIQP; if coordination
-%                   cost exists, update it; requires either 'most.build_model'
-%                   set to 1 or MDI.QP must contain previously built model
-%           most.resolve_new_cost (0) - use when MIQP is already built and
-%                   unchanged except for new coordination cost
-%           most.dc_model (1) - use DC flow network model as opposed to simple
-%                   generation = demand constraint
-%           most.fixed_res (-1) - include fixed zonal reserve contstraints,
-%                   -1 = if present, 1 = always include, 0 = never include
-%           most.q_coordination (0) - create Qg variables for reactive power
-%                   coordination
-%           most.security_constraints (-1) - include contingency contstraints,
-%                   -1 = if present, 1 = always include, 0 = never include
-%           most.storage.terminal_target (-1) - constrain the expected terminal
-%                   storage to target value, if present (1 = always, 0 = never)
-%           most.storage.cyclic (0) - if 1, then initial storage is a variable
-%                   constrained to = final expected storage; can't be
-%                   simultaneously true with most.storage.terminal_target
-%           most.uc.run (-1) - flag to indicate whether to perform unit
-%                   commitment; 0 = do NOT perform UC, 1 = DO perform UC,
-%                   -1 = perform UC if MDI.UC.CommitKey is present/non-empty
-%           most.uc.cyclic (0) - commitment restrictions (e.g. min up/down
-%                   times) roll over from end of horizon back to beginning
-%           most.alpha (0) - 0 = contingencies happen at beginning of period,
-%                   1 = at end of period
-%           most.solver ('DEFAULT') - see ALG argument to OPT_MODEL/SOLVE
-%                   (i.e. MIQPS_MASTER or QPS_MASTER) for details
-%           most.skip_prices (0) - skip price computation stage for mixed
-%                   integer problems, see MIQPS_MASTER for details
-%           most.price_stage_warn_tol (1e-7) - tolerance on the objective fcn
-%               value and primal variable relative match required to avoid
-%               mis-match warning message, see MIQPS_MASTER for details
+% MOST solves a multiperiod, stochastic, contingency constrained,
+% optimal power flow problem with linear constraints and unit commitment.
+% Depending on inputs it may include DC power flow constraints or
+% a simple total power balance condition.
 %
-%   Outputs:
-%       MDO   MOST data structure, output
-%           (see MOST User's Manual for details)
+% Inputs:
+%   mdi (struct) : MOST data structure, input (see |MOSTman| for details)
+%   mpopt (struct) : |MATPOWER| options struct, relevant fields are
+%       *(default value in parens)*:
+%
+%       - ``verbose`` - see ``'help mpoption'``
+%       - :samp:`{<solver specific options>}` - e.g. cplex, gurobi, etc,
+%         see ``'help mpoption'``
+%       - ``most.build_model`` *(1)* - build the MIQP, both constraints and
+%         standard costs (not coordination cost) and store in
+%         QP field of ``mdo``
+%       - ``most.solve_model`` *(1)* - solve the MIQP; if coordination
+%         cost exists, update it; requires either ``'most.build_model'``
+%         set to 1 or ``mdi.qp`` must contain previously built model
+%       - ``most.resolve_new_cost`` *(0)* - use when MIQP is already built
+%         and unchanged except for new coordination cost
+%       - ``most.dc_model`` *(1)* - use DC flow network model as opposed to
+%         simple *generation = demand* constraint
+%       - ``most.fixed_res`` *(-1)* - include fixed zonal reserve contstraints,
+%         -1 = if present, 1 = always include, 0 = never include
+%       - ``most.q_coordination`` *(0)* - create ``Qg`` variables for
+%         reactive power coordination
+%       - ``most.security_constraints`` *(-1)* - include contingency
+%         contstraints, -1 = if present, 1 = always include, 0 = never include
+%       - ``most.storage.terminal_target`` *(-1)* - constrain the expected
+%         terminal storage to target value, -1 = if present, 1 = always,
+%         0 = never
+%       - ``most.storage.cyclic`` *(0)* - if 1, then initial storage is a
+%         variable constrained to = final expected storage; can't be
+%         simultaneously true with ``most.storage.terminal_target``
+%       - ``most.uc.run`` *(-1)* - flag to indicate whether to perform unit
+%         commitment; 0 = do *not* perform UC, 1 = *do* perform UC,
+%         -1 = perform UC if ``mdi.uc.CommitKey`` is present/non-empty
+%       - ``most.uc.cyclic`` *(0)* - commitment restrictions (e.g. min
+%         up/down times) roll over from end of horizon back to beginning
+%       - ``most.alpha`` *(0)* - 0 = contingencies happen at beginning of
+%         period, 1 = at end of period
+%       - ``most.solver`` *(* ``'DEFAULT'`` *)* - see ``alg`` argument to
+%         :meth:`opt_model.solve` (i.e. miqps_master or qps_master) for
+%         details
+%       - ``most.skip_prices`` *(0)* - skip price computation stage for mixed
+%         integer problems, see miqps_master for details
+%       - ``most.price_stage_warn_tol`` *(1e-7)* - tolerance on the objective
+%         function value and primal variable relative match required to avoid
+%         mis-match warning message, see miqps_master for details
+%
+% Outputs:
+%   mdo (struct) : MOST data structure, output (see |MOSTman| for details)
+%
+% See also loadmd.
 
 %   MOST
-%   Copyright (c) 2010-2023, Power Systems Engineering Research Center (PSERC)
+%   Copyright (c) 2010-2024, Power Systems Engineering Research Center (PSERC)
 %   by Carlos E. Murillo-Sanchez, PSERC Cornell & Universidad Nacional de Colombia
 %   and Ray Zimmerman, PSERC Cornell
 %

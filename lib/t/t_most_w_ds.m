@@ -1,8 +1,8 @@
 function t_most_w_ds(quiet, solver, verbose)
-%T_MOST_W_DS  Test for MOST with dynamical system constraints.
+% t_most_w_ds - Test for MOST with dynamical system constraints.
 
 %   MOST
-%   Copyright (c) 2015-2020, Power Systems Engineering Research Center (PSERC)
+%   Copyright (c) 2015-2024, Power Systems Engineering Research Center (PSERC)
 %   by Carlos E. Murillo-Sanchez, PSERC Cornell & Universidad Nacional de Colombia
 %   and Ray Zimmerman, PSERC Cornell
 %

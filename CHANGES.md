@@ -5,6 +5,9 @@ Change history for MOST
 since 1.2
 ---------
 
+#### 3/21/24
+  - Add Sphinx-based Reference documentation.
+
 #### 11/8/23
   - Speed up building unit commitment (min up/down time) constraints.
     Improvement can be quite substantial on large problems.
