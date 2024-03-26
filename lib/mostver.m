@@ -13,7 +13,7 @@ function rv = mostver(varargin)
 % mostver without assigning the return value prints the version and
 % release date of the current installation of MOST.
 %
-%   See also mpver.
+% See also mpver.
 
 %   MOST
 %   Copyright (c) 2010-2024, Power Systems Engineering Research Center (PSERC)
