@@ -27,7 +27,7 @@ System Requirements
 -------------------
 
 This version of MOST requires:
-*   [MATPOWER][2] version 7.x or later, _(see MATPOWER system requirements
+*   [MATPOWER][2] version 8.x or later, _(see MATPOWER system requirements
     for details of required versions of [MATLAB][4] or [GNU Octave][5])_
 *   _(highly recommended)_ A high-performance LP/MILP, QP/MIQP solver,
    such as Gurobi, CPLEX, MOSEK, MATLAB's Optimization Toolbox, or GLPK
