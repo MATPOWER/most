@@ -12,8 +12,12 @@ Pre-release
     up-to-date.
   - Create `docs/relnotes/MOST-Release-Notes-#.#.md` document from
     Appendix B of `MOST-manual.tex`.
+- Update date in Copyright line in:
+  - `LICENSE`
+  - `docs/sphinx/source/conf.py`.
 - Update version number and date in:
   - `mostver.m`
+  - `docs/sphinx/source/conf.py`
   - `most.m`    (copyright line in printout)
   - `lib/Contents.m`
   - `docs/relnotes/MOST-Release-Notes-#.#.md`
@@ -25,7 +29,6 @@ Pre-release
   - Sphinx docs
     - `mp-docs-shared/preamble.tex.txt` - \mostver
     - `mp-docs-shared/prolog.rst.txt` - in URL in raw-html for |MOSTman|
-  - Copyright line in `LICENSE`.
 - In `README.md` and `docs/src/MOST-manual/MOST-manual.tex`
   - update output of `test_most` in Section 2.2
     - may require first doing:
@@ -58,7 +61,7 @@ Pre-release
   - Make updates for current version specific citations:
     - version number (3 places)
     - year
-    - latest version DOI, current is: 10.5281/zenodo.7434827
+    - latest version DOI, current is: 10.5281/zenodo.11177189
       - (update here each time)
     ... in the following places ...
     - CITATION file
@@ -69,32 +72,31 @@ Pre-release
     - search everywhere for 10.5281/zenodo.3236531 and update year
       - User's Manual
       - search citations in all other projects being updated simultaneously
-        (does not exist as of 6/20/19)
+        - MATPOWER User's Manual
     - search everywhere for 10.5281/zenodo.3236519 and update year (MATPOWER User's Manual)
       - User's Manual
 - Copy latest `MATPOWER-manual.aux` to `docs/src/MOST-manual` for
   `\externaldocument`
-- Create `MOST-manual.pdf` from `MOST-manual.tex`
-  - move to `docs`
-  - make copy named `MOST-manual-x.x.pdf`
-    - copy to `docs` directory of `matpower.org-static` git repo
-      - update `MOST-manual.pdf` symlink on `https://matpower.org/docs/` to point
-        to new `MOST-manual-x.x.pdf` (replaces existing current version)
-        - `cd dev/projects/matpower.org-static/docs`
-        - `rm MOST-manual.pdf`
-        - `ln -s ./MOST-manual-x.x.pdf MOST-manual.pdf`
-      - commit & push, then pull to matpower.org
-    - upload `MOST-manual-x.x.pdf` to Zenodo and finish entry for "New Version"
-      - update:
-        - Publication date
-        - Version
-        - Identifiers:
-          - version number in "identical to"
-  - add link on `https://matpower.org/doc/manuals/` page
+- Create `MOST-manual.pdf` from `MOST-manual.tex` and move to `docs`.
 - Add release notice with date and version in `CHANGES.md`.
 - Commit all changes to `prep-for-release`.
 - Push `prep-for-release` to GitHub.
 - Make sure CI checks are ok.
+- Make copy named `MOST-manual-x.x.pdf`
+  - copy to `docs` directory of `matpower.org-static` git repo
+    - update `MOST-manual.pdf` symlink on `https://matpower.org/docs/` to point
+      to new `MOST-manual-x.x.pdf` (replaces existing current version)
+      - `cd dev/projects/matpower.org-static/docs`
+      - `rm MOST-manual.pdf`
+      - `ln -s ./MOST-manual-x.x.pdf MOST-manual.pdf`
+    - commit & push, then pull to matpower.org
+  - upload `MOST-manual-x.x.pdf` to Zenodo and finish entry for "New Version"
+    - update:
+      - Publication date
+      - Version
+      - Identifiers:
+        - version number in "identical to"
+- Add link on `https://matpower.org/doc/manuals/` page
 
 
 Release

@@ -141,12 +141,12 @@ citing both the 2011 MATPOWER paper and the 2013 MOST paper.
 The [MATPOWER Optimal Scheduling Tool (MOST) User's Manual][7] should
 also be cited explicitly in work that refers to or is derived from its
 content. The citation and DOI can be version-specific or general, as
-appropriate. For version 1.2, use:
+appropriate. For version 1.3, use:
 
 >   R. D. Zimmerman, C. E. Murillo-Sanchez. *MATPOWER Optimal Scheduling
-    Tool (MOST) User's Manual, Version 1.2*. 2022. [Online].
-    Available: https://matpower.org/docs/MOST-manual-1.2.pdf  
-    doi: [10.5281/zenodo.7434827](https://doi.org/10.5281/zenodo.7434827)
+    Tool (MOST) User's Manual, Version 1.3*. 2024. [Online].
+    Available: https://matpower.org/docs/MOST-manual-1.3.pdf  
+    doi: [10.5281/zenodo.11177189](https://doi.org/10.5281/zenodo.11177189)
 
 For a version non-specific citation, use the following citation and DOI,
 with *\<YEAR\>* replaced by the year of the most recent release:
