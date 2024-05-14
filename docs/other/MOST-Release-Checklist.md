@@ -23,7 +23,7 @@ Pre-release
   - `docs/relnotes/MOST-Release-Notes-#.#.md`
   - `docs/src/MOST-manual/MOST-manual.tex`
     - title page
-    - copyright
+    - copyright (front page and LICENSE text)
     - Appendix B Release History
     - `\mostver`  (update `\mpver`, `\mptestver`, `\mipsver`, `\mpomver` too)
   - Sphinx docs
@@ -82,7 +82,7 @@ Pre-release
 - Commit all changes to `prep-for-release`.
 - Push `prep-for-release` to GitHub.
 - Make sure CI checks are ok.
-- Make copy named `MOST-manual-x.x.pdf`
+- Make copy of `docs/MOST-manual.pdf` named `MOST-manual-x.x.pdf`
   - copy to `docs` directory of `matpower.org-static` git repo
     - update `MOST-manual.pdf` symlink on `https://matpower.org/docs/` to point
       to new `MOST-manual-x.x.pdf` (replaces existing current version)
