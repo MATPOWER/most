@@ -2,6 +2,16 @@ Change history for MOST
 =======================
 
 
+since 1.3
+---------
+
+#### 5/29/24
+  - Fix [issue #45][12] where `most()` does not properly handle cases with
+    contingencies defined only in some periods/scenarios.
+    *Thanks to Stefano Nicolin.*
+  - Update `most_summary()` to skip display of non-existent contingencies.
+
+
 Version 1.3 - *May 10, 2024*
 ----------------------------
 
@@ -338,3 +348,4 @@ Version 1.0 - *Jun 1, 2016*
 [9]: https://github.com/MATPOWER/most/issues/37
 [10]: https://github.com/MATPOWER/most/issues/39
 [11]: https://github.com/MATPOWER/mp-opt-model
+[12]: https://github.com/MATPOWER/most/issues/45
