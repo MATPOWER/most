@@ -78,7 +78,7 @@ ns = mdo.idx.ns;
 psi = NaN(nt, nj_max, nc_max+1);
 Pg = NaN(ng, nt, nj_max, nc_max+1);
 Pd = NaN(nb, nt, nj_max, nc_max+1);
-if mdo.idx.ntramp
+if mdo.idx.ntramp && isfield(mdo.results, 'Rrp')
     Rup = mdo.results.Rrp;
     Rdn = mdo.results.Rrm;
 else
@@ -162,7 +162,7 @@ if verbose
     fprintf('\n');
 
     print_most_summary_section('PG', 'Gen', nt, nj_max, nc, Pg);
-    if mdo.idx.ntramp
+    if mdo.idx.ntramp && isfield(mdo.results, 'Rrp')
         print_most_summary_section('RAMP UP', 'Gen', nt, 1, 0, Rup);
         print_most_summary_section('RAMP DOWN', 'Gen', nt, 1, 0, Rdn);
     end

@@ -5,6 +5,9 @@ Change history for MOST
 since 1.3
 ---------
 
+#### 9/12/24
+  - Fix issue with `most_summary()` when ramp results are missing.
+
 #### 5/29/24
   - Fix [issue #45][12] where `most()` does not properly handle cases with
     contingencies defined only in some periods/scenarios.
