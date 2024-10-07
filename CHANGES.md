@@ -5,6 +5,10 @@ Change history for MOST
 since 1.3
 ---------
 
+#### 10/7/24
+  - Tweak tests (again) to avoid warnings and presolve bug with HiGHS-based
+    `linprog` and `intlinprog` in Optimization Toolbox R2024b.
+
 #### 9/12/24
   - Fix issue with `most_summary()` when ramp results are missing.
 
