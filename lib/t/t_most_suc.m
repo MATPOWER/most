@@ -8,7 +8,7 @@ function t_most_suc(quiet, create_plots, create_pdfs, savedir)
 %   E.g. t_most_suc(0, 1, 1, '~/Downloads/suc_plots')
 
 %   MOST
-%   Copyright (c) 2015-2024, Power Systems Engineering Research Center (PSERC)
+%   Copyright (c) 2015-2025, Power Systems Engineering Research Center (PSERC)
 %   by Ray Zimmerman, PSERC Cornell
 %
 %   This file is part of MOST.
@@ -36,8 +36,8 @@ if create_plots
     pp = 0;     %% plot counter
 end
 
-solvers = {'CPLEX', 'GLPK', 'GUROBI', 'MOSEK', 'OT'};
-fcn = {'cplex', 'glpk', 'gurobi', 'mosek', 'intlinprog'};
+solvers = {'CPLEX', 'GLPK', 'GUROBI', 'MOSEK', 'OT', 'HIGHS'};
+fcn = {'cplex', 'glpk', 'gurobi', 'mosek', 'intlinprog', 'highs'};
 % solvers = {'CPLEX'};
 % fcn = {'cplex'};
 % solvers = {'OT'};
