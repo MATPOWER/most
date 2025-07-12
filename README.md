@@ -72,6 +72,7 @@ resulting `most` directory. Then add the following directories to your
 MATLAB or Octave path:
  *  `<MOST>/lib`
  *  `<MOST>/lib/t`
+ *  `<MOST>/examples`
 
 It is important that they appear before MATPOWER in your path if you want
 to use this version of MOST, rather than the one included with MATPOWER.
