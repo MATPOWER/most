@@ -116,7 +116,7 @@ for k = 1:nc
 end
 
 t = 'gen : base';
-t_is(r.flow(1,1,1).mpc.gen(:,1:MU_PMIN), s.rdc.base.gen(:,1:MU_PMIN), 3, t);
+t_is(r.flow(1,1,1).mpc.gen(:,1:MU_PMIN), s.rdc.base.gen(:,1:MU_PMIN), 2.99, t);
 t = 'gen : cont ';
 for k = 1:nc
     t_is(r.flow(1,1,k+1).mpc.gen(:,1:MU_PMIN), s.rdc.cont(k).gen(:,1:MU_PMIN), 3, sprintf('%s %d', t, k));

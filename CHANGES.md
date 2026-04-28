@@ -5,6 +5,10 @@ Change history for MOST
 since 1.3.1
 -----------
 
+#### 4/28/26
+  - Tweak test `t_most_3b_1_1_2()` to avoid spurious failure with MATLAB
+    R2026a with Optimization Toolbox (HiGHS 1.11.0).
+
 #### 2/16/26
   - Allow absolute paths for file inputs to `loadgenericdata()` and the
     functions that call it, e.g. `addstorage()`, `addwind()`, `getprofiles()`,
