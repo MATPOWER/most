@@ -8,7 +8,7 @@ Getting Involved
 [MOST][1] and [MATPOWER][2] are community efforts and your involvement
 is greatly appreciated.
 We are always looking for help in identifying and fixing bugs, writing test
-cases, improving documentation, answering queries on the mailing lists,
+cases, improving documentation, answering queries on [MATPOWER Discussions][5],
 enhancing existing functionality and implementing new features that fit
 within the general scope of the project.
 
@@ -29,12 +29,13 @@ This repository is also included in the core MATPOWER repository as a
 subrepository using [`git subrepo`][4].
 
 
-Mailing Lists
--------------
+MATPOWER Discussions
+--------------------
 
-Your participation is welcomed on the two mailing lists for MATPOWER and MOST
-users and developers, [MATPOWER-L][5] and [MATPOWER-DEV-L][6], respectively.
-We can always use help in answering questions from newer users.
+Your participation is welcomed on [MATPOWER Discussions][5] on GitHub, a place
+to connect with other members of the MATPOWER community to ask questions, share
+ideas, and engage with other MATPOWER users and developers. MATPOWER Discussions
+replaces the legacy MATPOWER-L and MATPOWER-DEV-L [e-mail lists][6].
 
 
 Reporting a Bug
@@ -47,10 +48,8 @@ a mistake in the documentation, please report it.
 
 1. **Confirm it is a bug.** You should be able to demonstrate that it
 is an error caused by the code in this repository. If it is simply that
-you do not understand a result you are getting, ask a question on the
-[MATPOWER discussion mailing list][5] instead of submitting an issue
-*(after searching [the archives][8] to see if your question has already
-been answered, of course)*.
+you do not understand a result you are getting, ask a question on
+[MATPOWER Discussions][5] instead of submitting an issue.
 
 2. **Check if it has already been reported or fixed.** Make sure the bug
 still exists by attempting to reproduce it using the latest `master`
@@ -93,8 +92,8 @@ Submitting Additions or Modifications to the Code
 Code contributions are a great help and are always welcome. This includes
 bug fixes, enhancements to existing functionality, new features or tests,
 and even edits to the included documentation. It is always a good idea to
-discuss your ideas first on the [MATPOWER developer mailing list][6], especially
-for larger or more complex contributions.
+discuss your ideas first on [MATPOWER Discussions][5], especially for larger
+or more complex contributions.
 
 Contributions should be submitted as pull requests, as described below.
 Before submitting your pull request, please make sure you have tested
@@ -307,10 +306,9 @@ the power systems community. **Thank you!**
 [2]: https://github.com/MATPOWER/matpower
 [3]: https://github.com/MATPOWER/mptest
 [4]: https://github.com/ingydotnet/git-subrepo
-[5]: https://matpower.org/mailing-lists/#discusslist
-[6]: https://matpower.org/mailing-lists/#devlist
+[5]: https://github.com/MATPOWER/matpower/discussions
+[6]: https://matpower.org/mailing-lists
 [7]: https://github.com/MATPOWER/most/issues
-[8]: https://www.mail-archive.com/matpower-l@cornell.edu/
 [9]: https://github.com/MATPOWER/matpower/issues
 [10]: https://github.com/MATPOWER/matpower/blob/master/docs/MATPOWER-dev-guide.md
 [11]: https://help.github.com/articles/set-up-git/
