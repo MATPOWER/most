@@ -8,7 +8,7 @@ function t_most_sp(quiet, create_plots, create_pdfs, savedir)
 %   E.g. t_most_sp(0, 1, 1, '~/Downloads/sp_plots')
 
 %   MOST
-%   Copyright (c) 2015-2024, Power Systems Engineering Research Center (PSERC)
+%   Copyright (c) 2015-2026, Power Systems Engineering Research Center (PSERC)
 %   by Ray Zimmerman, PSERC Cornell
 %
 %   This file is part of MOST.
@@ -111,10 +111,10 @@ end
 
 %%-----  economic dispatch (no network)  -----
 if verbose
-    fprintf('\n\n');
-    fprintf('--------------------------------------------\n');
-    fprintf('-----  economic dispatch (no network)  -----\n');
-    fprintf('--------------------------------------------\n');
+    mp_printf('\n\n');
+    mp_printf('--------------------------------------------\n');
+    mp_printf('-----  economic dispatch (no network)  -----\n');
+    mp_printf('--------------------------------------------\n');
 end
 t = 'economic dispatch (no network) : runopf ';
 mpc.branch(:, RATE_A) = 0;
@@ -147,10 +147,10 @@ end
 
 %%-----  DC OPF  -----
 if verbose
-    fprintf('\n\n');
-    fprintf('--------------------------------------------\n');
-    fprintf('-----              DC OPF              -----\n');
-    fprintf('--------------------------------------------\n');
+    mp_printf('\n\n');
+    mp_printf('--------------------------------------------\n');
+    mp_printf('-----              DC OPF              -----\n');
+    mp_printf('--------------------------------------------\n');
 end
 t = 'DC OPF : runopf ';
 mpc = mpc0;
@@ -185,10 +185,10 @@ end
 
 %%-----  economic dispatch (w/reserves)  -----
 if verbose
-    fprintf('\n\n');
-    fprintf('--------------------------------------------\n');
-    fprintf('-----  economic dispatch (w/reserves)  -----\n');
-    fprintf('--------------------------------------------\n');
+    mp_printf('\n\n');
+    mp_printf('--------------------------------------------\n');
+    mp_printf('-----  economic dispatch (w/reserves)  -----\n');
+    mp_printf('--------------------------------------------\n');
 end
 t = 'economic dispatch (w/reserves) : runopf ';
 mpc = mpc0;
@@ -228,10 +228,10 @@ end
 
 %%-----  DC OPF  -----
 if verbose
-    fprintf('\n\n');
-    fprintf('--------------------------------------------\n');
-    fprintf('-----        DC OPF (w/reserves)       -----\n');
-    fprintf('--------------------------------------------\n');
+    mp_printf('\n\n');
+    mp_printf('--------------------------------------------\n');
+    mp_printf('-----        DC OPF (w/reserves)       -----\n');
+    mp_printf('--------------------------------------------\n');
 end
 t = 'DC OPF (w/reserves) : runopf ';
 mpc = mpc0;
@@ -272,10 +272,10 @@ end
 
 %%-----  DC OPF w/contingencies  -----
 if verbose
-    fprintf('\n\n');
-    fprintf('--------------------------------------------\n');
-    fprintf('-----     DC OPF (w/contingencies)     -----\n');
-    fprintf('--------------------------------------------\n');
+    mp_printf('\n\n');
+    mp_printf('--------------------------------------------\n');
+    mp_printf('-----     DC OPF (w/contingencies)     -----\n');
+    mp_printf('--------------------------------------------\n');
 end
 t = 'DC OPF (w/contingencies) : runopf ';
 ff = [-443115; -439750; -297000];
@@ -445,9 +445,9 @@ r = c3sopf(mpc0, offers, contab0, mpopt);
 t_ok(r.success, [t 'success']);
 t_is(r.opf_results.f, -444525.605052, 5, [t 'f']);
 rr = r.cont(1);
-% fprintf('[%.7f; %.7f; %.7f; %.7f; %.7f]\n', rr.gen(:, PG));
-% fprintf('[%.7f; %.7f; %.7f]\n', rr.bus(:, LAM_P));
-% fprintf('[%.7f; %.7f; %.7f]\n', rr.branch(:, MU_SF) + rr.branch(:, MU_ST));
+% mp_printf('[%.7f; %.7f; %.7f; %.7f; %.7f]\n', rr.gen(:, PG));
+% mp_printf('[%.7f; %.7f; %.7f]\n', rr.bus(:, LAM_P));
+% mp_printf('[%.7f; %.7f; %.7f]\n', rr.branch(:, MU_SF) + rr.branch(:, MU_ST));
 t_is(rr.gen(:, PG), [128.7823267; 141.2176733; 180; -450; 0], 6, [t 'Pg 1']);
 t_is(rr.bus(:, LAM_P), [4.4809852; 7.2115891; 9.9421931], 7, [t 'lam P 1']);
 t_is(rr.branch(:, MU_SF) + rr.branch(:, MU_ST), [0; 8.1918119; 0], 7, [t 'mu flow 1']);
@@ -469,9 +469,9 @@ mdo = most(mdi, mpopt);
 t_ok(mdo.QP.exitflag > 0, [t 'success']);
 t_is(mdo.QP.f, -444525.605052, 5, [t 'f']);
 rr = mdo.flow(1,1,1).mpc;
-% fprintf('[%.7f; %.7f; %.7f; %.7f; %.7f]\n', rr.gen(:, PG));
-% fprintf('[%.7f; %.7f; %.7f]\n', rr.bus(:, LAM_P));
-% fprintf('[%.7f; %.7f; %.7f]\n', rr.branch(:, MU_SF) + rr.branch(:, MU_ST));
+% mp_printf('[%.7f; %.7f; %.7f; %.7f; %.7f]\n', rr.gen(:, PG));
+% mp_printf('[%.7f; %.7f; %.7f]\n', rr.bus(:, LAM_P));
+% mp_printf('[%.7f; %.7f; %.7f]\n', rr.branch(:, MU_SF) + rr.branch(:, MU_ST));
 t_is(rr.gen(:, PG), [128.7823267; 141.2176733; 180; -450; 0], 7, [t 'Pg 1']);
 t_is(rr.bus(:, LAM_P), [4.4809852; 7.2115891; 9.9421931], 7, [t 'lam P 1']);
 t_is(rr.branch(:, MU_SF) + rr.branch(:, MU_ST), [0; 8.1918119; 0], 7, [t 'mu flow 1']);
@@ -481,9 +481,9 @@ if create_plots
 end
 
 rr = mdo.flow(1,2,1).mpc;
-% fprintf('[%.7f; %.7f; %.7f; %.7f; %.7f]\n', rr.gen(:, PG));
-% fprintf('[%.7f; %.7f; %.7f]\n', rr.bus(:, LAM_P));
-% fprintf('[%.7f; %.7f; %.7f]\n', rr.branch(:, MU_SF) + rr.branch(:, MU_ST));
+% mp_printf('[%.7f; %.7f; %.7f; %.7f; %.7f]\n', rr.gen(:, PG));
+% mp_printf('[%.7f; %.7f; %.7f]\n', rr.bus(:, LAM_P));
+% mp_printf('[%.7f; %.7f; %.7f]\n', rr.branch(:, MU_SF) + rr.branch(:, MU_ST));
 t_is(rr.gen(:, PG), [128.7823267; 135.6088362; 135.6088370; -450; 50], 5, [t 'Pg 2']);
 t_is(rr.bus(:, LAM_P), [18.5157455; 18.5157455; 18.5157455], 6, [t 'lam P 2']);
 t_is(rr.branch(:, MU_SF) + rr.branch(:, MU_ST), [0; 0; 0], 6, [t 'mu flow 2']);
@@ -493,9 +493,9 @@ if create_plots
 end
 
 rr = mdo.flow(1,3,1).mpc;
-% fprintf('[%.7f; %.7f; %.7f; %.7f; %.7f]\n', rr.gen(:, PG));
-% fprintf('[%.7f; %.7f; %.7f]\n', rr.bus(:, LAM_P));
-% fprintf('[%.7f; %.7f; %.7f]\n', rr.branch(:, MU_SF) + rr.branch(:, MU_ST));
+% mp_printf('[%.7f; %.7f; %.7f; %.7f; %.7f]\n', rr.gen(:, PG));
+% mp_printf('[%.7f; %.7f; %.7f]\n', rr.bus(:, LAM_P));
+% mp_printf('[%.7f; %.7f; %.7f]\n', rr.branch(:, MU_SF) + rr.branch(:, MU_ST));
 t_is(rr.gen(:, PG), [128.7823267; 86.9726845; 134.2449888; -450; 100], 5, [t 'Pg 3']);
 t_is(rr.bus(:, LAM_P), [2.7597346; 2.7597346; 2.7597346], 6, [t 'lam P 3']);
 t_is(rr.branch(:, MU_SF) + rr.branch(:, MU_ST), [0; 0; 0], 7, [t 'mu flow 3']);
@@ -520,9 +520,9 @@ t_ok(mdo.QP.exitflag > 0, [t 'success']);
 t_is(mdo.QP.f, -438182.429, 5, [t 'f']);
 
 rr = mdo.flow(1,1,1).mpc;
-% fprintf('[%.7f; %.7f; %.7f; %.7f; %.7f]\n', rr.gen(:, PG));
-% fprintf('[%.7f; %.7f; %.7f]\n', rr.bus(:, LAM_P));
-% fprintf('[%.7f; %.7f; %.7f]\n', rr.branch(:, MU_SF) + rr.branch(:, MU_ST));
+% mp_printf('[%.7f; %.7f; %.7f; %.7f; %.7f]\n', rr.gen(:, PG));
+% mp_printf('[%.7f; %.7f; %.7f]\n', rr.bus(:, LAM_P));
+% mp_printf('[%.7f; %.7f; %.7f]\n', rr.branch(:, MU_SF) + rr.branch(:, MU_ST));
 t_is(rr.gen(:, PG), [137.6930222; 132.3069578; 180; -450; 0], 4, [t 'Pg 1 base']);
 t_is(rr.bus(:, LAM_P), [3.9958603; 5.1404304; 6.2850005], 3, [t 'lam P 1 base']);
 t_is(rr.branch(:, MU_SF) + rr.branch(:, MU_ST), [0; 3.4337103; 0], 2, [t 'mu flow 1 base']);
@@ -532,9 +532,9 @@ if create_plots
 end
 
 rr = mdo.flow(1,1,2).mpc;
-% fprintf('[%.7f; %.7f; %.7f; %.7f; %.7f]\n', rr.gen(:, PG));
-% fprintf('[%.7f; %.7f; %.7f]\n', rr.bus(:, LAM_P));
-% fprintf('[%.7f; %.7f; %.7f]\n', rr.branch(:, MU_SF) + rr.branch(:, MU_ST));
+% mp_printf('[%.7f; %.7f; %.7f; %.7f; %.7f]\n', rr.gen(:, PG));
+% mp_printf('[%.7f; %.7f; %.7f]\n', rr.bus(:, LAM_P));
+% mp_printf('[%.7f; %.7f; %.7f]\n', rr.branch(:, MU_SF) + rr.branch(:, MU_ST));
 t_is(rr.gen(:, PG), [137.6930928; 0; 312.3069041; -450; 0], 5, [t 'Pg 1 1']);
 t_is(rr.bus(:, LAM_P), [2.0945890; 2.0945890; 2.0945892], 6, [t 'lam P 1 1']);
 t_is(rr.branch(:, MU_SF) + rr.branch(:, MU_ST), [0; 0; 0], 6, [t 'mu flow 1 1']);
@@ -544,9 +544,9 @@ if create_plots
 end
 
 rr = mdo.flow(1,1,3).mpc;
-% fprintf('[%.7f; %.7f; %.7f; %.7f; %.7f]\n', rr.gen(:, PG));
-% fprintf('[%.7f; %.7f; %.7f]\n', rr.bus(:, LAM_P));
-% fprintf('[%.7f; %.7f; %.7f]\n', rr.branch(:, MU_SF) + rr.branch(:, MU_ST));
+% mp_printf('[%.7f; %.7f; %.7f; %.7f; %.7f]\n', rr.gen(:, PG));
+% mp_printf('[%.7f; %.7f; %.7f]\n', rr.bus(:, LAM_P));
+% mp_printf('[%.7f; %.7f; %.7f]\n', rr.branch(:, MU_SF) + rr.branch(:, MU_ST));
 t_is(rr.gen(:, PG), [137.6930139; 45.2766586; 117.0303189; -300; 0], 4, [t 'Pg 1 2']);
 t_is(rr.bus(:, LAM_P), [0.0574664; 0.0574664; 6.3462102], 6, [t 'lam P 1 2']);
 t_is(rr.branch(:, MU_SF) + rr.branch(:, MU_ST), [0; 0; 6.2887437], 6, [t 'mu flow 1 2']);
@@ -556,9 +556,9 @@ if create_plots
 end
 
 rr = mdo.flow(1,2,1).mpc;
-% fprintf('[%.7f; %.7f; %.7f; %.7f; %.7f]\n', rr.gen(:, PG));
-% fprintf('[%.7f; %.7f; %.7f]\n', rr.bus(:, LAM_P));
-% fprintf('[%.7f; %.7f; %.7f]\n', rr.branch(:, MU_SF) + rr.branch(:, MU_ST));
+% mp_printf('[%.7f; %.7f; %.7f; %.7f; %.7f]\n', rr.gen(:, PG));
+% mp_printf('[%.7f; %.7f; %.7f]\n', rr.bus(:, LAM_P));
+% mp_printf('[%.7f; %.7f; %.7f]\n', rr.branch(:, MU_SF) + rr.branch(:, MU_ST));
 t_is(rr.gen(:, PG), [137.6929448; 131.1533869; 131.1535795; -450; 50], 4, [t 'Pg 2 base']);
 t_is(rr.bus(:, LAM_P), [16.1166803; 16.1166890; 16.1166978], 6, [t 'lam P 2 base']);
 t_is(rr.branch(:, MU_SF) + rr.branch(:, MU_ST), [0; 0; 0], 4, [t 'mu flow 2 base']);
@@ -568,9 +568,9 @@ if create_plots
 end
 
 rr = mdo.flow(1,2,2).mpc;
-% fprintf('[%.7f; %.7f; %.7f; %.7f; %.7f]\n', rr.gen(:, PG));
-% fprintf('[%.7f; %.7f; %.7f]\n', rr.bus(:, LAM_P));
-% fprintf('[%.7f; %.7f; %.7f]\n', rr.branch(:, MU_SF) + rr.branch(:, MU_ST));
+% mp_printf('[%.7f; %.7f; %.7f; %.7f; %.7f]\n', rr.gen(:, PG));
+% mp_printf('[%.7f; %.7f; %.7f]\n', rr.bus(:, LAM_P));
+% mp_printf('[%.7f; %.7f; %.7f]\n', rr.branch(:, MU_SF) + rr.branch(:, MU_ST));
 t_is(rr.gen(:, PG), [137.6930711; 0; 262.3068485; -450; 50], 4, [t 'Pg 2 1']);
 t_is(rr.bus(:, LAM_P), [2.1488905; 2.1488905; 2.1488907], 6, [t 'lam P 2 1']);
 t_is(rr.branch(:, MU_SF) + rr.branch(:, MU_ST), [0; 0; 0], 6, [t 'mu flow 2 1']);
@@ -580,9 +580,9 @@ if create_plots
 end
 
 rr = mdo.flow(1,2,3).mpc;
-% fprintf('[%.7f; %.7f; %.7f; %.7f; %.7f]\n', rr.gen(:, PG));
-% fprintf('[%.7f; %.7f; %.7f]\n', rr.bus(:, LAM_P));
-% fprintf('[%.7f; %.7f; %.7f]\n', rr.branch(:, MU_SF) + rr.branch(:, MU_ST));
+% mp_printf('[%.7f; %.7f; %.7f; %.7f; %.7f]\n', rr.gen(:, PG));
+% mp_printf('[%.7f; %.7f; %.7f]\n', rr.bus(:, LAM_P));
+% mp_printf('[%.7f; %.7f; %.7f]\n', rr.branch(:, MU_SF) + rr.branch(:, MU_ST));
 t_is(rr.gen(:, PG), [137.6929611; 32.3066174; 117.0299763; -300; 12.9704443], 6, [t 'Pg 2 2']);
 t_is(rr.bus(:, LAM_P), [0; 0; 27.3075797], 6, [t 'lam P 2 2']);
 t_is(rr.branch(:, MU_SF) + rr.branch(:, MU_ST), [0; 0; 27.3075797], 6, [t 'mu flow 2 2']);
@@ -592,9 +592,9 @@ if create_plots
 end
 
 rr = mdo.flow(1,3,1).mpc;
-% fprintf('[%.7f; %.7f; %.7f; %.7f; %.7f]\n', rr.gen(:, PG));
-% fprintf('[%.7f; %.7f; %.7f]\n', rr.bus(:, LAM_P));
-% fprintf('[%.7f; %.7f; %.7f]\n', rr.branch(:, MU_SF) + rr.branch(:, MU_ST));
+% mp_printf('[%.7f; %.7f; %.7f; %.7f; %.7f]\n', rr.gen(:, PG));
+% mp_printf('[%.7f; %.7f; %.7f]\n', rr.bus(:, LAM_P));
+% mp_printf('[%.7f; %.7f; %.7f]\n', rr.branch(:, MU_SF) + rr.branch(:, MU_ST));
 t_is(rr.gen(:, PG), [137.6929341; 95.2771176; 117.0299561; -450; 100], 4, [t 'Pg 3 base']);
 t_is(rr.bus(:, LAM_P), [2.7209142; 2.7209144; 2.7209147], 6, [t 'lam P 3 base']);
 t_is(rr.branch(:, MU_SF) + rr.branch(:, MU_ST), [0; 0; 0], 5, [t 'mu flow 3 base']);
@@ -604,9 +604,9 @@ if create_plots
 end
 
 rr = mdo.flow(1,3,2).mpc;
-% fprintf('[%.7f; %.7f; %.7f; %.7f; %.7f]\n', rr.gen(:, PG));
-% fprintf('[%.7f; %.7f; %.7f]\n', rr.bus(:, LAM_P));
-% fprintf('[%.7f; %.7f; %.7f]\n', rr.branch(:, MU_SF) + rr.branch(:, MU_ST));
+% mp_printf('[%.7f; %.7f; %.7f; %.7f; %.7f]\n', rr.gen(:, PG));
+% mp_printf('[%.7f; %.7f; %.7f]\n', rr.bus(:, LAM_P));
+% mp_printf('[%.7f; %.7f; %.7f]\n', rr.branch(:, MU_SF) + rr.branch(:, MU_ST));
 t_is(rr.gen(:, PG), [137.6930070; 0.0000000; 212.3070512; -450; 100], 4, [t 'Pg 3 1']);
 t_is(rr.bus(:, LAM_P), [0.4042034; 0.4042034; 0.4042036], 6, [t 'lam P 3 1']);
 t_is(rr.branch(:, MU_SF) + rr.branch(:, MU_ST), [0; 0; 0], 6, [t 'mu flow 3 1']);
@@ -616,9 +616,9 @@ if create_plots
 end
 
 rr = mdo.flow(1,3,3).mpc;
-% fprintf('[%.7f; %.7f; %.7f; %.7f; %.7f]\n', rr.gen(:, PG));
-% fprintf('[%.7f; %.7f; %.7f]\n', rr.bus(:, LAM_P));
-% fprintf('[%.7f; %.7f; %.7f]\n', rr.branch(:, MU_SF) + rr.branch(:, MU_ST));
+% mp_printf('[%.7f; %.7f; %.7f; %.7f; %.7f]\n', rr.gen(:, PG));
+% mp_printf('[%.7f; %.7f; %.7f]\n', rr.bus(:, LAM_P));
+% mp_printf('[%.7f; %.7f; %.7f]\n', rr.branch(:, MU_SF) + rr.branch(:, MU_ST));
 t_is(rr.gen(:, PG), [137.6930131; 32.3071796; 117.0302086; -300; 12.9695914], 5, [t 'Pg 3 2']);
 t_is(rr.bus(:, LAM_P), [0; 0; 6.3462102], 6, [t 'lam P 3 2']);
 t_is(rr.branch(:, MU_SF) + rr.branch(:, MU_ST), [0; 0; 6.3462102], 6, [t 'mu flow 3 2']);

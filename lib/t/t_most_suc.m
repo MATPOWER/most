@@ -8,7 +8,7 @@ function t_most_suc(quiet, create_plots, create_pdfs, savedir)
 %   E.g. t_most_suc(0, 1, 1, '~/Downloads/suc_plots')
 
 %   MOST
-%   Copyright (c) 2015-2025, Power Systems Engineering Research Center (PSERC)
+%   Copyright (c) 2015-2026, Power Systems Engineering Research Center (PSERC)
 %   by Ray Zimmerman, PSERC Cornell
 %
 %   This file is part of MOST.
@@ -286,7 +286,7 @@ for s = 1:length(solvers)
 
         t = sprintf('%s : + storage : ', solvers{s});
         if mpopt.out.all
-            fprintf('Add storage\n');
+            mp_printf('Add storage\n');
         end
         [iess, mpc, xgd, sd] = addstorage('ex_storage', mpc, xgd);
         mdi = loadmd(mpc, transmat_sf, xgd, sd, 'ex_contab', profiles_s);

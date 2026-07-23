@@ -44,7 +44,7 @@ function mso = most_summary(mdo)
 % ``mdo.qp.opt.verbose`` flag.
 
 %   MOST
-%   Copyright (c) 2015-2024, Power Systems Engineering Research Center (PSERC)
+%   Copyright (c) 2015-2026, Power Systems Engineering Research Center (PSERC)
 %   by Ray Zimmerman, PSERC Cornell
 %
 %   This file is part of MOST.
@@ -132,34 +132,34 @@ ms = struct(...
 
 %% print results
 if verbose
-    fprintf('\n========== OBJECTIVE  ==========\n');
-    fprintf('f = %.12g\n', ms.f);
+    mp_printf('\n========== OBJECTIVE  ==========\n');
+    mp_printf('f = %.12g\n', ms.f);
 
-    fprintf('\n========== GEN_STATUS ==========\n');
-    fprintf(' Gen ');
+    mp_printf('\n========== GEN_STATUS ==========\n');
+    mp_printf(' Gen ');
     for t = 1:nt
-        fprintf('   t =%2d ', t);
+        mp_printf('   t =%2d ', t);
     end
-    fprintf('\n');
-    fprintf('----');
+    mp_printf('\n');
+    mp_printf('----');
     for t = 1:nt
-        fprintf('  -------');
+        mp_printf('  -------');
     end
-    fprintf('\n');
+    mp_printf('\n');
     for i = 1:ng
-        fprintf('%4d', i);
-%         fprintf('%9d', u(i, :));
+        mp_printf('%4d', i);
+%         mp_printf('%9d', u(i, :));
         for t = 1:nt
             qty = u(i, t);
             if abs(qty) > tol
-                fprintf('      1  ');
+                mp_printf('      1  ');
             else
-                fprintf('    --0--');
+                mp_printf('    --0--');
             end
         end
-        fprintf('\n');
+        mp_printf('\n');
     end
-    fprintf('\n');
+    mp_printf('\n');
 
     print_most_summary_section('PG', 'Gen', nt, nj_max, nc, Pg);
     if mdo.idx.ntramp && isfield(mdo.results, 'Rrp')
@@ -188,46 +188,46 @@ if nargin < 7
 end
 n = size(data, 1);
 bl = blanks(fix((12-length(label)) / 2));
-fprintf('\n==========%-12s==========\n', sprintf('%s%s', bl, label));
+mp_printf('\n==========%-12s==========\n', sprintf('%s%s', bl, label));
 if any(data(:))
     for j = 1:nj_max
         nc_max = max(nc(:,j));
         for k = 1:nc_max+1
             if nj_max > 1 || nc_max > 0
-                fprintf('\nSCENARIO %d', j);
+                mp_printf('\nSCENARIO %d', j);
                 if nc_max == 0
-                    fprintf('\n');
+                    mp_printf('\n');
                 elseif k == 1
-                    fprintf(', base case\n');
+                    mp_printf(', base case\n');
                 else
-                    fprintf(', contingency %d\n', k-1);
+                    mp_printf(', contingency %d\n', k-1);
                 end
             end
-            fprintf('%4s ', section_type);
+            mp_printf('%4s ', section_type);
             for t = 1:nt
-                fprintf('   t =%2d ', t);
+                mp_printf('   t =%2d ', t);
             end
-            fprintf('\n');
-            fprintf('----');
+            mp_printf('\n');
+            mp_printf('----');
             for t = 1:nt
-                fprintf('  -------');
+                mp_printf('  -------');
             end
-            fprintf('\n');
+            mp_printf('\n');
             for i = 1:n
-                fprintf('%4d', i);
+                mp_printf('%4d', i);
                 for t = 1:nt
                     qty = data(i, t, j, k);
                     if abs(qty) > tol
-                        fprintf('%9.2f', qty);
+                        mp_printf('%9.2f', qty);
                     else
-                        fprintf('      -  ');
+                        mp_printf('      -  ');
                     end
                 end
-                fprintf('\n');
+                mp_printf('\n');
             end
         end
     end
 else
-    fprintf('All zeros.\n');
+    mp_printf('All zeros.\n');
 end
-fprintf('\n');
+mp_printf('\n');

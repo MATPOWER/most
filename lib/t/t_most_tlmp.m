@@ -2,7 +2,7 @@ function t_most_tlmp(quiet)
 % t_most_tlmp - Tests of TLMP for ramping and storage
 
 %   MOST
-%   Copyright (c) 2022-2024, Power Systems Engineering Research Center (PSERC)
+%   Copyright (c) 2022-2026, Power Systems Engineering Research Center (PSERC)
 %   by Ray Zimmerman, PSERC Cornell
 %
 %   This file is part of MOST.
@@ -41,7 +41,7 @@ end
 %%-----  TLMP Example 1  -----
 t = 'example 1 : ';
 if verbose > 1
-    fprintf('\n--------------------  TLMP Example 1  --------------------\n');
+    mp_printf('\n--------------------  TLMP Example 1  --------------------\n');
 end
 mpc = loadcase('t_case_tlmp');
 xgd_table.colnames = {
@@ -84,27 +84,27 @@ t_is(mdo.results.GenPrices, eLMP, 5, [t 'LMP']);
 t_is(mdo.results.GenTLMP, eTLMP, 5, [t 'TLMP']);
 
 if verbose
-    fprintf('    ');
+    mp_printf('    ');
     for t = 1:nt
-        fprintf('%-20s', sprintf('   T=%d', t));
+        mp_printf('%-20s', sprintf('   T=%d', t));
     end
-    fprintf('\n');
+    mp_printf('\n');
     for g = 1:2
-        fprintf('G%d  ', g);
+        mp_printf('G%d  ', g);
         for t = 1:nt
-            fprintf('%-20s', ...
+            mp_printf('%-20s', ...
                 sprintf('(%.4g, %.4g, %.4g)', ms.Pg(g, t), ...
                                         mdo.results.GenPrices(g, t), ...
                                         mdo.results.GenTLMP(g, t) ));
         end
-        fprintf('\n');
+        mp_printf('\n');
     end
 end
 
 %%-----  TLMP Example 2  -----
 t = 'example 2';
 if verbose > 1
-    fprintf('\n--------------------  TLMP Example 2  --------------------\n');
+    mp_printf('\n--------------------  TLMP Example 2  --------------------\n');
 end
 load_profile = struct( ...
     'type', 'mpcData', ...
@@ -139,20 +139,20 @@ for w = 1:2
     t_is(mdo.results.GenTLMP, eTLMP{w}, 5, sprintf('%s window %d : %s', t, w, 'TLMP'));
 
     if verbose
-        fprintf('    ');
+        mp_printf('    ');
         for t = 1:nt
-            fprintf('%-20s', sprintf('   T=%d', t));
+            mp_printf('%-20s', sprintf('   T=%d', t));
         end
-        fprintf('\n');
+        mp_printf('\n');
         for g = 1:2
-            fprintf('G%d  ', g);
+            mp_printf('G%d  ', g);
             for t = 1:nt
-                fprintf('%-20s', ...
+                mp_printf('%-20s', ...
                     sprintf('(%.4g, %.4g, %.4g)', ms.Pg(g, t), ...
                                             mdo.results.GenPrices(g, t), ...
                                             mdo.results.GenTLMP(g, t) ));
             end
-            fprintf('\n');
+            mp_printf('\n');
         end
     end
 end
@@ -161,7 +161,7 @@ end
 %%-----  TLMP Example 3  -----
 t = 'example 3';
 if verbose > 1
-    fprintf('\n--------------------  TLMP Example 3  --------------------\n');
+    mp_printf('\n--------------------  TLMP Example 3  --------------------\n');
 end
 mpc = loadcase('t_case_tlmp_storage');
 xgd_table.colnames = {
@@ -237,30 +237,30 @@ for w = 1:2
     t_is(ms.SoC, eSoC{w}, 5, sprintf('%s window %d : %s', t, w, 'SoC'));
 
     if verbose
-        fprintf('    ');
+        mp_printf('    ');
         for t = 1:nt
-            fprintf('%-20s', sprintf('   T=%d', t));
+            mp_printf('%-20s', sprintf('   T=%d', t));
         end
-        fprintf('\n');
+        mp_printf('\n');
         for g = 1:3
-            fprintf('G%d  ', g);
+            mp_printf('G%d  ', g);
             for t = 1:nt
-                fprintf('%-20s', ...
+                mp_printf('%-20s', ...
                     sprintf('(%.4g, %.4g, %.4g)', ms.Pg(g, t), ...
                                             mdo.results.GenPrices(g, t), ...
                                             mdo.results.GenTLMP(g, t) ));
             end
-            fprintf('\n');
+            mp_printf('\n');
         end
         for s = 1:ms.ns
-            fprintf('S%d  ', s);
+            mp_printf('S%d  ', s);
             for t = 1:nt
-                fprintf('%-20s', ...
+                mp_printf('%-20s', ...
                     sprintf('(%.4g, %.4g, %.4g)', ms.SoC(s, t), ...
                                             mdo.results.StorageTLMPc(s, t), ...
                                             mdo.results.StorageTLMPd(s, t) ));
             end
-            fprintf('\n');
+            mp_printf('\n');
         end
     end
 end
@@ -270,7 +270,7 @@ t = 'example 4';
 % to match Cong's result, requires manually constraining storage to discharge
 % at 0.1 in period 1
 if verbose > 1
-    fprintf('\n--------------------  TLMP Example 4  --------------------\n');
+    mp_printf('\n--------------------  TLMP Example 4  --------------------\n');
 end
 mpc = loadcase('t_case_tlmp_storage');
 mpc.gencost(2, 5) = 1000;   %% make demand practically inelastic
@@ -368,30 +368,30 @@ for w = 1:2
     t_is(ms.SoC, eSoC{w}, 3.9, sprintf('%s window %d : %s', t, w, 'SoC'));
 
     if verbose
-        fprintf('    ');
+        mp_printf('    ');
         for t = 1:nt
-            fprintf('%-20s', sprintf('   T=%d', t));
+            mp_printf('%-20s', sprintf('   T=%d', t));
         end
-        fprintf('\n');
+        mp_printf('\n');
         for g = 1:3
-            fprintf('G%d  ', g);
+            mp_printf('G%d  ', g);
             for t = 1:nt
-                fprintf('%-20s', ...
+                mp_printf('%-20s', ...
                     sprintf('(%.4g, %.4g, %.4g)', ms.Pg(g, t), ...
                                             mdo.results.GenPrices(g, t), ...
                                             mdo.results.GenTLMP(g, t) ));
             end
-            fprintf('\n');
+            mp_printf('\n');
         end
         for s = 1:ms.ns
-            fprintf('S%d  ', s);
+            mp_printf('S%d  ', s);
             for t = 1:nt
-                fprintf('%-20s', ...
+                mp_printf('%-20s', ...
                     sprintf('(%.4g, %.4g, %.4g)', ms.SoC(s, t), ...
                                             mdo.results.StorageTLMPc(s, t), ...
                                             mdo.results.StorageTLMPd(s, t) ));
             end
-            fprintf('\n');
+            mp_printf('\n');
         end
     end
 end

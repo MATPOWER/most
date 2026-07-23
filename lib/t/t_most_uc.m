@@ -8,7 +8,7 @@ function t_most_uc(quiet, create_plots, create_pdfs, savedir)
 %   E.g. t_most_uc(0, 1, 1, '~/Downloads/uc_plots')
 
 %   MOST
-%   Copyright (c) 2015-2025, Power Systems Engineering Research Center (PSERC)
+%   Copyright (c) 2015-2026, Power Systems Engineering Research Center (PSERC)
 %   by Ray Zimmerman, PSERC Cornell
 %
 %   This file is part of MOST.
@@ -257,7 +257,7 @@ for s = 1:length(solvers)
 
         t = sprintf('%s : + startup/shutdown costs : ', solvers{s});
         if mpopt.out.all
-            fprintf('Add STARTUP and SHUTDOWN costs\n');
+            mp_printf('Add STARTUP and SHUTDOWN costs\n');
         end
         mpc = mpc_full;
         % mpc.gencost(3, STARTUP)  = 3524.9944997;    %% CPLEX, GLPK
@@ -288,7 +288,7 @@ for s = 1:length(solvers)
 
         t = sprintf('%s : + min up/down time constraints : ', solvers{s});
         if mpopt.out.all
-            fprintf('Add MinUp time\n');
+            mp_printf('Add MinUp time\n');
         end
         xgd.MinUp(2) = 3;
         mdi = loadmd(mpc, nt, xgd, [], [], profiles);
@@ -313,7 +313,7 @@ for s = 1:length(solvers)
 
         t = sprintf('%s : + ramp constraint/ramp res cost : ', solvers{s});
         if mpopt.out.all
-            fprintf('Restrict ramping and add ramp reserve costs\n');
+            mp_printf('Restrict ramping and add ramp reserve costs\n');
         end
         xgd = xgd_full;
         mdi = loadmd(mpc, nt, xgd, [], [], profiles);
@@ -342,7 +342,7 @@ for s = 1:length(solvers)
 
         t = sprintf('%s : + storage : ', solvers{s});
         if mpopt.out.all
-            fprintf('Add storage\n');
+            mp_printf('Add storage\n');
         end
         [iess, mpc, xgd, sd] = addstorage('ex_storage', mpc, xgd);
         mdi = loadmd(mpc, nt, xgd, sd, [], profiles);
@@ -368,7 +368,7 @@ for s = 1:length(solvers)
 
         t = sprintf('%s : + storage2 : ', solvers{s});
         if mpopt.out.all
-            fprintf('Add storage\n');
+            mp_printf('Add storage\n');
         end
         mpopt = mpoption(mpopt, 'most.storage.cyclic', 0);
         mdi.Storage.rho = 1;
@@ -395,7 +395,7 @@ for s = 1:length(solvers)
 
         t = sprintf('%s : + storage3 : ', solvers{s});
         if mpopt.out.all
-            fprintf('Add storage\n');
+            mp_printf('Add storage\n');
         end
         mdi.Storage.rho = 0;
         mdo = most(mdi, mpopt);

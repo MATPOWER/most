@@ -62,7 +62,7 @@ function mdo = most(mdi, mpopt)
 % See also loadmd.
 
 %   MOST
-%   Copyright (c) 2010-2025, Power Systems Engineering Research Center (PSERC)
+%   Copyright (c) 2010-2026, Power Systems Engineering Research Center (PSERC)
 %   by Carlos E. Murillo-Sanchez, PSERC Cornell & Universidad Nacional de Colombia
 %   and Ray Zimmerman, PSERC Cornell
 %
@@ -80,14 +80,14 @@ end
 verbose = mpopt.verbose;
 
 if verbose
-    fprintf('\n=============================================================================\n');
-    fprintf(  '          MATPOWER Optimal Scheduling Tool  --  MOST Version %s\n', mostver());
-    fprintf(  '          A multiperiod stochastic secure OPF with unit commitment\n');
-    fprintf(  '                       -----  Built on MATPOWER  -----\n');
-    fprintf(  '  by Carlos E. Murillo-Sanchez, Universidad Nacional de Colombia--Manizales\n');
-    fprintf(  '                  and Ray D. Zimmerman, Cornell University\n');
-    fprintf(  '       (c) 2010-2025 Power Systems Engineering Research Center (PSERC)       \n');
-    fprintf(  '=============================================================================\n');
+    mp_printf('\n=============================================================================\n');
+    mp_printf(  '          MATPOWER Optimal Scheduling Tool  --  MOST Version %s\n', mostver());
+    mp_printf(  '          A multiperiod stochastic secure OPF with unit commitment\n');
+    mp_printf(  '                       -----  Built on MATPOWER  -----\n');
+    mp_printf(  '  by Carlos E. Murillo-Sanchez, Universidad Nacional de Colombia--Manizales\n');
+    mp_printf(  '                  and Ray D. Zimmerman, Cornell University\n');
+    mp_printf(  '       (c) 2010-2026 Power Systems Engineering Research Center (PSERC)       \n');
+    mp_printf(  '=============================================================================\n');
 end
 
 %% if you want to do a normal solve, you have to create the QP
@@ -370,7 +370,7 @@ mdi.mpc.success = 1;
 
 if mpopt.most.build_model
   if verbose
-    fprintf('- Building indexing structures.\n');
+    mp_printf('- Building indexing structures.\n');
   end
 
   %% save model options in data structure
@@ -594,7 +594,7 @@ if mpopt.most.build_model
               '           For a system with islands, a reference bus in each island\n', ...
               '           may help convergence, but in a fully connected system such\n', ...
               '           a situation is probably not reasonable.\n\n' ];
-            fprintf(errstr);
+            mp_printf(errstr);
           end
           Va0 = mdi.flow(t,j,k).mpc.bus(:,VA)*pi/180;
           Va_max = Inf(mdi.idx.nb(t,j,k), 1);
@@ -896,7 +896,7 @@ if mpopt.most.build_model
   % matrices for each storage unit along the diagonal, where each component
   % is simply the i-th element of beta times an identity matrix.
   if verbose
-    fprintf('- Building expected storage-tracking mechanism.\n');
+    mp_printf('- Building expected storage-tracking mechanism.\n');
   end
   if ns
     % The following code assumes that no more variables will be added
@@ -958,14 +958,14 @@ if mpopt.most.build_model
 
   % Now for the constraint indexing and creation.
   if verbose
-    fprintf('- Building constraint submatrices.\n');
+    mp_printf('- Building constraint submatrices.\n');
   end
   baseMVA = mdi.mpc.baseMVA;
   om.init_indexed_name('lin', 'Pmis', {nt, nj_max, nc_max+1});
   if mdi.DCMODEL
     % Construct all load flow equations using a DC flow model
     if verbose
-      fprintf('  - Building DC flow constraints.\n');
+      mp_printf('  - Building DC flow constraints.\n');
     end
     om.init_indexed_name('lin', 'Pf', {nt, nj_max, nc_max+1});
     for t = 1:nt
@@ -993,7 +993,7 @@ if mpopt.most.build_model
     end
   else
     if verbose
-      fprintf('  - Building load balance constraints.\n');
+      mp_printf('  - Building load balance constraints.\n');
     end
     % Set simple generation - demand = 0 equations, one for each flow
     for t = 1:nt
@@ -1010,7 +1010,7 @@ if mpopt.most.build_model
   end
   if mdi.IncludeFixedReserves
     if verbose
-      fprintf('  - Building fixed zonal reserve constraints.\n');
+      mp_printf('  - Building fixed zonal reserve constraints.\n');
     end
     om.init_indexed_name('lin', 'Pg_plus_R', {nt, nj_max, nc_max+1});
     om.init_indexed_name('lin', 'Rreq', {nt, nj_max, nc_max+1});
@@ -1046,7 +1046,7 @@ if mpopt.most.build_model
   % Set relationships between generator injections and charge/discharge
   % variables (-pg + psc + psd = 0)
   if verbose && ~isempty(mdi.Storage.UnitIdx)
-    fprintf('  - Splitting storage injections into charge/discharge.\n');
+    mp_printf('  - Splitting storage injections into charge/discharge.\n');
   end
   om.init_indexed_name('lin', 'Ps', {nt, nj_max, nc_max+1});
   for t = 1:nt
@@ -1069,7 +1069,7 @@ if mpopt.most.build_model
   % Also, note that makeAy assumes that every gen is online, which is
   % consistent with our formulation for unit commitment
   if verbose
-    fprintf('  - Building CCV constraints for piecewise-linear costs.\n');
+    mp_printf('  - Building CCV constraints for piecewise-linear costs.\n');
   end
   om.init_indexed_name('lin', 'ycon', {nt, nj_max, nc_max+1});
   for t = 1:nt
@@ -1091,7 +1091,7 @@ if mpopt.most.build_model
   % whose commitment key is -1; either of these two possibilities will
   % result in a GEN_STATUS of 0, so we use that as the indicator.
   if verbose
-    fprintf('  - Building contingency reserve constraints.\n');
+    mp_printf('  - Building contingency reserve constraints.\n');
   end
   om.init_indexed_name('lin', 'rampcont', {nt, nj_max, nc_max+1});
   for t =1:nt
@@ -1173,7 +1173,7 @@ if mpopt.most.build_model
   % Note: in the event that some future reserves are already locked in, we may
   %       not want to start at t = 1
   if verbose
-    fprintf('  - Building ramping transitions and reserve constraints.\n');
+    mp_printf('  - Building ramping transitions and reserve constraints.\n');
   end
   om.init_indexed_name('lin', 'Rrp', {mdi.idx.ntramp, nj_max, nj_max});
   if mdi.idx.ntramp
@@ -1270,7 +1270,7 @@ if mpopt.most.build_model
   % Now for the storage restrictions.
   if ns
     if verbose
-      fprintf('  - Building storage constraints.\n');
+      mp_printf('  - Building storage constraints.\n');
     end
     % First bound sm(t) based on sm(t-1), with sm(1) being bound by the initial
     % data; this is for base case trajectories only
@@ -1510,7 +1510,7 @@ if mpopt.most.build_model
   % Dynamical system contraints
   if nzds || nyds
     if verbose
-      fprintf('  - Building dynamical system constraints.\n');
+      mp_printf('  - Building dynamical system constraints.\n');
     end
     % Compute matrices that give the expected dispatch in time period t
     % given that we make it to that period, for all generators at once,
@@ -1569,7 +1569,7 @@ if mpopt.most.build_model
   % UNIT COMMITMENT
   if UC
     if verbose
-      fprintf('  - Building unit commitment constraints.\n');
+      mp_printf('  - Building unit commitment constraints.\n');
     end
     % u(t,i) - u(t-1,i) - v(t,i) + w(t,i) = 0
     om.init_indexed_name('lin', 'uvw', {nt});
@@ -1772,7 +1772,7 @@ if mpopt.most.build_model
   end
 
   if verbose
-    fprintf('- Building cost structures.\n');
+    mp_printf('- Building cost structures.\n');
   end
   % Start building the cost.  Two main components, the input data cost and
   % the coordination cost are specified.  The coordination cost is assumed to
@@ -2033,15 +2033,15 @@ if mpopt.most.build_model
 
   % Asssemble contraints, variable bounds and costs
   if verbose
-    fprintf('- Assembling full set of constraints.\n');
+    mp_printf('- Assembling full set of constraints.\n');
   end
   [mdi.QP.A, mdi.QP.l, mdi.QP.u] = om.params_lin_constraint();
   if verbose
-    fprintf('- Assembling full set of variable bounds.\n');
+    mp_printf('- Assembling full set of variable bounds.\n');
   end
   [mdi.QP.x0, mdi.QP.xmin, mdi.QP.xmax, mdi.QP.vtype] = om.params_var();
   if verbose
-    fprintf('- Assembling full set of costs.\n');
+    mp_printf('- Assembling full set of costs.\n');
   end
   [mdi.QP.H1, mdi.QP.C1, mdi.QP.c1] = om.params_quad_cost();
 
@@ -2057,7 +2057,7 @@ end     % if mpopt.most.build_model
 if isfield(mdi, 'CoordCost') && ...
         (~isempty(mdi.CoordCost.Cuser) || ~isempty(mdi.CoordCost.Huser))
   if verbose
-    fprintf('- Adding coordination cost to standard cost.\n');
+    mp_printf('- Adding coordination cost to standard cost.\n');
   end
   nvuser = length(mdi.CoordCost.Cuser);
   nvdiff = mdi.idx.nvars - nvuser;
@@ -2103,32 +2103,32 @@ if mpopt.most.solve_model
   mdo.QP.opt = mpopt2qpopt(mpopt, model, 'most');
   mdo.QP.opt.x0 = [];
   if verbose
-    fprintf('- Calling %s solver.\n\n', model);
-    fprintf('============================================================================\n\n');
+    mp_printf('- Calling %s solver.\n\n', model);
+    mp_printf('============================================================================\n\n');
   end
   [mdo.QP.x, mdo.QP.f, mdo.QP.exitflag, mdo.QP.output, mdo.QP.lambda ] = ...
         mdo.om.solve(mdo.QP.opt);
   if mdo.QP.exitflag > 0
     success = 1;
     if verbose
-      fprintf('\n============================================================================\n');
-      fprintf('- MOST: %s solved successfully.\n', model);
+      mp_printf('\n============================================================================\n');
+      mp_printf('- MOST: %s solved successfully.\n', model);
     end
   else
     success = 0;
     if verbose
-      fprintf('\n============================================================================\n');
-      fprintf('- MOST: %s solver ''%s'' failed with exit flag = %d\n', model, mdo.QP.opt.alg, mdo.QP.exitflag);
+      mp_printf('\n============================================================================\n');
+      mp_printf('- MOST: %s solver ''%s'' failed with exit flag = %d\n', model, mdo.QP.opt.alg, mdo.QP.exitflag);
     end
-%     fprintf('\n============================================================================\n');
-%     fprintf('- MOST: %s solver ''%s'' failed with exit flag = %d\n', model, mdo.QP.opt.alg, mdo.QP.exitflag);
-%     fprintf('  You can query the workspace to debug.\n')
-%     fprintf('  When finished, type the word "dbcont" to continue.\n\n');
+%     mp_printf('\n============================================================================\n');
+%     mp_printf('- MOST: %s solver ''%s'' failed with exit flag = %d\n', model, mdo.QP.opt.alg, mdo.QP.exitflag);
+%     mp_printf('  You can query the workspace to debug.\n')
+%     mp_printf('  When finished, type the word "dbcont" to continue.\n\n');
 %     keyboard;
   end
   % Unpack results
   if verbose
-    fprintf('- Post-processing results.\n');
+    mp_printf('- Post-processing results.\n');
   end
   if success
     om = mdo.om;
@@ -2437,5 +2437,5 @@ end     % if mpopt.most.solve_model
 mdo.results.SetupTime = et_setup;
 
 if verbose
-  fprintf('- MOST: Done.\n\n');
+  mp_printf('- MOST: Done.\n\n');
 end

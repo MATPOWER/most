@@ -5,6 +5,10 @@ Change history for MOST
 since 1.3.1
 -----------
 
+#### 7/23/26
+  - Use `mp_printf()`, recently included in [MP-Test](15), in place of
+    `fprintf()` everywhere to allow redirecting of console output.
+
 #### 4/28/26
   - Tweak test `t_most_3b_1_1_2()` to avoid spurious failure with MATLAB
     R2026a with Optimization Toolbox (HiGHS 1.11.0).
@@ -384,3 +388,4 @@ Version 1.0 - *Jun 1, 2016*
 [12]: https://github.com/MATPOWER/most/issues/45
 [13]: https://highs.development
 [14]: https://github.com/savyasachi/HiGHSMEX
+[15]: https://github.com/MATPOWER/mptest
