@@ -111,7 +111,7 @@ end
 if ~isfield(mdi, 'UC') || ~isfield(mdi.UC, 'CommitSched') || ...
         isempty(mdi.UC.CommitSched)
   if isfield(mdi, 'CommitSched') && ~isempty(mdi.CommitSched)
-    warning('-----  most: MDI.CommitSched has moved to MDI.UC.CommitSched, please update your code.  -----');
+    mp_warning('-----  most: MDI.CommitSched has moved to MDI.UC.CommitSched, please update your code.  -----');
     mdi.UC.CommitSched = mdi.CommitSched;
   else
     error('most: commitment schedule must be provided in MSPD_IN.UC.CommitSched');
@@ -179,7 +179,7 @@ if mo.SecurityConstrained && ~have_contingency
   error('most: MDI.cont(t,j).contab cannot be empty for all t, j when MPOPT.most.security_constraints = 1');
 end
 if mo.IncludeFixedReserves && mo.SecurityConstrained
-  warning('most: Using MPOPT.most.fixed_res = 1 and MPOPT.most.security_constraints = 1 together is not recommended.');
+  mp_warning('most: Using MPOPT.most.fixed_res = 1 and MPOPT.most.security_constraints = 1 together is not recommended.');
 end
 if mo.ForceExpectedTerminalStorage == 1;
   if mo.ForceCyclicStorage
@@ -289,7 +289,7 @@ if ns
     end
   elseif max(mdi.idx.nj) == 1 && ~mo.ForceCyclicStorage && ...
         any(mdi.Storage.InitialStorageLowerBound ~= mdi.Storage.InitialStorage)
-    warning('Deterministic problem with ForceCyclicStorage = 0, setting InitialStorageLowerBound = InitialStorage')
+    mp_warning('Deterministic problem with ForceCyclicStorage = 0, setting InitialStorageLowerBound = InitialStorage')
     mdi.Storage.InitialStorageLowerBound = mdi.Storage.InitialStorage;
   end
   if ~isfield(mdi.Storage, 'InitialStorageUpperBound') || isempty(mdi.Storage.InitialStorageUpperBound)
@@ -300,7 +300,7 @@ if ns
     end
   elseif max(mdi.idx.nj) == 1 && ~mo.ForceCyclicStorage && ...
         any(mdi.Storage.InitialStorageUpperBound ~= mdi.Storage.InitialStorage)
-    warning('Deterministic problem with ForceCyclicStorage = 0, setting InitialStorageUpperBound = InitialStorage')
+    mp_warning('Deterministic problem with ForceCyclicStorage = 0, setting InitialStorageUpperBound = InitialStorage')
     mdi.Storage.InitialStorageUpperBound = mdi.Storage.InitialStorage;
   end
 

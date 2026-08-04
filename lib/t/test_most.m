@@ -63,7 +63,7 @@ if is_octave11
     persistent show_octave11_warning_once;
     if isempty(show_octave11_warning_once)
         show_octave11_warning_once = 1;
-        warning(sprintf('\n###############################################################################\n#  GNU Octave 11.x has a bug (https://savannah.gnu.org/bugs/index.php?68227)  #\n#  that results in lots of warnings when running MATPOWER. One workaround is  #\n#  to turn off all warnings using:  warning off                               #\n#  (applied automatically and temporarily for test_most)                      #\n###############################################################################\n'));
+        mp_warning(sprintf('\n###############################################################################\n#  GNU Octave 11.x has a bug (https://savannah.gnu.org/bugs/index.php?68227)  #\n#  that results in lots of warnings when running MATPOWER. One workaround is  #\n#  to turn off all warnings using:  warning off                               #\n#  (applied automatically and temporarily for test_most)                      #\n###############################################################################\n'));
     end
     w = warning();
     warning('off');

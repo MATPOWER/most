@@ -5,9 +5,10 @@ Change history for MOST
 since 1.3.1
 -----------
 
-#### 7/23/26
-  - Use `mp_printf()`, recently included in [MP-Test](15), in place of
-    `fprintf()` everywhere to allow redirecting of console output.
+#### 8/4/26
+  - Add support for redirecting console output via `mp.logger` by replacing
+    `fprintf()` and `warning()` everywhere with `mp_printf()` and
+    `mp_warning()`, respectively. Requires [MP-Test](4) 8.2 or later.
 
 #### 4/28/26
   - Tweak test `t_most_3b_1_1_2()` to avoid spurious failure with MATLAB

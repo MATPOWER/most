@@ -101,7 +101,7 @@ if iscell(opt.subtitle) && length(opt.subtitle) == 3
 elseif ischar(opt.subtitle)
     subt = opt.subtitle;
 else
-    warning('plot_uc_data: OPT.subtitle must be a string or 3 element cell array of strings');
+    mp_warning('plot_uc_data: OPT.subtitle must be a string or 3 element cell array of strings');
     subt = '';
 end
 
